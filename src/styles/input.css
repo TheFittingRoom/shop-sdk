@@ -1,0 +1,26 @@
+input {
+    border: none;
+    width: 100%;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border: none;
+}
+
+.fieldset {
+    border-radius: 10px;
+    text-align: left;
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.5);
+    width: 65%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.fieldset-err {
+    border-color: red;
+}
+

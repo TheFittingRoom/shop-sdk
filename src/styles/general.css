@@ -1,0 +1,181 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Modal */
+.modal {
+    /* display: none; */
+    /* Hidden by default */
+    position: absolute;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    padding-top: 100px;
+    /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.53);
+}
+
+.modal-content {
+    width: 90%;
+    text-align: center;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.modal-content-container {
+    background-color: #ffffff;
+    max-width: 709px;
+    margin: auto;
+    border-radius: 10px;
+    border: 1px solid #434343;
+    box-shadow: 0px 6px 6px #00000029;
+}
+
+/* Close button */
+.close-container {
+    text-align: end;
+}
+
+.close {
+    color: #aaaaaa;
+    font-size: 28px;
+    font-weight: bold;
+    width: 50px;
+    height: 50px;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+}
+
+/* */
+.cursor:hover {
+    cursor: pointer;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.standard-button {
+    border: 0;
+    width: 138px;
+    height: 43px;
+    border-radius: 3px;
+}
+
+.modal-title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-title-logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tfr-logo {
+    width: 247px;
+    height: 40px;
+    display: inline-block;
+}
+
+.t-a-center {
+    text-align: center;
+}
+
+.w-70-p {
+    width: 70%;
+}
+
+.w-80-p {
+    width: 80%;
+}
+
+.w-85-p {
+    width: 85%;
+}
+
+.w-200 {
+    width: 200px;
+}
+
+.h-200 {
+    height: 200px;
+}
+
+.w-150 {
+    width: 150px;
+}
+
+.h-150 {
+    height: 150px;
+}
+
+.w-100 {
+    width: 100px;
+}
+
+.h-40 {
+    height: 40px;
+}
+
+.h-30 {
+    height: 30px;
+}
+
+.w-80 {
+    width: 80px;
+}
+
+.h-25 {
+    height: 25px;
+}
+
+.d-inline {
+    display: inline;
+}
+
+.d-inline-block {
+    display: inline-block;
+}
+
+.d-none {
+    display: none;
+}
+
+.d-block {
+    display: block;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.a-items-center {
+    align-items: center;
+}
+
+.j-content-center {
+    justify-content: center;
+}
+
+.p-relative {
+    position: relative;
+}
+
+.top-7 {
+    top: 7px;
+}

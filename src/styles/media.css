@@ -1,0 +1,12 @@
+@media screen and (max-width: 702px) {
+    .modal-title-logo-container {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .fieldset {
+        width: 90%;
+    }
+}

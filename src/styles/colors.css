@@ -1,0 +1,23 @@
+.grey {
+    color: grey;
+}
+
+.bg-aquamarina-strong {
+    background-color: #209DA7;
+}
+
+.c-white {
+    color: white;
+}
+
+.c-dark {
+    color: #000000;
+}
+
+.c-dark-o5 {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.c-red {
+    color: red;
+}
