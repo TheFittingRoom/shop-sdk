@@ -5,9 +5,6 @@
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
   "module": "build/module/index.js",
-  "repository": "https://github.com/YOUR_GITHUB_USER_NAME/tfr-library",
-  "license": "MIT",
-  "keywords": [],
   "scripts": {
     "build:rollup": "rm -rf dist && rollup --config",
     "dev:rollup": "rm -rf dist && rollup --config -w",
@@ -83,7 +80,6 @@
     "!**/*.spec.*",
     "!**/*.json",
     "CHANGELOG.md",
-    "LICENSE",
     "README.md"
   ],
   "ava": {

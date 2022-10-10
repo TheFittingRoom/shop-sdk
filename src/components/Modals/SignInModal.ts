@@ -2,9 +2,6 @@ import { Locale } from "../../classes/Locale";
 import { SignInModalProps } from "../../types";
 
 const SignInModal = ({override}: SignInModalProps) => {
-
-    console.log("Locale.getLocale(): ", Locale.getLocale())
-
     const { Texts } = override || Locale.getLocale();
     const { title, emailAddress, password, forgotPasswordWithSymbol, dontHaveAcc, signIn } = Texts;
 

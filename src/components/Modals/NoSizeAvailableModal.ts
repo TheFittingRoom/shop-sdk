@@ -6,9 +6,6 @@ const NoSizeAvailableModal = ({override, sizes}: NoSizeAvailableModalProps) => {
     const { title, signOut } = Texts;
     const { noSizeAvailable, trySize, orSize } = NoSizeAvailableModalTexts;
 
-    // document.querySelector('#thefittingroom-modal #recommendedSize').innerHTML = `${trySize} ${sizes?.recommended?.[0]} ${orSize} ${sizes?.recommended?.[1]}`;
-    const msg = `${trySize} ${sizes?.recommended?.[0]} ${orSize} ${sizes?.recommended?.[1]}`;
-
     return `
         <div class="modal-content-container pt-5-p pb-5-p pr-20 pl-20">
             <div class="modal-content">
@@ -19,7 +16,7 @@ const NoSizeAvailableModal = ({override, sizes}: NoSizeAvailableModalProps) => {
 
                 <div class="body-text-container mt-15-p mb-40">
                     <div class="poppins-regular-20-default c-dark">${noSizeAvailable}</div>
-                    <div class="poppins-regular-20-default c-dark" id="recommendedSize">${msg}</div>
+                    <div class="poppins-regular-20-default c-dark" id="recommendedSize">${trySize} ${sizes?.recommended?.[0]} ${orSize} ${sizes?.recommended?.[1]}</div>
                 </div>
 
                 <button class="standard-button bg-aquamarina-strong c-white poppins-medium-16-default cursor mt-10-p" id="signInOut" onclick="window.theFittingRoom.Auth.signOut()">

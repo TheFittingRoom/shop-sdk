@@ -11,7 +11,7 @@ export const verifyEmail = async ({ email }: VerifyEmailProps): Promise<VerifyEm
         await Api.post("/verify-email", { body: { email } });
         window.theFittingRoom.closeModal();
     } catch (error) {
-        console.log("error -> verifyEmail: ", error);
         return "Invalid email";
+        // throw new Error(error);
     }
 }

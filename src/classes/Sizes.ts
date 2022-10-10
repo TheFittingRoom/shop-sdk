@@ -10,7 +10,6 @@ export const getRecommendedSizes = async ({ sku }: GetRecommendedSizeProps): Pro
             optionalSizes: data.optionalSizes
         };
     } catch (error) {
-        console.log("error -> getRecommendedSizes: ", error);
         throw new Error(error)
     }
 }

@@ -18,7 +18,7 @@ export class TheFittingRoomInit {
 
         if(!secret) {
             const errorMessage = "A secret is required as an identifier for the brand"
-            console.error("TheFittingRoom:",errorMessage)
+            // console.error("TheFittingRoom:",errorMessage)
             
             window.theFittingRoom = {
                 error: errorMessage,

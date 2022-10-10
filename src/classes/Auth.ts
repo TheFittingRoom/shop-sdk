@@ -13,8 +13,8 @@ class Auth {
 
             window.theFittingRoom.closeModal();
         } catch (error) {
-            console.log("signIn error: ", error);
             return "Something went wrong. Try again!";
+            // throw new Error(error);
         }
     }
 
@@ -26,7 +26,6 @@ class Auth {
     
             return data;
         } catch (error) {
-            console.log("signOut error: ", error);
             throw new Error(error);
         }
     }
@@ -41,6 +40,7 @@ class Auth {
             window.theFittingRoom.renderResetLinkModal();
         } catch (error) {
             return "Invalid email";
+            // throw new Error(error);
         }
     }
 }

@@ -8,7 +8,6 @@ export const getVirtualTryOnFrames = async ({ sku, size, backgroundColor }: GetV
         return data.frames;
     } catch (error) {
         window.theFittingRoom.renderNoAvatarModal();
-        console.log("error -> getVirtualTryOnFrames: ", error)
         throw new Error(error);
     }
 }

@@ -10,7 +10,6 @@ import SuccessModal from './SuccessModal';
 import ResetLinkModal from './ResetLinkModal';
 
 export const initializeModal = ()=> {
-    console.log("initializeModal called")
     const modal = document.getElementById("thefittingroom-modal");
     window.onclick = (event) => {
         if (event.target == modal) {

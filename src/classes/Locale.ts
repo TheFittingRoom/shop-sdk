@@ -46,15 +46,13 @@ export class Locale {
         }
     };
 
-    // static strings = {};
-
     static async setLocale(locale: string) {
         try {
             const data = await Api.get(`/language/${locale}`);
 
             this.strings = data.strings;
         } catch (error) {
-            console.log("error -> setLocale: ", error)
+            throw new Error(error);
         }
     };
 
