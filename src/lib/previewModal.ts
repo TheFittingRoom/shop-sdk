@@ -54,8 +54,8 @@ export const renderEnterEmailModal = () => {
     return;
 }
 
-export const renderErrorModal = ({errorText}: ErrorModalProps) => {
-    document.querySelector("#thefittingroom-modal").innerHTML = ErrorModal({errorText});
+export const renderErrorModal = ({errorText, sizes}: ErrorModalProps) => {
+    document.querySelector("#thefittingroom-modal").innerHTML = ErrorModal({errorText, sizes});
     document.querySelector("#thefittingroom-modal").setAttribute("style", "display:block;");
     return;
 }

@@ -1,21 +1,12 @@
-import Auth from "../../classes/Auth";
 import { Locale } from "../../classes/Locale";
 import { ErrorModalProps } from "../../types";
 
-const ErrorModal = ({override, errorText}: ErrorModalProps) => {
+const ErrorModal = ({override, errorText, sizes}: ErrorModalProps) => {
     const { Texts, ErrorModal } = override || Locale.getLocale();
     const { title, signOut } = Texts;
     const { noSizeAvailable, trySize, orSize } = ErrorModal;
 
-    const sizes = {recommended: ["1", "2"], optionalSizes: ["1", "2"]};
-
     const errorMsg = errorText || `${noSizeAvailable} ${trySize} ${sizes?.recommended?.[0]} ${orSize} ${sizes?.recommended?.[1]}`
-
-    setTimeout(() => {
-        if(!window.theFittingRoom.isLoggedIn()) {
-            document.querySelector('#thefittingroom-modal #signOutButton').style.display = "none";
-        }
-    }, 10);
 
     return `
         <div class="modal-content-container pt-5-p pb-5-p pr-20 pl-20">

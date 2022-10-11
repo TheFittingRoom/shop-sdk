@@ -12,6 +12,10 @@ export interface NoAvatarModalProps extends ModalProps {
 };
 export interface ErrorModalProps extends ModalProps {
     errorText?: string
+    sizes?: {
+        recommended: string,
+        optionalSizes: string[]
+    };
 };
 export interface ResetLinkModalProps extends ModalProps {
     // 
