@@ -1,17 +1,19 @@
 import Api from './Api';
-import { VerifyEmailProps, VerifyEmailResponse } from '../types';
+import { NotifyEmailProps, NotifyEmailResponse, ErrorType } from '../types';
 import { validateEmail } from '../lib/validations';
+import ErrorHandler from './ErrorHandler';
 
-export const verifyEmail = async ({ email }: VerifyEmailProps): Promise<VerifyEmailResponse | string | void> => {
+export const notifyEmail = async ({ email }: NotifyEmailProps): Promise<NotifyEmailResponse | ErrorType> => {
     if (!validateEmail(email)) {
-        return "Not a valid email";
+        return ErrorHandler.BAD_REQUEST;
     }
 
     try {
-        await Api.post("/verify-email", { body: { email } });
+        const data = await Api.post("/notify-email", { body: { email } });
         window.theFittingRoom.closeModal();
+
+        return {id: data.id, email: data.email};
     } catch (error) {
-        return "Invalid email";
-        // throw new Error(error);
+        return ErrorHandler.BAD_REQUEST;
     }
 }

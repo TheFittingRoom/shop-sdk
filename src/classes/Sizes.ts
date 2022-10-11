@@ -1,7 +1,8 @@
-import { GetRecommendedSizeProps, GetRecommendedSizesResponse } from "../types";
+import { ErrorType, GetRecommendedSizeProps, GetRecommendedSizesResponse } from "../types";
 import Api from './Api';
+import ErrorHandler from "./ErrorHandler";
 
-export const getRecommendedSizes = async ({ sku }: GetRecommendedSizeProps): Promise<GetRecommendedSizesResponse> => {
+export const getRecommendedSizes = async ({ sku }: GetRecommendedSizeProps): Promise<GetRecommendedSizesResponse | ErrorType> => {
     try {
         const data = await Api.get(`/get-sizes/${sku}`);
 
@@ -10,6 +11,6 @@ export const getRecommendedSizes = async ({ sku }: GetRecommendedSizeProps): Pro
             optionalSizes: data.optionalSizes
         };
     } catch (error) {
-        throw new Error(error)
+        return ErrorHandler.NOT_FOUND;
     }
 }

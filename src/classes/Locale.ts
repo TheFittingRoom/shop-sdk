@@ -1,4 +1,6 @@
 import Api from './Api';
+import ErrorHandler from './ErrorHandler';
+import { ErrorType } from '../types';
 export class Locale {
     static strings = {
         Texts: {
@@ -30,7 +32,7 @@ export class Locale {
         ForgotPasswordModalTexts: {
             enterEmailAddress: "Enter your email address, we will send you a link to reset your password."
         },
-        NoSizeAvailableModalTexts: {
+        ErrorModal: {
             noSizeAvailable: "Unfortunately, that size is not available for try on.",
             trySize: "You can try on a size",
             orSize: "or size"
@@ -46,13 +48,13 @@ export class Locale {
         }
     };
 
-    static async setLocale(locale: string) {
+    static async setLocale(locale: string): Promise<void | ErrorType> {
         try {
             const data = await Api.get(`/language/${locale}`);
 
             this.strings = data.strings;
         } catch (error) {
-            throw new Error(error);
+            return ErrorHandler.NOT_FOUND;
         }
     };
 

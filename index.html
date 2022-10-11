@@ -35,7 +35,9 @@
         </style>
         <button onclick="window.theFittingRoom.renderSignInModal()">Sign In Modal</button>
         <br>
-        <button onclick="window.theFittingRoom.renderNoSizeAvailableModal()">No Sizes Available Modal</button>
+        <button onclick="window.theFittingRoom.renderErrorModal({errorText: ''})">Error Modal default text</button>
+        <br>
+        <button onclick="window.theFittingRoom.renderErrorModal({errorText: 'Text hereee ...'})">Error Modal with random text</button>
         <br>
         <button onclick="window.theFittingRoom.renderSuccessModal()">Success Modal</button>
         <br>

@@ -9,7 +9,7 @@ import {
     ScanCodeModal2,
     ScanCodeModal3,
     EnterEmailModal,
-    NoSizeAvailableModal,
+    ErrorModal,
     SuccessModal,
     ResetLinkModal,
     validate
@@ -26,7 +26,7 @@ export {
     ScanCodeModal2,
     ScanCodeModal3,
     EnterEmailModal,
-    NoSizeAvailableModal,
+    ErrorModal,
     SuccessModal,
     ResetLinkModal,
     validate

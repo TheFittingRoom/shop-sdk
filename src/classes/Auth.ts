@@ -1,11 +1,12 @@
 import * as firebase from "firebase/auth";
 import { validateEmail, validatePassword } from "../lib/validations";
-import { SignInProps, SignInResponse, PasswordResetEmailProps } from "../types";
+import { SignInProps, SignInResponse, PasswordResetEmailProps, ErrorType } from "../types";
+import ErrorHandler from "./ErrorHandler";
 import { FirebaseInstance } from "./Firebase";
 class Auth {
-    static async signIn({ email, password }: SignInProps): Promise<SignInResponse | string | void> {
+    static async signIn({ email, password }: SignInProps): Promise<SignInResponse | ErrorType | void> {
         if (!validateEmail(email) || !validatePassword(password)) {
-            return "Wrong credentials";
+            return ErrorHandler.BAD_REQUEST;
         }
 
         try {
@@ -13,35 +14,35 @@ class Auth {
 
             window.theFittingRoom.closeModal();
         } catch (error) {
-            return "Something went wrong. Try again!";
-            // throw new Error(error);
+            return ErrorHandler.getFireBaseError(error);
         }
     }
 
-    static async signOut(): Promise<any> {
+    static async signOut(): Promise<void | ErrorType> {
         try {
-            const data = await firebase.signOut(FirebaseInstance.auth);
+            await firebase.signOut(FirebaseInstance.auth);
 
             window.theFittingRoom.renderSuccessModal();
-    
-            return data;
         } catch (error) {
-            throw new Error(error);
+            return ErrorHandler.getFireBaseError(error);
         }
     }
 
-    static async sendPasswordResetEmail({ email }: PasswordResetEmailProps): Promise<string | void> {
+    static async sendPasswordResetEmail({ email }: PasswordResetEmailProps): Promise<ErrorType | void> {
         if (!validateEmail(email)) {
-            return "Not a valid email";
+            return ErrorHandler.BAD_REQUEST;
         }
-    
+
         try {
             await firebase.sendPasswordResetEmail(FirebaseInstance.auth, email);
             window.theFittingRoom.renderResetLinkModal();
         } catch (error) {
-            return "Invalid email";
-            // throw new Error(error);
+            return ErrorHandler.getFireBaseError(error);
         }
+    }
+
+    static isLoggedIn() {
+        return Boolean(FirebaseInstance.auth.currentUser);
     }
 }
 

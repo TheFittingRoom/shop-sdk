@@ -14,16 +14,12 @@ class Api {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`
             }
-        }).then(res=>res.json());
+        }).then(res => res.json());
     }
 
-    static get = (url,data ={}) => this.fetch(url, {...data, method:"GET"})
+    static get = (url, data = {}) => this.fetch(url, {...data, method:"GET"})
 
-    static post = (url,data ={}) => this.fetch(url, {...data, method:"POST"})
-
-    static put = (url,data ={}) => this.fetch(url, {...data, method:"PUT"})
-
-    static delete = (url,data ={}) => this.fetch(url, {...data, method:"DELETE"})
+    static post = (url, data = {}) => this.fetch(url, {...data, method:"POST"})
 }
 
 export default Api;

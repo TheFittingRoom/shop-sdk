@@ -34,11 +34,11 @@ const ForgotPasswordModal = ({override}: ForgotPasswordModalProps) => {
                 <button class="standard-button bg-aquamarina-strong c-white poppins-medium-16-default cursor mt-30"
                 onclick="
                         window.theFittingRoom.validate()
-                        const response = window.theFittingRoom.Auth.sendPasswordResetEmail({email: document.querySelector('#thefittingroom-modal #email-input').value})
+                        const response = window.theFittingRoom.sendPasswordResetEmail({email: document.querySelector('#thefittingroom-modal #email-input').value})
                         
-                        response.then(msg => {
-                            if (msg) {
-                                window.theFittingRoom.validate(msg)
+                        response.then(data => {
+                            if (data?.errorMessage) {
+                                window.theFittingRoom.validate(data.errorMessage)
                             }
                         })
                     "

@@ -4,7 +4,7 @@ import { TheFittingRoomInit } from './classes/Initialization';
 import { Locale } from './classes/Locale';
 import { getRecommendedSizes } from './classes/Sizes';
 import { getVirtualTryOnFrames } from './classes/VirtualTryOnFrames';
-import { verifyEmail } from './classes/Email';
+import { notifyEmail } from './classes/Email';
 import { initializeModal, closeModal, validate } from './components';
 import {
     renderNoAvatarModal,
@@ -14,7 +14,7 @@ import {
     renderScanCodeModal2,
     renderScanCodeModal3,
     renderEnterEmailModal,
-    renderNoSizeAvailableModal,
+    renderErrorModal,
     renderSuccessModal,
     renderResetLinkModal,
 } from './lib/previewModal';
@@ -39,13 +39,18 @@ window.addEventListener('load', () => {
     // Public
     window.theFittingRoom = {
         ...instance,
+        _internal: {
+            signIn: Auth.signIn
+        },
         // Auth
-        Auth,
+        sendPasswordResetEmail: Auth.sendPasswordResetEmail,
+        signOut: Auth.signOut,
+        isLoggedIn: Auth.isLoggedIn,
         // Sizes
         getRecommendedSizes,
         // Avatar
         getVirtualTryOnFrames,
-        verifyEmail,
+        notifyEmail,
         // Language service
         getLocale: Locale.getLocale,
         setLocale: Locale.setLocale,
@@ -58,7 +63,7 @@ window.addEventListener('load', () => {
         renderScanCodeModal2,
         renderScanCodeModal3,
         renderEnterEmailModal,
-        renderNoSizeAvailableModal,
+        renderErrorModal,
         renderSuccessModal,
         renderResetLinkModal,
         validate,

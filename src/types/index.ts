@@ -10,11 +10,8 @@ export interface ForgotPasswordModalProps extends ModalProps {
 export interface NoAvatarModalProps extends ModalProps {
     // 
 };
-export interface NoSizeAvailableModalProps extends ModalProps {
-    sizes: {
-        recommended: string[],
-        optionalSizes: string[]
-    }
+export interface ErrorModalProps extends ModalProps {
+    errorText?: string
 };
 export interface ResetLinkModalProps extends ModalProps {
     // 
@@ -65,10 +62,19 @@ export interface GetRecommendedSizesResponse {
     optionalSizes: string[]
 }
 
-export interface VerifyEmailProps {
+export interface NotifyEmailProps {
     email: string
 }
-export interface VerifyEmailResponse { 
+export interface NotifyEmailResponse { 
     id: number,
     email: string
+}
+
+export interface ProfileResponse {
+    hasAvatar: boolean
+}
+
+export type ErrorType = {
+    code: number,
+    errorMessage: string
 }

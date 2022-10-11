@@ -39,11 +39,11 @@ const SignInModal = ({override}: SignInModalProps) => {
                 <button class="standard-button bg-aquamarina-strong c-white poppins-medium-16-default cursor mt-30" id="sign-in-button"
                 onclick="
                         window.theFittingRoom.validate();
-                        const response = window.theFittingRoom.Auth.signIn({email: document.querySelector('#thefittingroom-modal #email-input').value, password: document.querySelector('#thefittingroom-modal #password-input').value})
+                        const response = window.theFittingRoom._internal.signIn({email: document.querySelector('#thefittingroom-modal #email-input').value, password: document.querySelector('#thefittingroom-modal #password-input').value});
 
-                        response.then(msg => {
-                            if (msg) {
-                                window.theFittingRoom.validate(msg)
+                        response.then(data => {
+                            if (data?.errorMessage) {
+                                window.theFittingRoom.validate(data.errorMessage)
                             }
                         })
                     "

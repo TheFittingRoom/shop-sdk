@@ -1,13 +1,14 @@
 import Api from './Api';
-import { GetVirtualTryOnFramesProps, GetVirtualTryOnFramesResponse } from '../types';
+import { ErrorType, GetVirtualTryOnFramesProps, GetVirtualTryOnFramesResponse } from '../types';
+import ErrorHandler from './ErrorHandler';
 
-export const getVirtualTryOnFrames = async ({ sku, size, backgroundColor }: GetVirtualTryOnFramesProps): Promise<GetVirtualTryOnFramesResponse> => {
+export const getVirtualTryOnFrames = async ({ sku, size, backgroundColor }: GetVirtualTryOnFramesProps): Promise<GetVirtualTryOnFramesResponse | ErrorType> => {
     try {
         const data = await Api.get("/get-virtual-try-on-frames", { body: { sku, size, backgroundColor } });
 
         return data.frames;
     } catch (error) {
         window.theFittingRoom.renderNoAvatarModal();
-        throw new Error(error);
+        return ErrorHandler.NOT_FOUND;
     }
 }

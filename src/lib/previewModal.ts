@@ -6,10 +6,11 @@ import {
     ScanCodeModal2,
     ScanCodeModal3,
     EnterEmailModal,
-    NoSizeAvailableModal,
+    ErrorModal,
     SuccessModal,
     ResetLinkModal,
 } from '../components';
+import { ErrorModalProps } from '../types';
 
 export const renderNoAvatarModal = () => {
     document.querySelector("#thefittingroom-modal").innerHTML = NoAvatarModal({});
@@ -53,8 +54,8 @@ export const renderEnterEmailModal = () => {
     return;
 }
 
-export const renderNoSizeAvailableModal = () => {
-    document.querySelector("#thefittingroom-modal").innerHTML = NoSizeAvailableModal({sizes: {recommended: ["1", "2"], optionalSizes: ["1", "2"]}});
+export const renderErrorModal = ({errorText}: ErrorModalProps) => {
+    document.querySelector("#thefittingroom-modal").innerHTML = ErrorModal({errorText});
     document.querySelector("#thefittingroom-modal").setAttribute("style", "display:block;");
     return;
 }

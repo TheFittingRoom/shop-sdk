@@ -5,7 +5,7 @@ import ScanCodeModal1 from './ScanCodeModal1';
 import ScanCodeModal2 from './ScanCodeModal2';
 import ScanCodeModal3 from './ScanCodeModal3';
 import EnterEmailModal from './EnterEmailModal';
-import NoSizeAvailableModal from './NoSizeAvailableModal';
+import ErrorModal from './ErrorModal';
 import SuccessModal from './SuccessModal';
 import ResetLinkModal from './ResetLinkModal';
 
@@ -61,7 +61,7 @@ export {
     ScanCodeModal2,
     ScanCodeModal3,
     EnterEmailModal,
-    NoSizeAvailableModal,
+    ErrorModal,
     SuccessModal,
     ResetLinkModal,
 };
