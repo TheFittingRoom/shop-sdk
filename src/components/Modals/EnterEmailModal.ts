@@ -1,5 +1,5 @@
 import { Locale } from "../../classes/Locale";
-import { checkAvatar } from "../../classes/Profile";
+import { getProfile } from "../../classes/Profile";
 import { EnterEmailModalProps, ProfileResponse } from "../../types";
 
 const EnterEmailModal = ({override}: EnterEmailModalProps) => {
@@ -8,9 +8,7 @@ const EnterEmailModal = ({override}: EnterEmailModalProps) => {
     const { title, emailAddress, signUp } = Texts;
     const { modalTitle } = EnterEmailModalTexts;
 
-    const response = checkAvatar();
-    response.then(res => {
-        const data = res as ProfileResponse;
+    getProfile().then((data: ProfileResponse) => {
         if (data?.hasAvatar) {
             document.querySelector('#thefittingroom-modal #signUpButton').style.display = "none";
         }
