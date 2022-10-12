@@ -22,7 +22,7 @@ const ScanCodeModal2 = ({override}: ScanCodeModal2Props) => {
 
                 <img src="../assets/qr-code-logo.png" class="w-150 h-150 mt-30 mb-20" />
 
-                <div class="arial-helvetica-18-default c-dark-o5 underline cursor mt-10 mb-40" onclick="window.theFittingRoom.renderSignInModal()">${returnToSignIn}</div>
+                <div class="roboto-18-default c-dark-o5 underline cursor mt-10 mb-40" onclick="window.theFittingRoom.renderSignInModal()">${returnToSignIn}</div>
             </div>
         </div>
     `;

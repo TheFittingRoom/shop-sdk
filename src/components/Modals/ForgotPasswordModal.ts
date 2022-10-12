@@ -23,13 +23,13 @@ const ForgotPasswordModal = ({override}: ForgotPasswordModalProps) => {
                 <div class="poppins-light-16-300 mt-20 w-70-p m-h-auto">${enterEmailAddress}</div>
 
                 <fieldset class="fieldset-element fieldset mt-30">
-                    <legend class="label-element arial-helvetica-14-default c-dark-o5">${emailAddress}</legend>
+                    <legend class="label-element roboto-14-default c-dark-o5">${emailAddress}</legend>
                     <input type="email" id="email-input" />
                 </fieldset>
 
-                <div class="arial-helvetica-12-default c-red mt-10 d-none" id="error-msg"></div>
+                <div class="roboto-12-default c-red mt-10 d-none" id="error-msg"></div>
 
-                <div class="arial-helvetica-12-default c-dark-o5 underline cursor mt-30" onclick="window.theFittingRoom.renderSignInModal()">${backToSignIn}</div>
+                <div class="roboto-12-default c-dark-o5 underline cursor mt-30" onclick="window.theFittingRoom.renderSignInModal()">${backToSignIn}</div>
 
                 <button class="standard-button bg-aquamarina-strong c-white poppins-medium-16-default cursor mt-30"
                 onclick="

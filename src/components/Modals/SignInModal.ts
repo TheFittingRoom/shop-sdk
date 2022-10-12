@@ -20,20 +20,20 @@ const SignInModal = ({override}: SignInModalProps) => {
                 <div class="poppins-light-22-300 c-dark mt-30">${signIn}</div>
 
                 <fieldset class="fieldset-element fieldset mt-20">
-                    <legend class="label-element arial-helvetica-14-default c-dark-o5">${emailAddress}</legend>
+                    <legend class="label-element roboto-14-default c-dark-o5">${emailAddress}</legend>
                     <input type="email" id="email-input" />
                 </fieldset>
 
                 <fieldset class="fieldset-element fieldset mt-20">
-                    <legend class="label-element arial-helvetica-14-default c-dark-o5">${password}</legend>
+                    <legend class="label-element roboto-14-default c-dark-o5">${password}</legend>
                     <input type="password" id="password-input" />
                 </fieldset>
 
-                <div class="arial-helvetica-12-default c-red mt-10 d-none" id="error-msg"></div>
+                <div class="roboto-12-default c-red mt-10 d-none" id="error-msg"></div>
 
                 <div class="mt-30">
-                    <span class="arial-helvetica-12-default c-dark-o5 underline cursor mr-15" onclick="window.theFittingRoom.renderForgotPasswordModal()">${forgotPasswordWithSymbol}</span>
-                    <span class="arial-helvetica-12-default c-dark-o5 underline cursor">${dontHaveAcc}</span>
+                    <span class="roboto-12-default c-dark-o5 underline cursor mr-15" onclick="window.theFittingRoom.renderForgotPasswordModal()">${forgotPasswordWithSymbol}</span>
+                    <span class="roboto-12-default c-dark-o5 underline cursor">${dontHaveAcc}</span>
                 </div>
 
                 <button class="standard-button bg-aquamarina-strong c-white poppins-medium-16-default cursor mt-30" id="sign-in-button"

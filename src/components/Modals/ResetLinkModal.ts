@@ -18,7 +18,7 @@ const ResetLinkModal = ({override}: ResetLinkModalProps) => {
             </div>
 
             <div class="t-a-center">
-                <span class="arial-helvetica-16-default c-dark-o5 underline cursor mr-20" onclick="window.theFittingRoom.renderSignInModal()">${backToSignIn}</span>
+                <span class="roboto-16-default c-dark-o5 underline cursor mr-20" onclick="window.theFittingRoom.renderSignInModal()">${backToSignIn}</span>
             </div>
         </div>
     `;

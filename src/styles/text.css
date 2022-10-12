@@ -8,10 +8,10 @@
     src: url(../fonts/Poppins-Regular.ttf) format("truetype");
 } */
 
-@font-face {
+/* @font-face {
     font-family: "Arial-Regular";
     src: url(../fonts/Arial-Regular.ttf) format("truetype");
-}
+} */
 
 /* @font-face {
     font-family: "Poppins-Medium";
@@ -58,22 +58,22 @@
     font-size: 16px;
 }
 
-.arial-helvetica-12-default {
-    font-family: Arial, Helvetica, sans-serif;
+.roboto-12-default {
+    font-family: 'Roboto', sans-serif;
     font-size: 12px;
 }
 
-.arial-helvetica-14-default {
-    font-family: Arial, Helvetica, sans-serif;
+.roboto-14-default {
+    font-family: 'Roboto', sans-serif;
     font-size: 14px;
 }
 
-.arial-helvetica-16-default {
-    font-family: Arial, Helvetica, sans-serif;
+.roboto-16-default {
+    font-family: 'Roboto', sans-serif;
     font-size: 16px;
 }
 
-.arial-helvetica-18-default {
-    font-family: Arial, Helvetica, sans-serif;
+.roboto-18-default {
+    font-family: 'Roboto', sans-serif;
     font-size: 18px;
 }

@@ -1,0 +1,45 @@
+{
+    "Texts": {
+      "title": "Virtual try on with (de)",
+      "emailAddress": "Email address (de)",
+      "password": "Password (de)",
+      "signBackIn": "Sign back in (de)",
+      "signUp": "Sign up (de)",
+      "signOut": "Sign out (de)",
+      "signIn": "Sign in (de)",
+      "forgotPassword": "Forgot password (de)",
+      "backToSignIn": "Back to sign in (de)",
+      "send": "Send (de)",
+      "returnToSignIn": "Return to sign in (de)",
+      "forgotPasswordWithSymbol": "Forgot password? (de)",
+      "dontHaveAcc": "Don't have an account? (de)"
+    },
+    "NoAvatarModalTexts": {
+      "dontHaveAvatar": "Whoops! Looks like you don't have an avatar yet. (de)",
+      "createAvatar": "Scan the QR code to return to app to create your avatar. (de)"
+    },
+    "SuccessModalTexts": {
+      "successfullyLoggedOut": "You have successfully logged out! (de)",
+      "returnToSite": "Return to site (de)"
+    },
+    "EnterEmailModalTexts": {
+      "modalTitle": "Enter your email address to be notified when The Fitting Room try on is offered on Google Play: (de)"
+    },
+    "ForgotPasswordModalTexts": {
+      "enterEmailAddress": "Enter your email address, we will send you a link to reset your password. (de)"
+    },
+    "ErrorModal": {
+      "noSizeAvailable": "Unfortunately, that size is not available for try on. (de)",
+      "trySize": "You can try on a size (de)",
+      "orSize": "or size (de)"
+    },
+    "ResetLinkModalTexts": {
+      "associatedEmail": "If there is an account associated with that email, We have sent a link to reset your password. (de)"
+    },
+    "ScanCodeModalTexts": {
+      "createAvatar": "Scan the QR code to download our app and create an avatar: (de)",
+      "tfrAvailable": "The Fitting Room app is currently available for (de)",
+      "notifiedGoogle": "I would like to be notified when it is available on Google Play (de)",
+      "comingSoon": "coming soon! (de)"
+    }
+}

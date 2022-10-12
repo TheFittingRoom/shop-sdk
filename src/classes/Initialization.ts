@@ -18,9 +18,14 @@ export class TheFittingRoomInit {
         link3.rel = 'stylesheet';
         link3.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap';
 
+        const link4 = document.createElement('link');
+        link4.rel = 'stylesheet';
+        link4.href = 'https://fonts.googleapis.com/css2?family=Roboto&display=swap';
+
         document.getElementsByTagName('head')[0].appendChild(link1);
         document.getElementsByTagName('head')[0].appendChild(link2);
         document.getElementsByTagName('head')[0].appendChild(link3);
+        document.getElementsByTagName('head')[0].appendChild(link4);
     }
 
     public constructor(currentScript) {

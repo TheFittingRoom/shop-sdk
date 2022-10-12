@@ -18,8 +18,8 @@ const SuccessModal = ({override}: SuccessModalProps) => {
             </div>
 
             <div class="t-a-center">
-                <span class="arial-helvetica-16-default c-dark-o5 underline cursor mr-20" onclick="window.theFittingRoom.renderSignInModal()">${signBackIn}</span>
-                <span class="arial-helvetica-16-default c-dark-o5 underline cursor" id="returnToSite" onclick="window.theFittingRoom.closeModal()">${returnToSite}</span>
+                <span class="roboto-16-default c-dark-o5 underline cursor mr-20" onclick="window.theFittingRoom.renderSignInModal()">${signBackIn}</span>
+                <span class="roboto-16-default c-dark-o5 underline cursor" id="returnToSite" onclick="window.theFittingRoom.closeModal()">${returnToSite}</span>
             </div>
         </div>
     `;

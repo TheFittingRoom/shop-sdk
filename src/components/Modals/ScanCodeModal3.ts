@@ -24,19 +24,19 @@ const ScanCodeModal3 = ({override}: ScanCodeModal3Props) => {
 
                 <div>
                     <div class="d-flex a-items-center j-content-center">
-                        <div class="arial-helvetica-18-default c-dark mt-10">${tfrAvailable}</div>
+                        <div class="roboto-18-default c-dark mt-10">${tfrAvailable}</div>
                         <img src="../assets/ios-logo.png" class="w-80 h-25" />
                     </div>
 
                     <div class="d-flex a-items-center j-content-center">
                         <img src="../assets/android-logo.png" class="w-100 h-300 p-relative top-7 mr-5" />
-                        <div class="arial-helvetica-18-default c-dark mt-10">${comingSoon}</div>
+                        <div class="roboto-18-default c-dark mt-10">${comingSoon}</div>
                     </div>
                 </div>
 
-                <div class="arial-helvetica-18-default c-dark-o5 underline cursor mt-20" onclick="window.theFittingRoom.renderEnterEmailModal()">${notifiedGoogle}</div>
+                <div class="roboto-18-default c-dark-o5 underline cursor mt-20" onclick="window.theFittingRoom.renderEnterEmailModal()">${notifiedGoogle}</div>
 
-                <div class="arial-helvetica-18-default c-dark-o5 underline cursor mt-30 mb-30 d-inline-block" onclick="window.theFittingRoom.renderSignInModal()">${returnToSignIn}</div>
+                <div class="roboto-18-default c-dark-o5 underline cursor mt-30 mb-30 d-inline-block" onclick="window.theFittingRoom.renderSignInModal()">${returnToSignIn}</div>
             </div>
         </div>
     `;

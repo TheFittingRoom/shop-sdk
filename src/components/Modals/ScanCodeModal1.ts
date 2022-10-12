@@ -22,13 +22,13 @@ const ScanCodeModal1 = ({override}: ScanCodeModal1Props) => {
 
                 <img src="../assets/qr-code-logo.png" class="w-150 h-150 mt-30 mb-20" />
 
-                <div class="arial-helvetica-18-default c-dark-o5 mt-10">${tfrAvailable}</div>
+                <div class="roboto-18-default c-dark-o5 mt-10">${tfrAvailable}</div>
 
                 <img src="../assets/ios-logo.png" class="w-100 h-40 mt-5" />
 
-                <div class="arial-helvetica-18-default c-dark-o5 underline cursor mt-20" onclick="window.theFittingRoom.renderEnterEmailModal()">${notifiedGoogle}</div>
+                <div class="roboto-18-default c-dark-o5 underline cursor mt-20" onclick="window.theFittingRoom.renderEnterEmailModal()">${notifiedGoogle}</div>
 
-                <div class="arial-helvetica-18-default c-dark-o5 underline cursor mt-40 mb-30 d-inline-block" onclick="window.theFittingRoom.renderSignInModal()">${returnToSignIn}</div>
+                <div class="roboto-18-default c-dark-o5 underline cursor mt-40 mb-30 d-inline-block" onclick="window.theFittingRoom.renderSignInModal()">${returnToSignIn}</div>
             </div>
         </div>
     `;

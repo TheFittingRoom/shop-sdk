@@ -23,7 +23,7 @@ const NoAvatarModal = ({override}: NoAvatarModalProps) => {
                 
                 <img src="../assets/qr-code-logo.png" class="w-200 h-200 mt-30 mb-20" />
 
-                <div class="arial-helvetica-16-default c-dark-o5 underline cursor mt-10" onclick="window.theFittingRoom.renderSignInModal()">${returnToSignIn}</div>
+                <div class="roboto-16-default c-dark-o5 underline cursor mt-10" onclick="window.theFittingRoom.renderSignInModal()">${returnToSignIn}</div>
             </div>
         </div>
     `;
