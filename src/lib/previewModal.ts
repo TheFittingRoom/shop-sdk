@@ -57,20 +57,3 @@ export const renderResetLinkModal = (props: ResetLinkModalProps) => {
     document.querySelector("#thefittingroom-modal").setAttribute("style", "display:block;");
     return;
 }
-
-export const updateSignInButton = () => {    
-    const signOutButton = document.getElementById("thefittingroom-signout");
-
-    if (signOutButton) {
-        if (window.theFittingRoom.isLoggedIn()) {
-            // signOutButton.removeAttribute("hidden");
-            signOutButton.removeAttribute("data-tfr");
-
-            
-        } else {
-            // signOutButton.setAttribute("hidden", "true");
-            signOutButton.setAttribute("data-tfr", "true");
-
-        }
-    }
-}

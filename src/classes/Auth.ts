@@ -1,11 +1,13 @@
 import * as firebase from "firebase/auth";
-import { updateSignInButton } from "../lib/previewModal";
+import { showHideElement } from "../lib/updaters";
+
 import { validateEmail, validatePassword } from "../lib/validations";
 import { SignInProps, SignInResponse, PasswordResetEmailProps, ErrorType } from "../types";
 import ErrorHandler from "./ErrorHandler";
 import { FirebaseInstance } from "./Firebase";
 class Auth {
     static async signIn({ email, password }: SignInProps): Promise<SignInResponse | ErrorType | void> {
+
         if (!validateEmail(email) || !validatePassword(password)) {
             return ErrorHandler.BAD_REQUEST;
         }
@@ -13,7 +15,8 @@ class Auth {
         try {
             await firebase.signInWithEmailAndPassword(FirebaseInstance.auth, email, password);
 
-            updateSignInButton();
+            const signOutButton = document.getElementById("thefittingroom-signout-button")
+            showHideElement(true, signOutButton)
 
             window.theFittingRoom.renderScanCodeModal();
         } catch (error) {
@@ -25,7 +28,8 @@ class Auth {
         try {
             await firebase.signOut(FirebaseInstance.auth);
 
-            updateSignInButton();
+            const signOutButton = document.getElementById("thefittingroom-signout-button")
+            showHideElement(false, signOutButton)
 
             window.theFittingRoom.renderSuccessModal();
         } catch (error) {
@@ -51,6 +55,10 @@ class Auth {
     static isLoggedIn() {
         return Boolean(FirebaseInstance.auth.currentUser);
     }
+
+
+
+
 }
 
 export default Auth;

@@ -14,6 +14,10 @@
     background-color: rgb(230,230,230);
 }
 
+[data-tfr=hidden] {
+    display: none;
+}
+
 /* Modal */
 .modal {
     /* display: none; */

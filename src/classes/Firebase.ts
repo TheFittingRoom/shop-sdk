@@ -1,6 +1,6 @@
 import * as firebase from "firebase/app";
 import * as firebaseAuth from "firebase/auth";
-import { updateSignInButton } from "../lib/previewModal";
+import { showHideElement } from "../lib/updaters";
 import ErrorHandler from "./ErrorHandler";
 export class FirebaseInstance {
     static auth: firebaseAuth.Auth;
@@ -19,10 +19,14 @@ export class FirebaseInstance {
 
         FirebaseInstance.auth = firebaseAuth.getAuth(firebaseApp);
 
-        firebaseAuth.onAuthStateChanged(FirebaseInstance.auth, () => {
-            updateSignInButton();
+        firebaseAuth.onAuthStateChanged(FirebaseInstance.auth, (user) => {
+            const signOut = document.getElementById("thefittingroom-signout")
+
+            showHideElement(user, signOut)
         })
     }
+
+
 
     static async getTokenId(){
         try {

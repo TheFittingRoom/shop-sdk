@@ -25,7 +25,7 @@ const ErrorModal = ({override, errorText, sizes}: ErrorModalProps) => {
                         <div class="poppins-regular-20-default c-dark">${errorMsg}</div>
                     </div>
 
-                    <button class="standard-button bg-aquamarina-strong c-white poppins-medium-16-default cursor mt-10-p" id="signOutButton" onclick="window.theFittingRoom.signOut()">
+                    <button class="standard-button bg-aquamarina-strong c-white poppins-medium-16-default cursor mt-10-p" id="thefittingroom-signout-btn" onclick="window.theFittingRoom.signOut()">
                         ${signOut}
                     </button>
                 </div>
