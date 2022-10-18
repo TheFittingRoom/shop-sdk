@@ -14,7 +14,7 @@
     background-color: rgb(230,230,230);
 }
 
-[data-tfr=hidden] {
+*[data-tfr=hidden] {
     display: none;
 }
 
