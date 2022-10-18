@@ -43,6 +43,7 @@ export class Locale {
     }
 
     static async setLocale(locale: string): Promise<void | ErrorType> {
+        // Todo - handle with version updates
         fetch(`https://cdn.jsdelivr.net/gh/arbershabani1/tfr-languages@c6845f1df46cf253af7d8100e83f1fcfa002410c/${locale}.json`)
         .then((response) => response.json())
         .then((data) => {

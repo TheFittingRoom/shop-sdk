@@ -17,6 +17,17 @@ export class FirebaseInstance {
         const firebaseApp = firebase.initializeApp(firebaseConfig);
 
         FirebaseInstance.auth = firebaseAuth.getAuth(firebaseApp);
+
+        firebaseAuth.onAuthStateChanged(FirebaseInstance.auth, (user)=> {
+            let signOutButton = document.getElementById("thefittingroom-signout");
+            if(signOutButton){
+                if(user) {
+                    signOutButton.removeAttribute("hidden");
+                } else {
+                    signOutButton.setAttribute("hidden", "true");
+                }   
+            }         
+        })
     }
 
     static async getTokenId(){
