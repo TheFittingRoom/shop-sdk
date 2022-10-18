@@ -1,20 +1,13 @@
 import { Locale } from "../../classes/Locale";
-import { getProfile } from "../../classes/Profile";
 import { TfrLogo } from "../../lib/svgUrl";
-import { EnterEmailModalProps, ProfileResponse } from "../../types";
+import { EnterEmailModalProps } from "../../types";
 
 const EnterEmailModal = ({override}: EnterEmailModalProps) => {
     const { Strings } = override || Locale.getLocale();
     const { title, emailAddress, signUp, modalTitle } = Strings;
 
-    getProfile().then((data: ProfileResponse) => {
-        if (data?.hasAvatar) {
-            document.querySelector('#thefittingroom-modal #signUpButton').style.display = "none";
-        }
-    });
-
     return `
-        <div class="modal">
+        <div class="modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
             <div class="modal-content-container p-20">
                 <div class="close-container" onclick="window.theFittingRoom.closeModal()">
                     <span class="close cursor">&times;</span>
@@ -40,12 +33,12 @@ const EnterEmailModal = ({override}: EnterEmailModalProps) => {
 
                     <button id="signUpButton" class="standard-button bg-aquamarina-strong c-white poppins-medium-16-default cursor mt-30"
                         onclick="
-                            window.theFittingRoom.validate();
-                            const response = window.theFittingRoom.notifyEmail({email: document.querySelector('#thefittingroom-modal #email-input').value});
+                            window.theFittingRoom._internal.validate();
+                            const response = window.theFittingRoom._internal.notifyEmail({email: document.querySelector('#thefittingroom-modal #email-input').value});
 
                             response.then(data => {
                                 if (data?.errorMessage) {
-                                    window.theFittingRoom.validate(data.errorMessage)
+                                    window.theFittingRoom._internal.validate(data.errorMessage)
                                 }
                             })
                         "

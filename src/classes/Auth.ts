@@ -1,4 +1,5 @@
 import * as firebase from "firebase/auth";
+import { updateSignInButton } from "../lib/previewModal";
 import { validateEmail, validatePassword } from "../lib/validations";
 import { SignInProps, SignInResponse, PasswordResetEmailProps, ErrorType } from "../types";
 import ErrorHandler from "./ErrorHandler";
@@ -12,7 +13,9 @@ class Auth {
         try {
             await firebase.signInWithEmailAndPassword(FirebaseInstance.auth, email, password);
 
-            window.theFittingRoom.closeModal();
+            updateSignInButton();
+
+            window.theFittingRoom.renderScanCodeModal();
         } catch (error) {
             return ErrorHandler.getFireBaseError(error);
         }
@@ -21,6 +24,8 @@ class Auth {
     static async signOut(): Promise<void | ErrorType> {
         try {
             await firebase.signOut(FirebaseInstance.auth);
+
+            updateSignInButton();
 
             window.theFittingRoom.renderSuccessModal();
         } catch (error) {
@@ -36,6 +41,7 @@ class Auth {
 
         try {
             await firebase.sendPasswordResetEmail(FirebaseInstance.auth, email);
+
             window.theFittingRoom.renderResetLinkModal();
         } catch (error) {
             return ErrorHandler.getFireBaseError(error);

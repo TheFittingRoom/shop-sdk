@@ -11,7 +11,7 @@ class Api {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`
             }
-        }).then(res => res.json());
+        }).then(res =>res.json());
     }
 
     static get = (url, data = {}) => Api.fetch(url, {...data, method:"GET"})

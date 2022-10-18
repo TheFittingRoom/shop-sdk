@@ -7,7 +7,7 @@ const ForgotPasswordModal = ({override}: ForgotPasswordModalProps) => {
     const { title, emailAddress, forgotPassword, backToSignIn, send, enterEmailAddress } = Strings;
 
     return `
-        <div class="modal">
+        <div class="modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
             <div class="modal-content-container p-20">
                 <div class="close-container" onclick="window.theFittingRoom.closeModal()">
                     <span class="close cursor">&times;</span>
@@ -38,12 +38,12 @@ const ForgotPasswordModal = ({override}: ForgotPasswordModalProps) => {
 
                     <button class="standard-button bg-aquamarina-strong c-white poppins-medium-16-default cursor mt-30"
                     onclick="
-                            window.theFittingRoom.validate()
-                            const response = window.theFittingRoom.sendPasswordResetEmail({email: document.querySelector('#thefittingroom-modal #email-input').value})
+                            window.theFittingRoom._internal.validate()
+                            const response = window.theFittingRoom._internal.sendPasswordResetEmail({email: document.querySelector('#thefittingroom-modal #email-input').value})
                             
                             response.then(data => {
                                 if (data?.errorMessage) {
-                                    window.theFittingRoom.validate(data.errorMessage)
+                                    window.theFittingRoom._internal.validate(data.errorMessage)
                                 }
                             })
                         "

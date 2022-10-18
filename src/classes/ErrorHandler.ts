@@ -5,12 +5,12 @@ class ErrorHandler {
     static UNAUTHORIZED: ErrorType = {code: 401, errorMessage: 'Unauthorized'};
     static FORBIDDEN: ErrorType = {code: 403, errorMessage: 'Forbidden'};
     static NOT_FOUND: ErrorType = {code: 404, errorMessage: 'Not Found'};
-    // Todo - check offline
+    static BAD_GATEWAY: ErrorType = {code: 502, errorMessage: 'Bad Gateway'};
 
     static getFireBaseError(error: {code: string}) {
         if (error.code === 'auth/invalid-email') return this.BAD_REQUEST;
         if (error.code === 'auth/user-not-found') return this.NO_CONTENT;
-        // Todo - check offline
+        if (error.code === 'auth/network-request-failed') return this.BAD_GATEWAY;
 
         return this.BAD_REQUEST;
     }

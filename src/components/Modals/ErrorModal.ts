@@ -9,7 +9,7 @@ const ErrorModal = ({override, errorText, sizes}: ErrorModalProps) => {
     const errorMsg = errorText || (Boolean(sizes?.recommended) && `${noSizeAvailable} ${trySize} ${sizes?.recommended} ${orSize} ${sizes?.optionalSizes?.[0]}`) || somethingWentWrong;
 
     return `
-        <div class="modal">
+        <div class="modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
             <div class="modal-content-container pt-5-p pb-5-p pr-20 pl-20">
                 <div class="modal-content">
                     <div class="modal-title-logo-container">

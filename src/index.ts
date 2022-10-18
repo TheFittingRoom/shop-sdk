@@ -17,6 +17,7 @@ import {
     renderResetLinkModal,
 } from './lib/previewModal';
 import { getProfile } from './classes/Profile';
+import { tryOnWithTheFittingRoom } from './classes/TryOnWithTheFittingRoom';
 
 declare global {
     interface Window {
@@ -39,24 +40,25 @@ window.addEventListener('load', () => {
     window.theFittingRoom = {
         ...instance,
         _internal: {
-            signIn: Auth.signIn
+            signIn: Auth.signIn,
+            sendPasswordResetEmail: Auth.sendPasswordResetEmail,
+            notifyEmail,
+            validate,
         },
         // Auth
-        sendPasswordResetEmail: Auth.sendPasswordResetEmail,
-        signOut: Auth.signOut,
         isLoggedIn: Auth.isLoggedIn,
+        signOut: Auth.signOut,
         // Sizes
         getRecommendedSizes,
         // Avatar
         getVirtualTryOnFrames,
         getProfile,
-        notifyEmail,
         // Language service
         getLocale: Locale.getLocale,
         setLocale: Locale.setLocale,
         // Modals
-        renderNoAvatarModal,
         closeModal,
+        renderNoAvatarModal,
         renderSignInModal,
         renderForgotPasswordModal,
         renderScanCodeModal,
@@ -64,6 +66,6 @@ window.addEventListener('load', () => {
         renderErrorModal,
         renderSuccessModal,
         renderResetLinkModal,
-        validate,
+        tryOnWithTheFittingRoom,
     }
 });

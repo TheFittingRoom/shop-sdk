@@ -7,7 +7,7 @@ const NoAvatarModal = ({override}: NoAvatarModalProps) => {
     const { title, backToSignIn, dontHaveAvatar, returnToTfr } = Strings;
 
     return `
-        <div class="modal">
+        <div class="modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
             <div class="modal-content-container p-20">
                 <div class="close-container" onclick="window.theFittingRoom.closeModal()">
                     <span class="close cursor">&times;</span>

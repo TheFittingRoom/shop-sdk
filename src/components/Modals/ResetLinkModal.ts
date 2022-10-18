@@ -7,7 +7,7 @@ const ResetLinkModal = ({override}: ResetLinkModalProps) => {
     const { title, backToSignIn, associatedEmail } = Strings;
 
     return `
-        <div class="modal">
+        <div class="modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
             <div class="modal-content-container pt-7-p pb-7-p pr-20 pl-20">
                 <div class="modal-content">
                     <div class="modal-title-logo-container">

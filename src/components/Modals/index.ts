@@ -15,11 +15,26 @@ export const initializeModal = ()=> {
         }
     }
 }
-export const closeModal = () => {
-    const modal = document.getElementById("thefittingroom-modal");
-    if(modal){
+
+const hideModal = (modal: HTMLElement) => {
+    if (modal) {
         modal.style.display = "none";
         modal.innerHTML = "";
+    }
+}
+
+export const closeModal = (isCalledFromParent?: boolean) => {
+    const modal = document.getElementById("thefittingroom-modal");
+
+    if (isCalledFromParent) {
+        const modalContainer = document.querySelector('#thefittingroom-modal #modalContainer');
+        window.onclick = (event) => {
+            if (event.target == modalContainer) {
+                hideModal(modal);
+            }
+        }
+    } else {
+        hideModal(modal);
     }
 }
 
