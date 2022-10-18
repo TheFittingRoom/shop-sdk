@@ -10,14 +10,13 @@ import {
     renderNoAvatarModal,
     renderSignInModal,
     renderForgotPasswordModal,
-    renderScanCodeModal1,
-    renderScanCodeModal2,
-    renderScanCodeModal3,
+    renderScanCodeModal,
     renderEnterEmailModal,
     renderErrorModal,
     renderSuccessModal,
     renderResetLinkModal,
 } from './lib/previewModal';
+import { getProfile } from './classes/Profile';
 
 declare global {
     interface Window {
@@ -50,6 +49,7 @@ window.addEventListener('load', () => {
         getRecommendedSizes,
         // Avatar
         getVirtualTryOnFrames,
+        getProfile,
         notifyEmail,
         // Language service
         getLocale: Locale.getLocale,
@@ -59,9 +59,7 @@ window.addEventListener('load', () => {
         closeModal,
         renderSignInModal,
         renderForgotPasswordModal,
-        renderScanCodeModal1,
-        renderScanCodeModal2,
-        renderScanCodeModal3,
+        renderScanCodeModal,
         renderEnterEmailModal,
         renderErrorModal,
         renderSuccessModal,

@@ -2,72 +2,58 @@ import {
     NoAvatarModal,
     SignInModal,
     ForgotPasswordModal,
-    ScanCodeModal1,
-    ScanCodeModal2,
-    ScanCodeModal3,
+    ScanCodeModal,
     EnterEmailModal,
     ErrorModal,
     SuccessModal,
     ResetLinkModal,
 } from '../components';
-import { ErrorModalProps } from '../types';
+import { ErrorModalProps, SignInModalProps, NoAvatarModalProps, ForgotPasswordModalProps, ScanCodeModalProps, EnterEmailModalProps, SuccessModalProps, ResetLinkModalProps } from '../types';
 
-export const renderNoAvatarModal = () => {
-    document.querySelector("#thefittingroom-modal").innerHTML = NoAvatarModal({});
+export const renderNoAvatarModal = (props: NoAvatarModalProps) => {
+    document.querySelector("#thefittingroom-modal").innerHTML = NoAvatarModal({...props});
     document.querySelector("#thefittingroom-modal").setAttribute("style", "display:block;");
     return;
 }
 
-export const renderSignInModal = () => {
-    document.querySelector("#thefittingroom-modal").innerHTML = SignInModal({});
+export const renderSignInModal = (props: SignInModalProps) => {
+    document.querySelector("#thefittingroom-modal").innerHTML = SignInModal({...props});
     document.querySelector("#thefittingroom-modal").setAttribute("style", "display:block;");
     return;
 }
 
-export const renderForgotPasswordModal = () => {
-    document.querySelector("#thefittingroom-modal").innerHTML = ForgotPasswordModal({});
+export const renderForgotPasswordModal = (props: ForgotPasswordModalProps) => {
+    document.querySelector("#thefittingroom-modal").innerHTML = ForgotPasswordModal({...props});
     document.querySelector("#thefittingroom-modal").setAttribute("style", "display:block;");
     return;
 }
 
-export const renderScanCodeModal1 = () => {
-    document.querySelector("#thefittingroom-modal").innerHTML = ScanCodeModal1({});
+export const renderScanCodeModal = (props: ScanCodeModalProps) => {
+    document.querySelector("#thefittingroom-modal").innerHTML = ScanCodeModal({...props});
     document.querySelector("#thefittingroom-modal").setAttribute("style", "display:block;");
     return;
 }
 
-export const renderScanCodeModal2 = () => {
-    document.querySelector("#thefittingroom-modal").innerHTML = ScanCodeModal2({});
+export const renderEnterEmailModal = (props: EnterEmailModalProps) => {
+    document.querySelector("#thefittingroom-modal").innerHTML = EnterEmailModal({...props});
     document.querySelector("#thefittingroom-modal").setAttribute("style", "display:block;");
     return;
 }
 
-export const renderScanCodeModal3 = () => {
-    document.querySelector("#thefittingroom-modal").innerHTML = ScanCodeModal3({});
+export const renderErrorModal = (props: ErrorModalProps) => {
+    document.querySelector("#thefittingroom-modal").innerHTML = ErrorModal({...props});
     document.querySelector("#thefittingroom-modal").setAttribute("style", "display:block;");
     return;
 }
 
-export const renderEnterEmailModal = () => {
-    document.querySelector("#thefittingroom-modal").innerHTML = EnterEmailModal({});
+export const renderSuccessModal = (props: SuccessModalProps) => {
+    document.querySelector("#thefittingroom-modal").innerHTML = SuccessModal({...props});
     document.querySelector("#thefittingroom-modal").setAttribute("style", "display:block;");
     return;
 }
 
-export const renderErrorModal = ({errorText, sizes}: ErrorModalProps) => {
-    document.querySelector("#thefittingroom-modal").innerHTML = ErrorModal({errorText, sizes});
-    document.querySelector("#thefittingroom-modal").setAttribute("style", "display:block;");
-    return;
-}
-
-export const renderSuccessModal = () => {
-    document.querySelector("#thefittingroom-modal").innerHTML = SuccessModal({});
-    document.querySelector("#thefittingroom-modal").setAttribute("style", "display:block;");
-    return;
-}
-
-export const renderResetLinkModal = () => {
-    document.querySelector("#thefittingroom-modal").innerHTML = ResetLinkModal({});
+export const renderResetLinkModal = (props: ResetLinkModalProps) => {
+    document.querySelector("#thefittingroom-modal").innerHTML = ResetLinkModal({...props});
     document.querySelector("#thefittingroom-modal").setAttribute("style", "display:block;");
     return;
 }

@@ -1,16 +1,28 @@
-body {
-    font-family: 'Roboto', sans-serif;
+.home-button-container {
+    display:flex;
+    flex-wrap: wrap;
+    margin: 20px;
+}
+.home-button-container>button {
+    height:60px;
+    width:200px;
+    margin: 20px;
+    border:0;
+    cursor:pointer;
+}
+.home-button-container>button:hover {
+    background-color: rgb(230,230,230);
 }
 
 /* Modal */
 .modal {
     /* display: none; */
     /* Hidden by default */
-    position: absolute;
+    position: fixed;
     /* Stay in place */
-    z-index: 1;
+    z-index: 10000;
     /* Sit on top */
-    padding-top: 100px;
+    /* padding-top: 100px; */
     /* Location of the box */
     left: 0;
     top: 0;
@@ -21,6 +33,10 @@ body {
     overflow: auto;
     /* Enable scroll if needed */
     background-color: rgba(0, 0, 0, 0.53);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .modal-content {
@@ -33,10 +49,12 @@ body {
 .modal-content-container {
     background-color: #ffffff;
     max-width: 709px;
+    width: 100%;
     margin: auto;
     border-radius: 10px;
     border: 1px solid #434343;
     box-shadow: 0px 6px 6px #00000029;
+    line-height: normal;
 }
 
 /* Close button */
@@ -86,9 +104,9 @@ body {
     justify-content: center;
 }
 
-.tfr-logo {
-    width: 247px;
-    height: 40px;
+.girl-clothes {
+    width: 253px;
+    height: 316px;
     display: inline-block;
 }
 
@@ -178,4 +196,14 @@ body {
 
 .top-7 {
     top: 7px;
+}
+
+.how-it-works-item {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+}
+
+.try-on-content {
+    margin-left: 60px;
 }

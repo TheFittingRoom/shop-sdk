@@ -14,48 +14,25 @@
         <script src="http://127.0.0.1:8080/dist/cjs/main.js?secret=asd&language=en" type="text/javascript"></script>
     </head>
     <body>
-        <!-- <button onclick="window.theFittingRoom.renderSignUpModal()">Show The Fitting Room Modal 1</button> -->
-        <!-- <button onclick="window.theFittingRoom.renderTryAgainModal()">Show The Fitting Room Modal 7</button> -->
-        <style>
-            body {
-                display:flex;
-                flex-wrap: wrap;
-                margin: 20px;
-            }
-            body>button {
-                height:60px;
-                width:200px;
-                margin: 20px;
-                border:0;
-                cursor:pointer;
-            }
-            body>button:hover {
-                background-color: rgb(230,230,230);
-            }
-        </style>
-        <button onclick="window.theFittingRoom.renderSignInModal()">Sign In Modal</button>
-        <br>
-        <button onclick="window.theFittingRoom.renderErrorModal({errorText: '', sizes: {recommended: ['1', '2'], optionalSizes: ['1', '2']}})">Error Modal default text</button>
-        <br>
-        <button onclick="window.theFittingRoom.renderErrorModal({errorText: 'Text hereee ...'})">Error Modal with random text</button>
-        <br>
-        <button onclick="window.theFittingRoom.renderSuccessModal()">Success Modal</button>
-        <br>
-        <button onclick="window.theFittingRoom.renderForgotPasswordModal()">Forgot Password Modal</button>
-        <br>
-        <button onclick="window.theFittingRoom.renderResetLinkModal()">Reset Link Modal</button>
-        <br>
-        <button onclick="window.theFittingRoom.renderEnterEmailModal()">Enter Email Modal</button>
-        <br>
-        <button onclick="window.theFittingRoom.renderNoAvatarModal()">No Avatar Modal</button>
-        <br>
-        <button onclick="window.theFittingRoom.renderScanCodeModal1()">Scan Code Modal</button>
-        <br>
-        <button onclick="window.theFittingRoom.renderScanCodeModal2()">Scan Code Modal 2</button>
-        <br>
-        <button onclick="window.theFittingRoom.renderScanCodeModal3()">Scan Code Modal 3</button>
-        <br>
+        <div class="home-button-container">
+            <button onclick="window.theFittingRoom.renderSignInModal()">Sign In Modal</button>
+            <br>
+            <button onclick="window.theFittingRoom.renderErrorModal()">Error Modal default text</button>
+            <br>
+            <button onclick="window.theFittingRoom.renderSuccessModal()">Success Modal</button>
+            <br>
+            <button onclick="window.theFittingRoom.renderForgotPasswordModal()">Forgot Password Modal</button>
+            <br>
+            <button onclick="window.theFittingRoom.renderResetLinkModal()">Reset Link Modal</button>
+            <br>
+            <button onclick="window.theFittingRoom.renderEnterEmailModal()">Enter Email Modal</button>
+            <br>
+            <button onclick="window.theFittingRoom.renderNoAvatarModal()">No Avatar Modal</button>
+            <br>
+            <button onclick="window.theFittingRoom.renderScanCodeModal()">Scan Code Modal</button>
+            <br>
+        </div>
 
-        <div id="thefittingroom-modal" class="modal" style="display:none;"/>
+        <div id="thefittingroom-modal" style="display:none;"/>
     </body>
 </html>

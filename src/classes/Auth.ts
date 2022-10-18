@@ -24,6 +24,7 @@ class Auth {
 
             window.theFittingRoom.renderSuccessModal();
         } catch (error) {
+            window.theFittingRoom.renderErrorModal();
             return ErrorHandler.getFireBaseError(error);
         }
     }

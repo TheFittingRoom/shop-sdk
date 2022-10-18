@@ -9,4 +9,11 @@
     .fieldset {
         width: 90%;
     }
+    .how-it-works-item {
+        flex-direction: column;
+    }
+    .try-on-content {
+        margin-left: 0px;
+        margin-top: 20px;
+    }
 }

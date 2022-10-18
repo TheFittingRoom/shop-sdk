@@ -11,6 +11,7 @@ export const getRecommendedSizes = async ({ sku }: GetRecommendedSizeProps): Pro
             optionalSizes: data.optionalSizes
         };
     } catch (error) {
+        window.theFittingRoom.renderErrorModal({sizes: {recommended: "1", optionalSizes: ["2", "3"]}});
         return ErrorHandler.NOT_FOUND;
     }
 }

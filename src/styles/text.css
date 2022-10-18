@@ -19,42 +19,42 @@
 } */
 
 .poppins-regular-20-default {
-    /* font-family: 'Poppins', sans-serif; */
-    font-family: "Poppins-Regular";
+    font-family: 'Poppins', sans-serif;
+    /* font-family: "Poppins-Regular"; */
     font-size: 20px;
 }
 
 .poppins-regular-20-300 {
-    /* font-family: 'Poppins', sans-serif; */
-    font-family: "Poppins-Regular";
+    font-family: 'Poppins', sans-serif;
+    /* font-family: "Poppins-Regular"; */
     font-size: 20px;
     font-weight: 300;
 }
 
 .poppins-light-22-300 {
-    /* font-family: 'Poppins', sans-serif; */
-    font-family: "Poppins-Light";
+    font-family: 'Poppins', sans-serif;
+    /* font-family: "Poppins-Light"; */
     font-size: 22px;
     font-weight: 300;
 }
 
 .poppins-light-24-300 {
-    /* font-family: 'Poppins', sans-serif; */
-    font-family: "Poppins-Light";
+    font-family: 'Poppins', sans-serif;
+    /* font-family: "Poppins-Light"; */
     font-size: 24px;
     font-weight: 300;
 }
 
 .poppins-light-16-300 {
-    /* font-family: 'Poppins', sans-serif; */
-    font-family: "Poppins-Light";
+    font-family: 'Poppins', sans-serif;
+    /* font-family: "Poppins-Light"; */
     font-size: 16px;
     font-weight: 300;
 }
 
 .poppins-medium-16-default {
-    /* font-family: 'Poppins', sans-serif; */
-    font-family: "Poppins-Medium";
+    font-family: 'Poppins', sans-serif;
+    /* font-family: "Poppins-Medium"; */
     font-size: 16px;
 }
 

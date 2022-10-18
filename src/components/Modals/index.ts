@@ -1,9 +1,7 @@
 import NoAvatarModal from './NoAvatarModal';
 import SignInModal from './SignInModal';
 import ForgotPasswordModal from './ForgotPasswordModal';
-import ScanCodeModal1 from './ScanCodeModal1';
-import ScanCodeModal2 from './ScanCodeModal2';
-import ScanCodeModal3 from './ScanCodeModal3';
+import ScanCodeModal from './ScanCodeModal';
 import EnterEmailModal from './EnterEmailModal';
 import ErrorModal from './ErrorModal';
 import SuccessModal from './SuccessModal';
@@ -57,9 +55,7 @@ export {
     NoAvatarModal,
     SignInModal,
     ForgotPasswordModal,
-    ScanCodeModal1,
-    ScanCodeModal2,
-    ScanCodeModal3,
+    ScanCodeModal,
     EnterEmailModal,
     ErrorModal,
     SuccessModal,

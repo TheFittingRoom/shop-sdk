@@ -1,29 +1,34 @@
 import { Locale } from "../../classes/Locale";
+import { TfrLogo } from "../../lib/svgUrl";
 import { NoAvatarModalProps } from "../../types";
 
 const NoAvatarModal = ({override}: NoAvatarModalProps) => {
-    const { Texts, NoAvatarModalTexts } = override || Locale.getLocale();
-    const { title, returnToSignIn } = Texts;
-    const { dontHaveAvatar, createAvatar } = NoAvatarModalTexts;
+    const { Strings } = override || Locale.getLocale();
+    const { title, backToSignIn, dontHaveAvatar, returnToTfr } = Strings;
 
     return `
-        <div class="modal-content-container p-20">
-            <div class="close-container" onclick="window.theFittingRoom.closeModal()">
-                <span class="close cursor">&times;</span>
-            </div>
-
-            <div class="modal-content pt-20 pb-50">
-                <div class="modal-title-logo-container">
-                    <div class="poppins-light-24-300 c-dark mr-10">${title}</div>
-                    <img src='../assets/tfr-logo.jpeg' class="tfr-logo" />
+        <div class="modal">
+            <div class="modal-content-container p-20">
+                <div class="close-container" onclick="window.theFittingRoom.closeModal()">
+                    <span class="close cursor">&times;</span>
                 </div>
 
-                <div class="poppins-light-22-300 c-dark mt-30">${dontHaveAvatar}</div>
-                <div class="poppins-light-22-300 c-dark">${createAvatar}</div>
-                
-                <img src="../assets/qr-code-logo.png" class="w-200 h-200 mt-30 mb-20" />
+                <div class="modal-content pt-20 pb-50">
+                    <div class="modal-title-logo-container">
+                        <div class="poppins-light-24-300 c-dark mr-10">${title}</div>
+                        <div>
+                            <object data="tfr-logo.svg" type="image/svg+xml">
+                                <img src="${TfrLogo}" />
+                            </object>
+                        </div>
+                    </div>
 
-                <div class="roboto-16-default c-dark-o5 underline cursor mt-10" onclick="window.theFittingRoom.renderSignInModal()">${returnToSignIn}</div>
+                    <div class="poppins-light-22-300 c-dark mt-60">${dontHaveAvatar}</div>
+                    <div class="poppins-light-22-300 c-dark mb-60">${returnToTfr}</div>
+                
+
+                    <div class="roboto-16-default c-dark-o5 underline cursor mt-10" onclick="window.theFittingRoom.renderSignInModal()">${backToSignIn}</div>
+                </div>
             </div>
         </div>
     `;

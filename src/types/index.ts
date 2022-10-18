@@ -20,17 +20,11 @@ export interface ErrorModalProps extends ModalProps {
 export interface ResetLinkModalProps extends ModalProps {
     // 
 };
-export interface ScanCodeModal1Props extends ModalProps {
-    // 
-};
-export interface ScanCodeModal2Props extends ModalProps {
-    // 
-};
-export interface ScanCodeModal3Props extends ModalProps {
+export interface ScanCodeModalProps extends ModalProps {
     // 
 };
 export interface SignInModalProps extends ModalProps {
-    // 
+    imgUrl?: string
 };
 export interface SuccessModalProps extends ModalProps {
     // 

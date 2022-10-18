@@ -52,12 +52,20 @@
     margin-left: 10px;
 }
 
+.ml-60 {
+    margin-left: 60px;
+}
+
 .mt-50 {
     margin-top: 50px;
 }
 
 .mt-60 {
     margin-top: 60px;
+}
+
+.mb-60 {
+    margin-bottom: 60px;
 }
 
 .mb-10 {
