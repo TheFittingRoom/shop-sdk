@@ -1,6 +1,7 @@
 import typescript from '@rollup/plugin-typescript';
 import { terser } from "rollup-plugin-terser";
 import { nodeResolve } from '@rollup/plugin-node-resolve';
+import styles from "rollup-plugin-styles";
 import dotenv from "rollup-plugin-dotenv"
 import pkg from "./package.json";
 
@@ -19,6 +20,7 @@ const browserConfig = {
 const tsconfigOverride = {
     exclude: ["node_modules", "**/*.test.ts"],
 };
+
 export default {
     input: 'src/index.ts',
     output: [
@@ -55,5 +57,12 @@ export default {
             plugins: [terser()],
         },
     ],
-    plugins: [ dotenv(),nodeResolve(),typescript({ ...tsconfigOverride })]
+    plugins: [ 
+        dotenv(),
+        styles({
+            minimize: true,
+        }),
+        nodeResolve(),
+        typescript({ ...tsconfigOverride })
+    ]
 };

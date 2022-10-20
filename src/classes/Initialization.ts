@@ -1,4 +1,6 @@
 import { Locale } from "./Locale";
+import "../styles"
+
 export class TheFittingRoomInit {
     public locale?: string = "en";
     public key: string;
