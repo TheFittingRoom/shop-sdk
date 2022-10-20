@@ -1,10 +1,10 @@
 import * as firebase from "firebase/auth";
 import { showHideElement } from "../lib/updaters";
-
 import { validateEmail, validatePassword } from "../lib/validations";
 import { SignInProps, SignInResponse, PasswordResetEmailProps, ErrorType } from "../types";
 import ErrorHandler from "./ErrorHandler";
 import { FirebaseInstance } from "./Firebase";
+import { getProfile } from "./Profile";
 class Auth {
     static async signIn({ email, password }: SignInProps): Promise<SignInResponse | ErrorType | void> {
 
@@ -14,11 +14,16 @@ class Auth {
 
         try {
             await firebase.signInWithEmailAndPassword(FirebaseInstance.auth, email, password);
+            const data = await getProfile();
 
             const signOutButton = document.getElementById("thefittingroom-signout-button")
-            showHideElement(true, signOutButton)
+            showHideElement(true, signOutButton);
 
-            window.theFittingRoom.renderScanCodeModal();
+            if (!data[0].hasAvatar) {
+                window.theFittingRoom.renderNoAvatarModal();
+            } else {
+                window.theFittingRoom.renderScanCodeModal();
+            }
         } catch (error) {
             return ErrorHandler.getFireBaseError(error);
         }

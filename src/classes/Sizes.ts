@@ -11,6 +11,7 @@ export const getRecommendedSizes = async ({ sku }: GetRecommendedSizeProps): Pro
             optionalSizes: data.optionalSizes
         };
     } catch (error) {
+        // Todo - remove this and handle all types of api errors (based on possible types)
         window.theFittingRoom.renderErrorModal({sizes: {recommended: "1", optionalSizes: ["2", "3"]}});
         return ErrorHandler.NOT_FOUND;
     }
