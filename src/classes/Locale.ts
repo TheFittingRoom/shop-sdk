@@ -48,8 +48,8 @@ export class Locale {
         .then((data) => {
             this.strings = data;
         })
-        .catch(() => {
-            return ErrorHandler.NOT_FOUND;
+        .catch((error) => {
+            return ErrorHandler.getError(error?.status?.code);
         });
     };
 

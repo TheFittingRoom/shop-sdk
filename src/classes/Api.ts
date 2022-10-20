@@ -1,8 +1,16 @@
+import ErrorHandler from "./ErrorHandler";
 import { FirebaseInstance } from "./Firebase";
-
 class Api {
     static fetch = async (url, data) => {
+        if (!navigator.onLine) {
+            return ErrorHandler.NO_INTERNET;
+        }
+
         const token = await FirebaseInstance.getTokenId();
+        if (!token) {
+            return ErrorHandler.UNAUTHORIZED;
+        }
+
         return fetch(process.env.MOCK_DB_URL+url, {
             ...data,
             body: JSON.stringify(data?.body),

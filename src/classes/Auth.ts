@@ -60,10 +60,6 @@ class Auth {
     static isLoggedIn() {
         return Boolean(FirebaseInstance.auth.currentUser);
     }
-
-
-
-
 }
 
 export default Auth;

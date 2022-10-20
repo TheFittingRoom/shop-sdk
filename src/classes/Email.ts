@@ -14,6 +14,6 @@ export const notifyEmail = async ({ email }: NotifyEmailProps): Promise<NotifyEm
 
         return {id: data.id, email: data.email};
     } catch (error) {
-        return ErrorHandler.BAD_REQUEST;
+        return ErrorHandler.getError(error?.status?.code)
     }
 }

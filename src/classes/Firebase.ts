@@ -1,7 +1,6 @@
 import * as firebase from "firebase/app";
 import * as firebaseAuth from "firebase/auth";
 import { showHideElement } from "../lib/updaters";
-import ErrorHandler from "./ErrorHandler";
 export class FirebaseInstance {
     static auth: firebaseAuth.Auth;
 
@@ -26,14 +25,12 @@ export class FirebaseInstance {
         })
     }
 
-
-
     static async getTokenId(){
         try {
             const token = await FirebaseInstance.auth.currentUser.getIdToken();
             return token;
         } catch (error) {
-            return ErrorHandler.getFireBaseError(error);
+            return false;
         }
     }
 }
