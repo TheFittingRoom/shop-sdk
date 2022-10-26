@@ -28,7 +28,7 @@ export class TheFittingRoomInit {
     public constructor(currentScript) {
         const {searchParams} = new URL(currentScript.getAttribute("src"));
         const key = searchParams.get("key") || "";
-        const language = searchParams.get("lang") || "en";
+        const language = searchParams.get("language") || "en";
         const version = searchParams.get("version") || "";
 
         this.injectStyles();

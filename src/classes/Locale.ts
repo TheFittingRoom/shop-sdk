@@ -34,11 +34,14 @@ export class Locale {
         trySize: "You can try on a size",
         orSize: "or size",
         associatedEmail: "If there is an account associated with that email, We have sent a link to reset your password.",
-        createAvatarSc: "Scan the QR code to download our app and create an avatar:",
+        createAvatarSc: "Scan the QR code/click link to download our app and create an avatar:",
+        orEnterEmail: "Or enter your email so we can send you a download link:",
         tfrAvailable: "The Fitting Room app is currently available for",
         notifiedGoogle: "I would like to be notified when it is available on Google Play",
         comingSoon: "coming soon!",
-        somethingWentWrong: "Something went wrong. Try again"
+        somethingWentWrong: "Something went wrong. Try again",
+        signOutErrorText: "Something went wrong while logging out. Try again!",
+        getProfileErrorText: "Something went wrong while fetching profile"
       }
     }
 

@@ -3,12 +3,11 @@ import {
     SignInModal,
     ForgotPasswordModal,
     ScanCodeModal,
-    EnterEmailModal,
     ErrorModal,
     SuccessModal,
     ResetLinkModal,
 } from '../components';
-import { ErrorModalProps, SignInModalProps, NoAvatarModalProps, ForgotPasswordModalProps, ScanCodeModalProps, EnterEmailModalProps, SuccessModalProps, ResetLinkModalProps } from '../types';
+import { ErrorModalProps, SignInModalProps, NoAvatarModalProps, ForgotPasswordModalProps, ScanCodeModalProps, SuccessModalProps, ResetLinkModalProps } from '../types';
 
 export const renderNoAvatarModal = (props: NoAvatarModalProps) => {
     document.querySelector("#thefittingroom-modal").innerHTML = NoAvatarModal({...props});
@@ -30,12 +29,6 @@ export const renderForgotPasswordModal = (props: ForgotPasswordModalProps) => {
 
 export const renderScanCodeModal = (props: ScanCodeModalProps) => {
     document.querySelector("#thefittingroom-modal").innerHTML = ScanCodeModal({...props});
-    document.querySelector("#thefittingroom-modal").setAttribute("style", "display:block;");
-    return;
-}
-
-export const renderEnterEmailModal = (props: EnterEmailModalProps) => {
-    document.querySelector("#thefittingroom-modal").innerHTML = EnterEmailModal({...props});
     document.querySelector("#thefittingroom-modal").setAttribute("style", "display:block;");
     return;
 }

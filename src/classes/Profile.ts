@@ -1,6 +1,10 @@
 import Api from './Api';
 import { ErrorType, ProfileResponse } from '../types';
 import ErrorHandler from './ErrorHandler';
+import { Locale } from './Locale';
+
+const { Strings } = Locale.getLocale();
+const { getProfileErrorText } = Strings;
 
 export const getProfile = async (): Promise<ProfileResponse | ErrorType> => {
     try {
@@ -8,7 +12,7 @@ export const getProfile = async (): Promise<ProfileResponse | ErrorType> => {
 
         return data;
     } catch (error) {
-        window.theFittingRoom.renderErrorModal();
-        return ErrorHandler.getError(error?.status?.code);
+        window.theFittingRoom.renderErrorModal({errorText: error?.message || getProfileErrorText});
+        return ErrorHandler.getError(error?.code);
     }
 }

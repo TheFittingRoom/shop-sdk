@@ -41,7 +41,7 @@ const SignInModal = ({override, imgUrl = defaultImg}: SignInModalProps) => {
 
                     <div class="mt-30">
                         <span class="roboto-12-default c-dark-o5 underline cursor mr-15" onclick="window.theFittingRoom.renderForgotPasswordModal()">${forgotPasswordWithSymbol}</span>
-                        <span class="roboto-12-default c-dark-o5 underline cursor">${dontHaveAcc}</span>
+                        <span class="roboto-12-default c-dark-o5 underline cursor" onclick="window.theFittingRoom.renderScanCodeModal()">${dontHaveAcc}</span>
                     </div>
 
                     <button class="standard-button bg-aquamarina-strong c-white poppins-medium-16-default cursor mt-30" id="sign-in-button"
@@ -99,7 +99,7 @@ const SignInModal = ({override, imgUrl = defaultImg}: SignInModalProps) => {
                             </object>
                         </div>
 
-                        <div class="roboto-18-default c-dark-o5 underline cursor mt-40" onclick="window.theFittingRoom.renderEnterEmailModal()">${notifiedGoogle}</div>
+                        <!-- <div class="roboto-18-default c-dark-o5 underline cursor mt-40" onclick="window.theFittingRoom.renderEnterEmailModal()">${notifiedGoogle}</div> -->
                     </div>
                 </div>
             </div>

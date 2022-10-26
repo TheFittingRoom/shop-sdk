@@ -1,28 +1,32 @@
 import * as firebase from "firebase/auth";
 import { showHideElement } from "../lib/updaters";
 import { validateEmail, validatePassword } from "../lib/validations";
-import { SignInProps, SignInResponse, PasswordResetEmailProps, ErrorType } from "../types";
+import { SignInProps, SignInResponse, PasswordResetEmailProps, ErrorType, ProfileResponse } from "../types";
 import ErrorHandler from "./ErrorHandler";
 import { FirebaseInstance } from "./Firebase";
+import { Locale } from "./Locale";
 import { getProfile } from "./Profile";
+
+const { Strings } = Locale.getLocale();
+const { signOutErrorText } = Strings;
 class Auth {
     static async signIn({ email, password }: SignInProps): Promise<SignInResponse | ErrorType | void> {
-
         if (!validateEmail(email) || !validatePassword(password)) {
             return ErrorHandler.BAD_REQUEST;
         }
 
         try {
             await firebase.signInWithEmailAndPassword(FirebaseInstance.auth, email, password);
-            const data = await getProfile();
+            const data: ProfileResponse | ErrorHandler = await getProfile();
 
-            const signOutButton = document.getElementById("thefittingroom-signout-button")
+            const signOutButton = document.getElementById("thefittingroom-signout-button");
             showHideElement(true, signOutButton);
 
-            if (!data[0].hasAvatar) {
-                window.theFittingRoom.renderNoAvatarModal();
-            } else {
+            if ('hasAvatar' in data && data?.hasAvatar) {
                 window.theFittingRoom.renderScanCodeModal();
+            }
+            if ('hasAvatar' in data && data?.hasAvatar === false) {
+                window.theFittingRoom.renderNoAvatarModal();
             }
         } catch (error) {
             return ErrorHandler.getFireBaseError(error);
@@ -38,7 +42,7 @@ class Auth {
 
             window.theFittingRoom.renderSuccessModal();
         } catch (error) {
-            window.theFittingRoom.renderErrorModal();
+            window.theFittingRoom.renderErrorModal({errorText: signOutErrorText});
             return ErrorHandler.getFireBaseError(error);
         }
     }

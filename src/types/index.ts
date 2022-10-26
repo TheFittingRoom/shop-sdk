@@ -59,12 +59,7 @@ export interface GetRecommendedSizesResponse {
     recommended: string,
     optionalSizes: string[]
 }
-
-export interface NotifyEmailProps {
-    email: string
-}
-export interface NotifyEmailResponse { 
-    id: number,
+export interface DownloadLinkEmailProps {
     email: string
 }
 
@@ -73,6 +68,6 @@ export interface ProfileResponse {
 }
 
 export type ErrorType = {
-    code: number,
+    code: number | null,
     errorMessage: string
 }

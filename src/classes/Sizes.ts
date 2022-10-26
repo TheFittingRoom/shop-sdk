@@ -6,13 +6,11 @@ export const getRecommendedSizes = async ({ sku }: GetRecommendedSizeProps): Pro
     try {
         const data = await Api.get(`/get-sizes/${sku}`);
 
-        return {
-            recommended: data.recommended,
-            optionalSizes: data.optionalSizes
-        };
+        return data;
     } catch (error) {
-        // Todo - remove this and handle all types of api errors (based on possible types)
-        window.theFittingRoom.renderErrorModal({sizes: {recommended: "1", optionalSizes: ["2", "3"]}});
-        return ErrorHandler.getError(error?.status?.code);
+        const {code, message} = error;
+        const errorMsg = (message?.recommended && message?.optionalSizes?.length) ? {sizes: message} : {errorText: message};
+        window.theFittingRoom.renderErrorModal(errorMsg);
+        return ErrorHandler.getError(code);
     }
 }

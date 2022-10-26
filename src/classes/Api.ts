@@ -1,30 +1,48 @@
 import ErrorHandler from "./ErrorHandler";
 import { FirebaseInstance } from "./Firebase";
 class Api {
-    static fetch = async (url, data) => {
-        if (!navigator.onLine) {
-            return ErrorHandler.NO_INTERNET;
-        }
-
-        const token = await FirebaseInstance.getTokenId();
-        if (!token) {
-            return ErrorHandler.UNAUTHORIZED;
-        }
-
-        return fetch(process.env.MOCK_DB_URL+url, {
-            ...data,
-            body: JSON.stringify(data?.body),
-            headers: {
-                ...(data?.headers ||{}),
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
+    static fetch = (url, data) => {
+        return new Promise(async (resolve,reject) => {
+            if (!navigator.onLine) {
+                return reject(ErrorHandler.NO_INTERNET);
             }
-        }).then(res =>res.json());
+
+            const token = await FirebaseInstance.getTokenId();
+            if (!token) {
+                return reject(ErrorHandler.UNAUTHORIZED);
+            }
+
+            const { key } = window.theFittingRoom;
+            if (!key) {
+                return reject(ErrorHandler.CLIENT_UNAUTHORIZED);
+            }
+
+            const path = window?.location?.pathname || "";
+
+            fetch(process.env.MOCK_DB_URL+url, {
+                ...data,
+                body: JSON.stringify(data?.body),
+                headers: {
+                    ...(data?.headers ||{}),
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                    key,
+                    path
+                }
+            }).then(async res => {
+                if (res.status >= 400 && res.status < 600) {
+                    const response = await res.json();
+                    throw {code: res?.status, message: response?.message || response};
+                }
+
+                return await res.json();
+            }).then(resolve).catch(reject);
+        })
     }
 
-    static get = (url, data = {}) => Api.fetch(url, {...data, method:"GET"})
+    static get = (url, data = {}): any => Api.fetch(url, {...data, method:"GET"});
 
-    static post = (url, data = {}) => Api.fetch(url, {...data, method:"POST"})
+    static post = (url, data = {}): any => Api.fetch(url, {...data, method:"POST"});
 }
 
 export default Api;
