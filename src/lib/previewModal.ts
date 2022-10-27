@@ -16,6 +16,9 @@ export const renderNoAvatarModal = (props: NoAvatarModalProps) => {
 }
 
 export const renderSignInModal = (props: SignInModalProps) => {
+    if (window.theFittingRoom.isLoggedIn()) {
+        window.theFittingRoom.signOut();
+    }
     document.querySelector("#thefittingroom-modal").innerHTML = SignInModal({...props});
     document.querySelector("#thefittingroom-modal").setAttribute("style", "display:block;");
     return;
