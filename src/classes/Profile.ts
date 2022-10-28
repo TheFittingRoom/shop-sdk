@@ -12,7 +12,7 @@ export const getProfile = async (): Promise<ProfileResponse | ErrorType> => {
 
         return data;
     } catch (error) {
-        window.theFittingRoom.renderErrorModal({errorText: error?.message || getProfileErrorText});
+        window.theFittingRoom.renderErrorModal({errorText: getProfileErrorText});
         return ErrorHandler.getError(error?.code);
     }
 }

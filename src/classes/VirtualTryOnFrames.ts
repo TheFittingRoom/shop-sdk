@@ -4,7 +4,7 @@ import ErrorHandler from './ErrorHandler';
 import { Locale } from './Locale';
 
 const { Strings } = Locale.getLocale();
-const { somethingWentWrong } = Strings;
+const { getVirtualTryOnFramesErrorText } = Strings;
 
 export const getVirtualTryOnFrames = async ({ sku, size, backgroundColor }: GetVirtualTryOnFramesProps): Promise<GetVirtualTryOnFramesResponse | ErrorType> => {
     try {
@@ -12,7 +12,7 @@ export const getVirtualTryOnFrames = async ({ sku, size, backgroundColor }: GetV
 
         return data;
     } catch (error) {
-        window.theFittingRoom.renderErrorModal({errorText: error?.message || somethingWentWrong});
+        window.theFittingRoom.renderErrorModal({errorText: getVirtualTryOnFramesErrorText});
         return ErrorHandler.getError(error?.code);
     }
 }

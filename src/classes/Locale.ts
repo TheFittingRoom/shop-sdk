@@ -39,9 +39,12 @@ export class Locale {
         tfrAvailable: "The Fitting Room app is currently available for",
         notifiedGoogle: "I would like to be notified when it is available on Google Play",
         comingSoon: "coming soon!",
-        somethingWentWrong: "Something went wrong. Try again",
+        somethingWentWrong: "Something went wrong. Try again!",
         signOutErrorText: "Something went wrong while logging out. Try again!",
-        getProfileErrorText: "Something went wrong while fetching profile"
+        getProfileErrorText: "Something went wrong while fetching profile. Try again!",
+        getVirtualTryOnFramesErrorText: "Something went wrong while fetching frames. Try again!",
+        getRecommendedSizesErrorText: "Something went wrong while fetching sizes. Try again!",
+        sendPasswordResetEmailErrorText: "Something went wrong while sending password reset email. Try again!",
       }
     }
 

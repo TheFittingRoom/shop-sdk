@@ -8,11 +8,11 @@ import { Locale } from "./Locale";
 import { getProfile } from "./Profile";
 
 const { Strings } = Locale.getLocale();
-const { signOutErrorText } = Strings;
+const { signOutErrorText, sendPasswordResetEmailErrorText } = Strings;
 class Auth {
     static async signIn({ email, password }: SignInProps): Promise<SignInResponse | ErrorType | void> {
         if (!validateEmail(email) || !validatePassword(password)) {
-            return ErrorHandler.BAD_REQUEST;
+            return ErrorHandler.INVALID_CREDENTIALS;
         }
 
         try {
@@ -49,7 +49,7 @@ class Auth {
 
     static async sendPasswordResetEmail({ email }: PasswordResetEmailProps): Promise<ErrorType | void> {
         if (!validateEmail(email)) {
-            return ErrorHandler.BAD_REQUEST;
+            return ErrorHandler.INVALID_EMAIL;
         }
 
         try {
@@ -57,6 +57,7 @@ class Auth {
 
             window.theFittingRoom.renderResetLinkModal();
         } catch (error) {
+            window.theFittingRoom.renderErrorModal({errorText: sendPasswordResetEmailErrorText});
             return ErrorHandler.getFireBaseError(error);
         }
     }

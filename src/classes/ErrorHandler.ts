@@ -4,6 +4,17 @@ class ErrorHandler {
     static CLIENT_UNAUTHORIZED: ErrorType = {code: null, errorMessage: 'Client Unauthorized'};
     static UN_ANTICIPATED: ErrorType = {code: null, errorMessage: 'Unanticipated'};
     static WRONG_PASSWORD: ErrorType = {code: null, errorMessage: 'Wrong Password'};
+    static INVALID_PASSWORD: ErrorType = {code: null, errorMessage: 'Invalid Password'};
+    static INVALID_CREDENTIALS: ErrorType = {code: null, errorMessage: 'Invalid credentials'};
+    static INVALID_EMAIL: ErrorType = {code: null, errorMessage: 'Invalid email'};
+    static INVALID_DISPLAY_NAME: ErrorType = {code: null, errorMessage: 'Invalid display name'};
+    static INVALID_ID_TOKEN: ErrorType = {code: null, errorMessage: 'Invalid id token'};
+    static INVALID_EMAIL_VERIFIED: ErrorType = {code: null, errorMessage: 'Invalid email verified'};
+    static EMAIL_ALREADY_EXIST: ErrorType = {code: null, errorMessage: 'Email already exist'};
+    static ID_TOKEN_EXPIRED: ErrorType = {code: null, errorMessage: 'Id token expired'};
+    static INVALID_ARGUMENT: ErrorType = {code: null, errorMessage: 'Invalid argument'};
+    static ID_TOKEN_REVOKED: ErrorType = {code: null, errorMessage: 'Id token revoked'};
+    static USER_NOT_FOUND: ErrorType = {code: null, errorMessage: 'User not found'};
 
     static OK: ErrorType = {code: 200, errorMessage: 'OK'};
 
@@ -17,20 +28,20 @@ class ErrorHandler {
 
     static getFireBaseError(error: {code: string, message?: string}) {
         if (error.code === 'auth/wrong-password') return this.WRONG_PASSWORD;
-        if (error.code === 'auth/invalid-email') return this.BAD_REQUEST;
-        if (error.code === 'auth/invalid-display-name') return this.BAD_REQUEST;
-        if (error.code === 'auth/invalid-password') return this.BAD_REQUEST;
+        if (error.code === 'auth/invalid-email') return this.INVALID_EMAIL;
+        if (error.code === 'auth/invalid-display-name') return this.INVALID_DISPLAY_NAME;
+        if (error.code === 'auth/invalid-password') return this.INVALID_PASSWORD;
         if (error.code === 'auth/internal-error') return this.INTERNAL_ERROR;
         if (error.code === 'auth/network-request-failed') return this.NO_INTERNET;
         if (error.code === 'auth/claims-too-large') return this.REQUEST_ENTITY_TOO_LARGE;
-        if (error.code === 'auth/user-not-found') return this.NOT_FOUND;
-        if (error.code === 'auth/invalid-id-token') return this.BAD_REQUEST;
-        if (error.code === 'auth/invalid-email-verified') return this.BAD_REQUEST;
-        if (error.code === 'auth/email-already-exists') return this.BAD_REQUEST;
-        if (error.code === 'auth/id-token-expired') return this.UNAUTHORIZED;
-        if (error.code === 'auth/invalid-argument') return this.BAD_REQUEST;
-        if (error.code === 'auth/invalid-credential') return this.BAD_REQUEST;
-        if (error.code === 'auth/id-token-revoked') return this.UNAUTHORIZED;
+        if (error.code === 'auth/user-not-found') return this.USER_NOT_FOUND;
+        if (error.code === 'auth/invalid-id-token') return this.INVALID_ID_TOKEN;
+        if (error.code === 'auth/invalid-email-verified') return this.INVALID_EMAIL_VERIFIED;
+        if (error.code === 'auth/email-already-exists') return this.EMAIL_ALREADY_EXIST;
+        if (error.code === 'auth/id-token-expired') return this.ID_TOKEN_EXPIRED;
+        if (error.code === 'auth/invalid-argument') return this.INVALID_ARGUMENT;
+        if (error.code === 'auth/invalid-credential') return this.INVALID_CREDENTIALS;
+        if (error.code === 'auth/id-token-revoked') return this.ID_TOKEN_REVOKED;
 
         return this.UN_ANTICIPATED;
     }
