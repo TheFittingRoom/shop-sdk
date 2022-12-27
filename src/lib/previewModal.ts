@@ -6,11 +6,18 @@ import {
     ErrorModal,
     SuccessModal,
     ResetLinkModal,
+    LoadingAvatarModal
 } from '../components';
-import { ErrorModalProps, SignInModalProps, NoAvatarModalProps, ForgotPasswordModalProps, ScanCodeModalProps, SuccessModalProps, ResetLinkModalProps } from '../types';
+import { ErrorModalProps, SignInModalProps, NoAvatarModalProps, ForgotPasswordModalProps, ScanCodeModalProps, SuccessModalProps, ResetLinkModalProps, LoadingAvatarModalProps } from '../types';
 
 export const renderNoAvatarModal = (props: NoAvatarModalProps) => {
     document.querySelector("#thefittingroom-modal").innerHTML = NoAvatarModal({...props});
+    document.querySelector("#thefittingroom-modal").setAttribute("style", "display:block;");
+    return;
+}
+
+export const renderLoadingAvatarModal = (props: LoadingAvatarModalProps) => {
+    document.querySelector("#thefittingroom-modal").innerHTML = LoadingAvatarModal({...props});
     document.querySelector("#thefittingroom-modal").setAttribute("style", "display:block;");
     return;
 }

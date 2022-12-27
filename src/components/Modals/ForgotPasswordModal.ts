@@ -40,10 +40,10 @@ const ForgotPasswordModal = ({override}: ForgotPasswordModalProps) => {
                     onclick="
                             window.theFittingRoom._internal.validate()
                             const response = window.theFittingRoom._internal.sendPasswordResetEmail({email: document.querySelector('#thefittingroom-modal #email-input').value})
-                            
-                            response.then(data => {
-                                if (data?.errorMessage) {
-                                    window.theFittingRoom._internal.validate(data.errorMessage)
+
+                            response.then(msg => {
+                                if (msg) {
+                                    window.theFittingRoom._internal.validate(msg)
                                 }
                             })
                         "

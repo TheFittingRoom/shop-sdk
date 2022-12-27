@@ -6,6 +6,7 @@ import EnterEmailModal from './EnterEmailModal';
 import ErrorModal from './ErrorModal';
 import SuccessModal from './SuccessModal';
 import ResetLinkModal from './ResetLinkModal';
+import LoadingAvatarModal from './LoadingAvatarModal';
 
 export const initializeModal = ()=> {
     const modal = document.getElementById("thefittingroom-modal");
@@ -75,4 +76,5 @@ export {
     ErrorModal,
     SuccessModal,
     ResetLinkModal,
+    LoadingAvatarModal
 };

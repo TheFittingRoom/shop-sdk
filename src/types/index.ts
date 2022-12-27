@@ -10,6 +10,9 @@ export interface ForgotPasswordModalProps extends ModalProps {
 export interface NoAvatarModalProps extends ModalProps {
     // 
 };
+export interface LoadingAvatarModalProps extends ModalProps {
+    // 
+};
 export interface ErrorModalProps extends ModalProps {
     errorText?: string
     sizes?: {

@@ -10,6 +10,7 @@ import {
     ErrorModal,
     SuccessModal,
     ResetLinkModal,
+    LoadingAvatarModal,
     validate
 } from './Modals';
 
@@ -25,5 +26,6 @@ export {
     ErrorModal,
     SuccessModal,
     ResetLinkModal,
+    LoadingAvatarModal,
     validate
 };

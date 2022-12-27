@@ -1,0 +1,13 @@
+diff --git a/node_modules/@firebase/firestore/dist/index.esm2017.js b/node_modules/@firebase/firestore/dist/index.esm2017.js
+index 40a3aad..73457da 100644
+--- a/node_modules/@firebase/firestore/dist/index.esm2017.js
++++ b/node_modules/@firebase/firestore/dist/index.esm2017.js
+@@ -2,7 +2,7 @@ import { _registerComponent, registerVersion, _getProvider, getApp, _removeServi
+ import { Component } from '@firebase/component';
+ import { Logger, LogLevel } from '@firebase/logger';
+ import { FirebaseError, createMockUserToken, getModularInstance, deepEqual, getDefaultEmulatorHostnameAndPort, getUA, isIndexedDBAvailable, isSafari } from '@firebase/util';
+-import { XhrIo, EventType, ErrorCode, createWebChannelTransport, getStatEventTarget, FetchXmlHttpFactory, WebChannel, Event, Stat } from '@firebase/webchannel-wrapper';
++import { XhrIo, EventType, ErrorCode, createWebChannelTransport, getStatEventTarget, FetchXmlHttpFactory, WebChannel, Event, Stat } from '@firebase/webchannel-wrapper/dist/index.esm';
+ 
+ const b = "@firebase/firestore";
+ 

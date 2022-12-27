@@ -24,6 +24,7 @@ export class Locale {
         tryOnText: "After creating your avatar, return here and sign in. We will use the measurements from your avatar to tell you which size will fit you best, as well as let you try the garment on - all without leaving your house!",
         or: "Or",
         dontHaveAvatar: "Whoops! Looks like you don't have an avatar yet.",
+        loadingAvatar: "Your avatar is loading...",
         createAvatar: "Scan the QR code to return to app to create your avatar.",
         returnToTfr: "Please return to The Fitting Room app to create your avatar.",
         successfullyLoggedOut: "You have successfully logged out!",

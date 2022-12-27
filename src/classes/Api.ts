@@ -19,7 +19,7 @@ class Api {
 
             const path = window?.location?.pathname || "";
 
-            fetch(process.env.MOCK_DB_URL+url, {
+            fetch(process.env.API_ENDPOINT+url, {
                 ...data,
                 body: JSON.stringify(data?.body),
                 headers: {

@@ -13,6 +13,7 @@ import {
     renderErrorModal,
     renderSuccessModal,
     renderResetLinkModal,
+    renderLoadingAvatarModal,
 } from './lib/previewModal';
 import { getProfile } from './classes/Profile';
 import { tryOnWithTheFittingRoom } from './classes/TryOnWithTheFittingRoom';
@@ -56,6 +57,7 @@ window.addEventListener('load', () => {
         // Modals
         closeModal,
         renderNoAvatarModal,
+        renderLoadingAvatarModal,
         renderSignInModal,
         renderForgotPasswordModal,
         renderScanCodeModal,

@@ -1,8 +1,11 @@
 import * as firebase from "firebase/app";
 import * as firebaseAuth from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 import { showHideElement } from "../lib/updaters";
+
 export class FirebaseInstance {
     static auth: firebaseAuth.Auth;
+    static firestoreApp: any;
 
     constructor() {
         const firebaseConfig = {
@@ -13,10 +16,12 @@ export class FirebaseInstance {
             messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
             appId: process.env.FIREBASE_APP_ID
         };
-    
+
         const firebaseApp = firebase.initializeApp(firebaseConfig);
 
         FirebaseInstance.auth = firebaseAuth.getAuth(firebaseApp);
+
+        FirebaseInstance.firestoreApp = getFirestore(firebaseApp);
 
         firebaseAuth.onAuthStateChanged(FirebaseInstance.auth, (user) => {
             const signOut = document.getElementById("thefittingroom-signout")
