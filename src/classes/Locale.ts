@@ -43,7 +43,7 @@ export class Locale {
         somethingWentWrong: "Something went wrong. Try again!",
         signOutErrorText: "Something went wrong while logging out. Try again!",
         getProfileErrorText: "Something went wrong while fetching profile. Try again!",
-        getVirtualTryOnFramesErrorText: "Something went wrong while fetching frames. Try again!",
+        getVirtualTryOnFramesErrorText: "Something went wrong while fetching style id. Try again!",
         getRecommendedSizesErrorText: "Something went wrong while fetching sizes. Try again!",
         sendPasswordResetEmailErrorText: "Something went wrong while sending password reset email. Try again!",
       }

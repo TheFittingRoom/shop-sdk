@@ -83,6 +83,12 @@ class Auth {
           onSnapshot(doc(db, 'users', userId), (doc) => {
             const userProfile = doc.data();
 
+            const userProfileEvent = new CustomEvent('userProfile', {
+                detail: {
+                    userProfile: userProfile
+                }
+            });
+            document.dispatchEvent(userProfileEvent);
             resolve(userProfile);
           })
         });
