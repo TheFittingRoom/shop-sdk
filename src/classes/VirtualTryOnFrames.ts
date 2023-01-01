@@ -12,7 +12,7 @@ export const getVirtualTryOnFrames = async ({ sku }: GetVirtualTryOnFramesProps)
     try {
         const db = FirebaseInstance.firestoreApp;
 
-        const q = query(collection(db, 'styles'), where('sku', '==', String(sku)));
+        const q = query(collection(db, 'styles'), where('brand_style_id', '==', String(sku)));
 
         const querySnapshot = await getDocs(q);
 
