@@ -28,7 +28,9 @@ class Api {
                     Authorization: `Bearer ${token}`,
                     key,
                     path
-                }
+                },
+                //Add credentials to requests on cross-origin calls
+                credentials: 'include'
             }).then(async res => {
                 if (res.status >= 400 && res.status < 600) {
                     const response = await res.json();
