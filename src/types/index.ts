@@ -49,12 +49,12 @@ export interface PasswordResetEmailProps {
     email: string
 }
 export interface GetVirtualTryOnFramesProps {
-    sku: string | number,
+    sku: any,
 }
 
 export type GetVirtualTryOnFramesResponse = string[];
 export interface GetRecommendedSizeProps {
-    id: string | number,
+    sku: any,
 }
 export interface GetRecommendedSizesResponse {
     recommended: string,
