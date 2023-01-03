@@ -72,3 +72,9 @@ export type ErrorType = {
     code: number | null,
     errorMessage: string
 }
+
+export enum AvatarState {
+    NOT_CREATED = 'NOT_CREATED',
+    CREATED = 'CREATED',
+    PENDING = 'PENDING'
+}

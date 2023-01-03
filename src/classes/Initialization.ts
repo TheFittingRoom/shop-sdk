@@ -27,17 +27,23 @@ export class TheFittingRoomInit {
 
     public constructor(currentScript) {
         const {searchParams} = new URL(currentScript.getAttribute("src"));
-        const key = searchParams.get("key") || "";
+        // const key = searchParams.get("key") || "";
         const language = searchParams.get("language") || "en";
         const version = searchParams.get("version") || "";
 
         this.injectStyles();
         this.locale = language;
-        this.key = key;
+        // this.key = key;
         this.apiVersion = version;
 
         Locale.setLocale(language);
 
+        window.theFittingRoom = {
+            language, 
+            version,
+        }
+
+        /*
         if(!key) {
             const errorMessage = "A key is required as an identifier for the brand"
 
@@ -48,5 +54,6 @@ export class TheFittingRoomInit {
                 version,
             }
         }
+        */
     }
 }

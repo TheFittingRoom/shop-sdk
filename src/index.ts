@@ -46,6 +46,8 @@ window.addEventListener('load', () => {
         // Auth
         isLoggedIn: Auth.isLoggedIn,
         signOut: Auth.signOut,
+        getUserProfile: Auth.getUserProfile,
+        listenToUserProfile: Auth.listenToUserProfile,
         // Sizes
         getRecommendedSizes,
         // Avatar
