@@ -25,11 +25,19 @@ export const getVirtualTryOnFrames = async ({ sku }: GetVirtualTryOnFramesProps)
 
         const db = FirebaseInstance.firestoreApp;
 
-        const q = query(collection(db, 'styles'), where('brand_style_id', '==', String(sku)));
+        console.log("sku: ", sku)
+
+        const brandStyleId = sku?.split('-')?.[0];
+
+        console.log("brandStyleId: ", brandStyleId)
+
+        const q = query(collection(db, 'styles'), where('brand_style_id', '==', String(brandStyleId)));
 
         const querySnapshot = await getDocs(q);
 
         const style = querySnapshot?.docs?.[0]?.data();
+
+        console.log("style: ", style)
 
         let colorwayId = null;
 
@@ -44,6 +52,8 @@ export const getVirtualTryOnFrames = async ({ sku }: GetVirtualTryOnFramesProps)
                 }
             };
         }
+
+        console.log("colorwayId: ", colorwayId);
 
         if (colorwayId) {
             await Api.post(`/colorways/${colorwayId}/frames`);
