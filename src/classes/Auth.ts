@@ -1,19 +1,13 @@
 import * as firebase from "firebase/auth";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { showHideElement } from "../lib/updaters";
-import { SignInProps, SignInResponse, PasswordResetEmailProps, ErrorType } from "../types";
+import { SignInProps, SignInResponse, PasswordResetEmailProps, ErrorType, AvatarState } from "../types";
 import ErrorHandler from "./ErrorHandler";
 import { FirebaseInstance } from "./Firebase";
 import { Locale } from "./Locale";
 
 const { Strings } = Locale.getLocale();
 const { signOutErrorText, sendPasswordResetEmailErrorText } = Strings;
-
-enum AvatarState {
-    NOT_CREATED = 'NOT_CREATED',
-    CREATED = 'CREATED',
-    PENDING = 'PENDING'
-}
 
 class Auth {
     static async signIn({ email, password }: SignInProps): Promise<SignInResponse | ErrorType | void> {
@@ -33,13 +27,14 @@ class Auth {
                 window.theFittingRoom.renderLoadingAvatarModal();
             }
 
-            if (userProfile?.avatar_status === AvatarState.CREATED) {
+            if (userProfile?.avatar_status === AvatarState.NOT_CREATED) {
                 window.theFittingRoom.renderScanCodeModal();
             }
 
-            if (userProfile?.avatar_status === AvatarState.NOT_CREATED) {
-                window.theFittingRoom.renderNoAvatarModal();
+            if (userProfile?.avatar_status === AvatarState.CREATED) {
+                window.theFittingRoom.closeModal();
             }
+
         } catch (error) {
             return ErrorHandler.getFireBaseError(error);
         }
@@ -94,6 +89,20 @@ class Auth {
         });
 
         return myPromise;
+    }
+
+    static async getUserProfile(): Promise<any> {
+        try {
+            const userId = FirebaseInstance.auth.currentUser.uid;
+            const db = FirebaseInstance.firestoreApp;
+        
+            const querySnapshot = await getDoc(doc(db, 'users', userId));
+            const userProfile = querySnapshot.data();
+
+            return userProfile;
+        } catch (error) {
+            throw Error(error);
+        }
     }
 
     static isLoggedIn() {
