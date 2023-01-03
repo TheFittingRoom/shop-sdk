@@ -17,17 +17,13 @@ class Api {
                 return reject(ErrorHandler.CLIENT_UNAUTHORIZED);
             }
 
-            const path = window?.location?.pathname || "";
-
             fetch(process.env.API_ENDPOINT+url, {
                 ...data,
                 body: JSON.stringify(data?.body),
                 headers: {
                     ...(data?.headers ||{}),
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                    key,
-                    path
+                    Authorization: `Bearer ${token}`
                 },
                 //Add credentials to requests on cross-origin calls
                 credentials: 'include'
