@@ -24,16 +24,19 @@ class Api {
                 ...data,
                 body: JSON.stringify(data?.body),
                 headers: {
+                    ...(data?.headers || {}),
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
-                }
+                },
+                // Add credentials to requests on cross-origin calls
+                credentials: 'include'
                 /*
                 headers: {
                     ...(data?.headers ||{}),
                     "Content-Type": "application/json",
-                    // Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${token}`,
                     // key,
-                    path
+                    // path
                 }
                 */
             }).then(async res => {

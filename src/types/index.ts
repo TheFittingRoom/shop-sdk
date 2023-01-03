@@ -1,4 +1,4 @@
-interface ModalProps {
+export interface ModalProps {
     override?: any
 }
 export interface EnterEmailModalProps extends ModalProps {
