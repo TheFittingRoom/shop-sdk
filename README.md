@@ -19,5 +19,5 @@ FIREBASE_APP_ID=1:2298664147:web:340bda75cd5d25f3997026
 FIREBASE_MEASUREMENT_ID=G-B7GDQ1Y9LL
 <!-- firebase configs ends -->
 API_ENDPOINT = https://tfr.dev.thefittingroom.xyz/v1
-LANGUAGE_URL=https://cdn.jsdelivr.net/gh/arbershabani1/tfr-languages@0.0.1
-ASSETS_URL=https://cdn.jsdelivr.net/gh/arbershabani1/tfr-assets@0.0.1
+LANGUAGE_URL=https://assets.dev.thefittingroom.xyz/shop-sdk/44cb53e/languages
+ASSETS_URL=https://assets.dev.thefittingroom.xyz/shop-sdk/assets
