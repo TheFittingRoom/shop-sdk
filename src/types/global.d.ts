@@ -11,7 +11,5 @@ declare var process : {
     API_ENDPOINT: string;
     LANGUAGE_URL: string;
     ASSETS_URL: string;
-    STYLES_URL: string;
-    APP_ASSETS: string;
   }
 }
