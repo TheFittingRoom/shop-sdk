@@ -27,7 +27,7 @@ const NoAvatarModal = ({override}: NoAvatarModalProps) => {
                     <div class="poppins-light-22-300 c-dark mb-60">${returnToTfr}</div>
                 
 
-                    <div class="roboto-16-default c-dark-o5 underline cursor mt-10" onclick="window.theFittingRoom.renderSignInModal()">${backToSignIn}</div>
+                    <!-- <div class="roboto-16-default c-dark-o5 underline cursor mt-10" onclick="window.theFittingRoom.renderSignInModal()">${backToSignIn}</div> -->
                 </div>
             </div>
         </div>

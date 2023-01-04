@@ -1,15 +1,22 @@
-import { ErrorType, GetRecommendedSizeProps, GetRecommendedSizesResponse } from '../types';
+import { AvatarState, GetRecommendedSizeProps } from '../types';
 import Api from './Api';
 import ErrorHandler from './ErrorHandler';
 import { FirebaseInstance } from './Firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
+import Auth from './Auth';
 // import { Locale } from "./Locale";
 
 // const { Strings } = Locale.getLocale();
 // const { getRecommendedSizesErrorText } = Strings;
 
-export const getRecommendedSizes = async ({ sku }: GetRecommendedSizeProps): Promise<GetRecommendedSizesResponse | ErrorType> => {
+export const getRecommendedSizes = async ({ sku }: GetRecommendedSizeProps): Promise<any> => {
     try {
+        const userProfile = await Auth.getUserProfile();
+
+        if ((userProfile?.avatar_status === AvatarState.PENDING) || (userProfile?.avatar_status === AvatarState.NOT_CREATED)) {
+            return;
+        }
+
         const db = FirebaseInstance.firestoreApp;
 
         const brandStyleId = sku?.split('-')?.[0];
@@ -24,9 +31,9 @@ export const getRecommendedSizes = async ({ sku }: GetRecommendedSizeProps): Pro
 
         const data = await Api.get(`/styles/${style?.id}/recommendation`);
 
-        console.log("data getRecommendedSizes: ", data)
+        const results = await data.json();
 
-        return data;
+        return results;
     } catch (error) {
         console.log("error getRecommendedSizes: ", error)
         const errMsg = error?.message?.error;

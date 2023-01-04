@@ -31,7 +31,7 @@ const ScanCodeModal = ({override}: ScanCodeModalProps) => {
                         </object>
                     </div>
 
-                    <div class="mt-20 m-h-auto">
+                    <div class="mt-20 mb-20 m-h-auto">
                         <object data="app-store-logo.svg" type="image/svg+xml">
                             <img src="${AppStoreLogo}" />
                         </object>
@@ -39,7 +39,7 @@ const ScanCodeModal = ({override}: ScanCodeModalProps) => {
 
                     <!-- <div class="roboto-18-default c-dark-o5 underline cursor mt-20" onclick="window.theFittingRoom.renderEnterEmailModal()">${notifiedGoogle}</div> -->
 
-                    <div class="roboto-18-default c-dark-o5 underline cursor mt-40 mb-30 d-inline-block" onclick="window.theFittingRoom.renderSignInModal()">${returnToSignIn}</div>
+                    <!-- <div class="roboto-18-default c-dark-o5 underline cursor mt-40 mb-30 d-inline-block" onclick="window.theFittingRoom.renderSignInModal()">${returnToSignIn}</div> -->
                 </div>
             </div>
         </div>
