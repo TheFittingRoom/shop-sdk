@@ -4,6 +4,10 @@ on:
   push:
     branches: [ main ]
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,11 +30,11 @@ jobs:
       - name: Build
         run: npm run build:rollup
 
-#      - name: Configure AWS credentials
-#        uses: aws-actions/configure-aws-credentials@v1
-#        with:
-#          role-to-assume: arn:aws:iam::852727304199:role/github_actions
-#          aws-region: us-west-2
-#
-#      - name: Sync to S3
-#        run: aws s3 cp ./dist/cjs/main.min.js s3://tfr-assets-dev/js/shop-sdk-${GITHUB_SHA::7}.min.js
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::602373492013:role/github_actions
+          aws-region: us-west-2
+
+      - name: Sync to S3
+        run: aws s3 cp ./dist/cjs/main.min.js s3://tfr-assets-dev/shop-sdk/${GITHUB_SHA::7}/main.min.js
