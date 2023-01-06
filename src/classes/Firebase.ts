@@ -26,7 +26,7 @@ export class FirebaseInstance {
         firebaseAuth.onAuthStateChanged(FirebaseInstance.auth, (user) => {
             const signOut = document.getElementById("thefittingroom-signout")
 
-            showHideElement(user, signOut)
+            showHideElement(user, signOut);
         })
     }
 
