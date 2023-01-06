@@ -23,6 +23,10 @@ class Auth {
             const signOutButton = document.getElementById("thefittingroom-signout-button");
             showHideElement(true, signOutButton);
 
+            const event = new Event('TheFittingRoomUser');
+            // Dispatch the event.
+            window.dispatchEvent(event);
+
             if (userProfile?.avatar_status === AvatarState.PENDING) {
                 window.theFittingRoom.renderLoadingAvatarModal();
             }
