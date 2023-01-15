@@ -4,7 +4,7 @@ import { ErrorModalProps } from "../../types";
 
 const ErrorModal = ({override, errorText, sizes}: ErrorModalProps) => {
     const { Strings } = override || Locale.getLocale();
-    const { title, signOut, noSizeAvailable, trySize, orSize, somethingWentWrong, returnToHomePage, returnToProductPage } = Strings;
+    const { title, signOut, noSizeAvailable, trySize, orSize, somethingWentWrong, returnToHomePage, returnToCatalogPage } = Strings;
 
     const sizeText = `${noSizeAvailable} ${trySize} ${sizes?.recommended} ${orSize} ${sizes?.optionalSizes?.join(", ")}.`;
     const errorMsg = errorText || (Boolean(sizes?.recommended) && `${sizeText}`) || somethingWentWrong;
@@ -33,8 +33,8 @@ const ErrorModal = ({override, errorText, sizes}: ErrorModalProps) => {
                     -->
 
                     <div class="t-a-center">
-                        <span class="roboto-16-default c-dark-o5 underline cursor mr-20" onclick="window.history.back()">${returnToHomePage || "Return to home page"}</span>
-                        <span class="roboto-16-default c-dark-o5 underline cursor" id="returnToSite" onclick="window.theFittingRoom.closeModal()">${returnToProductPage || "Return to product page"}</span>
+                        <span class="roboto-16-default c-dark-o5 underline cursor mr-20" onclick="window.history.back()">${returnToHomePage || "Return to Home Page"}</span>
+                        <span class="roboto-16-default c-dark-o5 underline cursor" id="returnToSite" onclick="window.theFittingRoom.closeModal()">${returnToCatalogPage || "Return to Catalog Page"}</span>
                     </div>
                 </div>
             </div>
