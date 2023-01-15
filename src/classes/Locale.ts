@@ -46,8 +46,8 @@ export class Locale {
         getVirtualTryOnFramesErrorText: "Something went wrong while fetching style id. Try again!",
         getRecommendedSizesErrorText: "Something went wrong while fetching sizes. Try again!",
         sendPasswordResetEmailErrorText: "Something went wrong while sending password reset email. Try again!",
-        returnToHomePage: "Return to Home Page",
-        returnToCatalogPage: "Return to Catalog Page"
+        returnToCatalogPage: "Return to Catalog Page",
+        returnToProductPage: "Return to Product Page",
       }
     }
 
