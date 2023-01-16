@@ -40,7 +40,7 @@ class Auth {
             }
 
         } catch (error) {
-            return ErrorHandler.getFireBaseError(error);
+            return ErrorHandler.getFireBaseError({code: 'auth/invalid-credential'});
         }
     }
 
