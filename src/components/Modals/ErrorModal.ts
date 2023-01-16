@@ -7,7 +7,11 @@ const ErrorModal = ({override, errorText, sizes}: ErrorModalProps) => {
     const { title, signOut, noSizeAvailable, trySize, orSize, somethingWentWrong, returnToProductPage, returnToCatalogPage } = Strings;
 
     const sizeText = `${noSizeAvailable} ${trySize} ${sizes?.recommended} ${orSize} ${sizes?.optionalSizes?.join(", ")}.`;
-    const errorMsg = errorText || (Boolean(sizes?.recommended) && `${sizeText}`) || somethingWentWrong;
+    let errorMsg = errorText || (Boolean(sizes?.recommended) && `${sizeText}`) || somethingWentWrong;
+
+    if (errorMsg.toLocaleLowerCase() === 'user not found') {
+        errorMsg = 'Something is wrong with this user. Try to re-authenticate again!';
+    }
 
     return `
         <div class="modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
