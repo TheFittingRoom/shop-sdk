@@ -1,15 +1,11 @@
 import Api from './Api';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { AvatarState, GetVirtualTryOnFramesProps } from '../types';
+import { AvatarState, VirtualTryOnFramesProps } from '../types';
 import { FirebaseInstance } from './Firebase';
 import ErrorHandler from './ErrorHandler';
 import Auth from './Auth';
-// import { Locale } from './Locale';
 
-// const { Strings } = Locale.getLocale();
-// const { getVirtualTryOnFramesErrorText } = Strings;
-
-export const getVirtualTryOnFrames = async ({ sku }: GetVirtualTryOnFramesProps): Promise<any> => {
+export const virtualTryOnFrames = async ({ sku }: VirtualTryOnFramesProps): Promise<any> => {
     try {
         const userProfile = await Auth.getUserProfile();
 

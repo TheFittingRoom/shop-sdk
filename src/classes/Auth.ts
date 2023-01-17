@@ -7,25 +7,29 @@ import { FirebaseInstance } from "./Firebase";
 import { Locale } from "./Locale";
 
 const { Strings } = Locale.getLocale();
-const { signOutErrorText, sendPasswordResetEmailErrorText } = Strings;
+const { signOutErrorText, sendPasswordResetEmailErrorText, signIn, loading } = Strings;
 
 class Auth {
     static async signIn({ email, password }: SignInProps): Promise<SignInResponse | ErrorType | void> {
         // if (!validateEmail(email) || !validatePassword(password)) {
         //     return ErrorHandler.INVALID_CREDENTIALS;
         // }
+        const signInBtn = document.getElementById('sign-in-button') as HTMLButtonElement | null;
 
         try {
+            if (signInBtn) {
+                signInBtn.innerText = loading || 'Loading...';
+                signInBtn.classList.remove('bg-aquamarina-strong', 'c-white');
+                signInBtn.classList.add('c-black');
+                signInBtn.disabled = true;
+            }
+
             await firebase.signInWithEmailAndPassword(FirebaseInstance.auth, email, password);
 
             const userProfile = await Auth.listenToUserProfile();
 
-            const signOutButton = document.getElementById("thefittingroom-signout-button");
+            const signOutButton = document.getElementById('thefittingroom-signout-button');
             showHideElement(true, signOutButton);
-
-            const event = new Event('TheFittingRoomUser');
-            // Dispatch the event.
-            window.dispatchEvent(event);
 
             if (userProfile?.avatar_status === AvatarState.PENDING) {
                 window.theFittingRoom.renderLoadingAvatarModal();
@@ -40,6 +44,12 @@ class Auth {
             }
 
         } catch (error) {
+            if (signInBtn) {
+                signInBtn.innerText = signIn;
+                signInBtn.classList.add('bg-aquamarina-strong', 'c-white');
+                signInBtn.classList.remove('c-black');
+                signInBtn.disabled = false;
+            }
             return ErrorHandler.getFireBaseError({code: 'auth/invalid-credential'});
         }
     }

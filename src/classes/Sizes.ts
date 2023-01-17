@@ -4,16 +4,14 @@ import ErrorHandler from './ErrorHandler';
 import { FirebaseInstance } from './Firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import Auth from './Auth';
-// import { Locale } from "./Locale";
-
-// const { Strings } = Locale.getLocale();
-// const { getRecommendedSizesErrorText } = Strings;
 
 export const getRecommendedSizes = async ({ sku }: GetRecommendedSizeProps): Promise<any> => {
     try {
         const userProfile = await Auth.getUserProfile();
 
-        if ((userProfile?.avatar_status === AvatarState.PENDING) || (userProfile?.avatar_status === AvatarState.NOT_CREATED)) {
+        if ((userProfile?.avatar_status === AvatarState.PENDING) || 
+            (userProfile?.avatar_status === AvatarState.NOT_CREATED) || 
+            (!Boolean(userProfile?.vto?.frames?.length))) {
             return;
         }
 

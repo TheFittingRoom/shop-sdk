@@ -48,11 +48,11 @@ export interface SignInResponse { }
 export interface PasswordResetEmailProps {
     email: string
 }
-export interface GetVirtualTryOnFramesProps {
+export interface VirtualTryOnFramesProps {
     sku: any,
 }
 
-export type GetVirtualTryOnFramesResponse = string[];
+export type VirtualTryOnFramesResponse = string[];
 export interface GetRecommendedSizeProps {
     sku: any,
 }

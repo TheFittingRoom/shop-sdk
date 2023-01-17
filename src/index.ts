@@ -3,7 +3,7 @@ import { FirebaseInstance } from './classes/Firebase';
 import { TheFittingRoomInit } from './classes/Initialization';
 import { Locale } from './classes/Locale';
 import { getRecommendedSizes } from './classes/Sizes';
-import { getVirtualTryOnFrames } from './classes/VirtualTryOnFrames';
+import { virtualTryOnFrames } from './classes/VirtualTryOnFrames';
 import { initializeModal, closeModal, validate } from './components';
 import {
     renderNoAvatarModal,
@@ -15,7 +15,6 @@ import {
     renderResetLinkModal,
     renderLoadingAvatarModal,
 } from './lib/previewModal';
-import { getProfile } from './classes/Profile';
 import { tryOnWithTheFittingRoom } from './classes/TryOnWithTheFittingRoom';
 
 declare global {
@@ -51,8 +50,7 @@ window.addEventListener('load', () => {
         // Sizes
         getRecommendedSizes,
         // Avatar
-        getVirtualTryOnFrames,
-        getProfile,
+        virtualTryOnFrames,
         // Language service
         getLocale: Locale.getLocale,
         setLocale: Locale.setLocale,

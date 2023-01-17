@@ -83,7 +83,7 @@ window.thefittingroom.listenToUserProfile() -> you can listen to user profile, w
 
 # Post frames
 
-window.thefittingroom.getVirtualTryOnFrames({sku: '...'}) -> here you should pass the sku of the product and by that sku it will find the colorway id which then it will post frames with the specific colorway id
+window.thefittingroom.virtualTryOnFrames({sku: '...'}) -> here you should pass the sku of the product and by that sku it will find the colorway id which then it will post frames with the specific colorway id
 
 # tryOnWithTheFittingRoom
 

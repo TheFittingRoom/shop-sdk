@@ -6,7 +6,7 @@ const defaultImg = "https://cdn.shopify.com/s/files/1/0551/2180/5443/products/Sp
 
 const SignInModal = ({override, imgUrl = defaultImg}: SignInModalProps) => {
     const { Strings } = override || Locale.getLocale();
-    const { title, emailAddress, password, forgotPasswordWithSymbol, dontHaveAcc, signIn, howItWorks, howItWorksText, simplyScan, simplyScanText, tryOn, tryOnText, or, createAvatarSc, notifiedGoogle } = Strings;
+    const { title, emailAddress, password, forgotPasswordWithSymbol, dontHaveAcc, signIn, howItWorks, howItWorksText, simplyScan, simplyScanText, tryOn, tryOnText, or, createAvatarSc } = Strings;
 
     return `
         <div class="modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
@@ -58,7 +58,7 @@ const SignInModal = ({override, imgUrl = defaultImg}: SignInModalProps) => {
                     >
                         ${signIn}
                     </button>
-                    
+
                     <div>
                         <div class="poppins-light-24-300 c-dark mt-30">${howItWorks}</div>
 
@@ -98,8 +98,6 @@ const SignInModal = ({override, imgUrl = defaultImg}: SignInModalProps) => {
                                 <img src="${AppStoreLogo}" />
                             </object>
                         </div>
-
-                        <!-- <div class="roboto-18-default c-dark-o5 underline cursor mt-40" onclick="window.theFittingRoom.renderEnterEmailModal()">${notifiedGoogle}</div> -->
                     </div>
                 </div>
             </div>

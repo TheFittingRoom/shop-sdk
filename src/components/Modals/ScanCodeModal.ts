@@ -4,7 +4,7 @@ import { QrCodeLogo, AppStoreLogo, TfrLogo } from "../../lib/svgUrl";
 
 const ScanCodeModal = ({override}: ScanCodeModalProps) => {
     const { Strings } = override || Locale.getLocale();
-    const { title, returnToSignIn, createAvatarSc, notifiedGoogle } = Strings;
+    const { title, createAvatarSc } = Strings;
 
     return `
         <div class="modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
@@ -36,10 +36,6 @@ const ScanCodeModal = ({override}: ScanCodeModalProps) => {
                             <img src="${AppStoreLogo}" />
                         </object>
                     </div>
-
-                    <!-- <div class="roboto-18-default c-dark-o5 underline cursor mt-20" onclick="window.theFittingRoom.renderEnterEmailModal()">${notifiedGoogle}</div> -->
-
-                    <!-- <div class="roboto-18-default c-dark-o5 underline cursor mt-40 mb-30 d-inline-block" onclick="window.theFittingRoom.renderSignInModal()">${returnToSignIn}</div> -->
                 </div>
             </div>
         </div>

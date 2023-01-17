@@ -4,7 +4,7 @@ import { NoAvatarModalProps } from "../../types";
 
 const NoAvatarModal = ({override}: NoAvatarModalProps) => {
     const { Strings } = override || Locale.getLocale();
-    const { title, backToSignIn, dontHaveAvatar, returnToTfr } = Strings;
+    const { title, dontHaveAvatar, returnToTfr } = Strings;
 
     return `
         <div class="modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
@@ -25,9 +25,6 @@ const NoAvatarModal = ({override}: NoAvatarModalProps) => {
 
                     <div class="poppins-light-22-300 c-dark mt-60">${dontHaveAvatar}</div>
                     <div class="poppins-light-22-300 c-dark mb-60">${returnToTfr}</div>
-                
-
-                    <!-- <div class="roboto-16-default c-dark-o5 underline cursor mt-10" onclick="window.theFittingRoom.renderSignInModal()">${backToSignIn}</div> -->
                 </div>
             </div>
         </div>

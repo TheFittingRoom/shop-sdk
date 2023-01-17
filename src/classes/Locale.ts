@@ -25,7 +25,6 @@ export class Locale {
         or: "Or",
         dontHaveAvatar: "Whoops! Looks like you don't have an avatar yet.",
         loadingAvatar: "Your avatar is loading...",
-        createAvatar: "Scan the QR code to return to app to create your avatar.",
         returnToTfr: "Please return to The Fitting Room app to create your avatar.",
         successfullyLoggedOut: "You have successfully logged out!",
         returnToSite: "Return to site",
@@ -36,18 +35,15 @@ export class Locale {
         orSize: "or size",
         associatedEmail: "If there is an account associated with that email, We have sent a link to reset your password.",
         createAvatarSc: "Scan the QR code/click link to download our app and create an avatar:",
-        orEnterEmail: "Or enter your email so we can send you a download link:",
-        tfrAvailable: "The Fitting Room app is currently available for",
-        notifiedGoogle: "I would like to be notified when it is available on Google Play",
-        comingSoon: "coming soon!",
         somethingWentWrong: "Something went wrong. Try again!",
         signOutErrorText: "Something went wrong while logging out. Try again!",
-        getProfileErrorText: "Something went wrong while fetching profile. Try again!",
         getVirtualTryOnFramesErrorText: "Something went wrong while fetching style id. Try again!",
         getRecommendedSizesErrorText: "Something went wrong while fetching sizes. Try again!",
         sendPasswordResetEmailErrorText: "Something went wrong while sending password reset email. Try again!",
         returnToCatalogPage: "Return to Catalog Page",
         returnToProductPage: "Return to Product Page",
+        loading: "Loading...",
+        somethingIsWrongWithThisUser: "Something is wrong with this user. Try to re-authenticate again!"
       }
     }
 

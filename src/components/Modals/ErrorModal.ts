@@ -4,13 +4,13 @@ import { ErrorModalProps } from "../../types";
 
 const ErrorModal = ({override, errorText, sizes}: ErrorModalProps) => {
     const { Strings } = override || Locale.getLocale();
-    const { title, signOut, noSizeAvailable, trySize, orSize, somethingWentWrong, returnToProductPage, returnToCatalogPage } = Strings;
+    const { title, noSizeAvailable, trySize, orSize, somethingWentWrong, returnToProductPage, returnToCatalogPage, somethingIsWrongWithThisUser } = Strings;
 
     const sizeText = `${noSizeAvailable} ${trySize} ${sizes?.recommended} ${orSize} ${sizes?.optionalSizes?.join(", ")}.`;
     let errorMsg = errorText || (Boolean(sizes?.recommended) && `${sizeText}`) || somethingWentWrong;
 
     if (errorMsg.toLocaleLowerCase() === 'user not found') {
-        errorMsg = 'Something is wrong with this user. Try to re-authenticate again!';
+        errorMsg = somethingIsWrongWithThisUser;
     }
 
     return `
@@ -29,12 +29,6 @@ const ErrorModal = ({override, errorText, sizes}: ErrorModalProps) => {
                     <div class="body-text-container mt-15-p mb-13-p">
                         <div class="poppins-regular-20-default c-dark">${errorMsg}</div>
                     </div>
-
-                    <!--
-                    <button class="standard-button bg-aquamarina-strong c-white poppins-medium-16-default cursor mt-10-p" id="thefittingroom-signout-btn" onclick="window.theFittingRoom.signOut()">
-                        ${signOut}
-                    </button>
-                    -->
 
                     <div class="t-a-center">
                         <span class="roboto-16-default c-dark-o5 underline cursor mr-20" onclick="window.history.back()">${returnToCatalogPage || "Return to Catalog Page"}</span>
