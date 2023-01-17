@@ -15,7 +15,6 @@ import {
 } from './Modals';
 
 export {
-    // Modals
     initializeModal,
     closeModal,
     NoAvatarModal,
