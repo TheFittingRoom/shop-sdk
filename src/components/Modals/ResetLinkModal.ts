@@ -8,7 +8,11 @@ const ResetLinkModal = ({override}: ResetLinkModalProps) => {
 
     return `
         <div class="modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
-            <div class="modal-content-container pt-7-p pb-7-p pr-20 pl-20">
+            <div class="modal-content-container pb-7-p pt-20 pr-20 pl-20">
+                <div class="close-container" onclick="window.theFittingRoom.closeModal()">
+                    <span class="close cursor">&times;</span>
+                </div>
+
                 <div class="modal-content">
                     <div class="modal-title-logo-container">
                         <div class="poppins-light-24-300 c-dark mr-10">${title}</div>
