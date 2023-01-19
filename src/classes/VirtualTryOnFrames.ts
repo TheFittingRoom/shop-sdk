@@ -4,6 +4,7 @@ import { AvatarState, VirtualTryOnFramesProps } from '../types';
 import { FirebaseInstance } from './Firebase';
 import ErrorHandler from './ErrorHandler';
 import Auth from './Auth';
+import { getRecommendedSizes } from './Sizes';
 
 export const virtualTryOnFrames = async ({ sku }: VirtualTryOnFramesProps): Promise<any> => {
     try {
@@ -59,8 +60,32 @@ export const virtualTryOnFrames = async ({ sku }: VirtualTryOnFramesProps): Prom
             window.theFittingRoom.renderErrorModal({errorText: 'Something went wrong while fetching colorway id. Try again!'});
         }
     } catch (error) {
+        console.log("error virtualTryOnFrames: ", error)
         const errMsg = error?.message?.error;
-        window.theFittingRoom.renderErrorModal({errorText: errMsg || 'Something went wrong. Try again!'});
+
+        if (errMsg === 'size id is outside of recommended range') {
+            getRecommendedSizes({ sku: sku }).then((data) => {
+                const recommendedSizeValue = data?.recommended_sizes?.size_value?.size;
+                const availableSizes = data?.available_sizes;
+  
+                let trySizes = '';
+
+                availableSizes?.forEach((item, index) => {
+                    if ((availableSizes?.length - 1) === index) {
+                        trySizes += `or ${item?.size_value?.size}`;
+                    } else {
+                        trySizes += `${item?.size_value?.size}, `;
+                    }
+                });
+
+                let errorMsg = `Please try on one of the recommended sizes: ${trySizes}. We suggest starting with size ${recommendedSizeValue}!`;
+
+                window.theFittingRoom?.renderErrorModal({errorText: errorMsg});
+            }).catch(() => {})
+        } else {
+            window.theFittingRoom.renderErrorModal({errorText: errMsg || 'Something went wrong. Try again!'}); 
+        }
+
         return ErrorHandler.getError(error?.code);
     }
 }
