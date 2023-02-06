@@ -10,8 +10,7 @@ export const getRecommendedSizes = async ({ sku }: GetRecommendedSizeProps): Pro
         const userProfile = await Auth.getUserProfile();
 
         if ((userProfile?.avatar_status === AvatarState.PENDING) || 
-            (userProfile?.avatar_status === AvatarState.NOT_CREATED) || 
-            (!Boolean(userProfile?.vto?.frames?.length))) {
+            (userProfile?.avatar_status === AvatarState.NOT_CREATED)) {
             return;
         }
 
