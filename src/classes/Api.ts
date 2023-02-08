@@ -13,10 +13,10 @@ class Api {
                 return reject(ErrorHandler.UNAUTHORIZED);
             }
 
-            // const { key } = window.theFittingRoom;
-            // if (!key) {
-            //     return reject(ErrorHandler.CLIENT_UNAUTHORIZED);
-            // }
+            const { key } = window.theFittingRoom;
+            if (!key) {
+                return reject(ErrorHandler.CLIENT_UNAUTHORIZED);
+            }
 
             // const path = window?.location?.pathname || "";
 
@@ -27,9 +27,10 @@ class Api {
                     ...(data?.headers || {}),
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
+                    "Brand-ID": key,
                 },
                 // Add credentials to requests on cross-origin calls
-                credentials: 'include'
+                credentials: 'include',
                 /*
                 headers: {
                     ...(data?.headers ||{}),
