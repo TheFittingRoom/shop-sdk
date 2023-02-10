@@ -27,13 +27,13 @@ export class TheFittingRoomInit {
 
     public constructor(currentScript) {
         const {searchParams} = new URL(currentScript.getAttribute("src"));
-        // const key = searchParams.get("key") || "";
+        const key = searchParams.get("key") || "";
         const language = searchParams.get("language") || "en";
         const version = searchParams.get("version") || "";
 
         this.injectStyles();
         this.locale = language;
-        // this.key = key;
+        this.key = key;
         this.apiVersion = version;
 
         Locale.setLocale(language);
@@ -41,6 +41,7 @@ export class TheFittingRoomInit {
         window.theFittingRoom = {
             language, 
             version,
+            key,
         }
 
         /*
