@@ -1,22 +1,22 @@
 import { ErrorType } from "../types";
 
-export const getTFRFrames = async ({ sku }): Promise<ErrorType | void> => {
+export const getVTOFrames = async ({ sku }): Promise<ErrorType | void> => {
   window.theFittingRoom?.getUserProfile().then(userProfile => {
     console.log("userProfile: ", userProfile?.vto);
     console.log("sku: ", sku);
 
-    const getBrandId = () => {
-      const brandStyleId = sku?.split('-')?.[0];
-      return String(brandStyleId || "");
+    const getBandStyleId = () => {
+      const bandStyleId = sku?.split('-')?.[0];
+      return String(bandStyleId || "");
     }
 
-    const getUserFrames = () => {
+    const getUserVTOFrames = () => {
       let frames = [];
 
       if (userProfile?.vto?.frames) {
         frames = userProfile?.vto?.frames;
       } else {
-        frames = userProfile?.vto?.[`${getBrandId()}`]?.[`${sku}`]?.frames;
+        frames = userProfile?.vto?.[`${getBandStyleId()}`]?.[`${sku}`]?.frames;
       }
 
       return frames || [];
@@ -24,24 +24,24 @@ export const getTFRFrames = async ({ sku }): Promise<ErrorType | void> => {
 
   /*
     const getColorWayId = () => {
-      const colorWayId = userProfile?.vto?.[`${getBrandId()}`]?.[`${sku}`]?.colorway_id;
+      const colorWayId = userProfile?.vto?.[`${getBandStyleId()}`]?.[`${sku}`]?.colorway_id;
       return Number(colorWayId || null);
     }
   */
 
-    const getUserSku = () => {
+    const getUserLoadedSku = () => {
       let sku = "";
 
       if (userProfile?.vto?.sku) {
         sku = userProfile?.vto?.sku;
       } else {
-        sku = Object.keys(userProfile?.vto?.[`${getBrandId()}`])?.[0];
+        sku = Object.keys(userProfile?.vto?.[`${getBandStyleId()}`])?.[0];
       }
 
       return String(sku || "");
     }
 
-    return {frames: getUserFrames(), userSku: getUserSku()};
+    return {frames: getUserVTOFrames(), userSku: getUserLoadedSku()};
   }).catch(error => {
     console.log("getUserProfile error: ", error)
     throw new Error(error)

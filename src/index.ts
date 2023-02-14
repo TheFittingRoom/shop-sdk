@@ -16,7 +16,7 @@ import {
     renderLoadingAvatarModal,
 } from './lib/previewModal';
 import { tryOnWithTheFittingRoom } from './classes/TryOnWithTheFittingRoom';
-import { getTFRFrames } from './classes/Frames';
+import { getVTOFrames } from './classes/Frames';
 
 declare global {
     interface Window {
@@ -53,7 +53,7 @@ window.addEventListener('load', () => {
         // Avatar
         virtualTryOnFrames,
         // Frames
-        getTFRFrames,
+        getVTOFrames,
         // Language service
         getLocale: Locale.getLocale,
         setLocale: Locale.setLocale,
