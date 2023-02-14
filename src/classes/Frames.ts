@@ -1,7 +1,10 @@
 import { ErrorType } from "../types";
+import Auth from "./Auth";
 
-export const getVTOFrames = async ({ sku }): Promise<ErrorType | void> => {
-  window.theFittingRoom?.getUserProfile().then(userProfile => {
+export const getVTOFrames = async ({ sku }): Promise<ErrorType | void | {}> => {
+  try {
+    const userProfile = await Auth.getUserProfile();
+
     console.log("userProfile: ", userProfile?.vto);
     console.log("sku: ", sku);
 
@@ -22,12 +25,12 @@ export const getVTOFrames = async ({ sku }): Promise<ErrorType | void> => {
       return userVTOFrames || [];
     }
 
-    return {userVTOFrames: getUserVTOFrames()};
+    return {userVTOFrames: getUserVTOFrames()}
 
-  }).catch(error => {
+  } catch (error) {
     console.log("getUserProfile error: ", error)
     throw new Error(error)
-  })
+  }
 }
 
 /*
