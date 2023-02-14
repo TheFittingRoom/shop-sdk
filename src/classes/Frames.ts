@@ -5,45 +5,46 @@ export const getVTOFrames = async ({ sku }): Promise<ErrorType | void> => {
     console.log("userProfile: ", userProfile?.vto);
     console.log("sku: ", sku);
 
-    const getBandStyleId = () => {
-      const bandStyleId = sku?.split('-')?.[0];
-      return String(bandStyleId || "");
+    const getBrandStyleId = () => {
+      const brandStyleId = sku?.split('-')?.[0];
+      return String(brandStyleId || "");
     }
 
     const getUserVTOFrames = () => {
       let frames = [];
 
-      if (userProfile?.vto?.frames) {
-        frames = userProfile?.vto?.frames;
+      if (userProfile?.vto) {
+        frames = userProfile?.vto;
       } else {
-        frames = userProfile?.vto?.[`${getBandStyleId()}`]?.[`${sku}`]?.frames;
+        frames = userProfile?.vto?.[`${getBrandStyleId()}`]?.[`${sku}`];
       }
 
       return frames || [];
     }
 
-  /*
-    const getColorWayId = () => {
-      const colorWayId = userProfile?.vto?.[`${getBandStyleId()}`]?.[`${sku}`]?.colorway_id;
-      return Number(colorWayId || null);
-    }
-  */
+    return {frames: getUserVTOFrames()};
 
-    const getUserLoadedSku = () => {
-      let sku = "";
-
-      if (userProfile?.vto?.sku) {
-        sku = userProfile?.vto?.sku;
-      } else {
-        sku = Object.keys(userProfile?.vto?.[`${getBandStyleId()}`])?.find(item => item === sku);
-      }
-
-      return String(sku || "");
-    }
-
-    return {frames: getUserVTOFrames(), userSku: getUserLoadedSku()};
   }).catch(error => {
     console.log("getUserProfile error: ", error)
     throw new Error(error)
   })
 }
+
+/*
+  const getColorWayId = () => {
+    const colorWayId = userProfile?.vto?.[`${getBrandStyleId()}`]?.[`${sku}`]?.colorway_id;
+    return Number(colorWayId || null);
+  }
+
+  const getUserLoadedSku = () => {
+    let sku = "";
+
+    if (userProfile?.vto?.sku) {
+      sku = userProfile?.vto?.sku;
+    } else {
+      sku = userProfile?.vto?.[`${getBrandStyleId()}`]?.[`${sku}`]
+    }
+
+    return String(sku || "");
+  }
+*/
