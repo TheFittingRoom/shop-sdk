@@ -35,7 +35,7 @@ export const getVTOFrames = async ({ sku }): Promise<ErrorType | void> => {
       if (userProfile?.vto?.sku) {
         sku = userProfile?.vto?.sku;
       } else {
-        sku = Object.keys(userProfile?.vto?.[`${getBandStyleId()}`])?.[0];
+        sku = Object.keys(userProfile?.vto?.[`${getBandStyleId()}`])?.find(item => item === sku);
       }
 
       return String(sku || "");
