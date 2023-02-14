@@ -10,19 +10,19 @@ export const getVTOFrames = async ({ sku }): Promise<ErrorType | void> => {
       return String(brandStyleId || "");
     }
 
-    const getUserVTOFrames = () => {
-      let frames = [];
+    const getUserVTO = () => {
+      let userVTO = null;
 
       if (userProfile?.vto) {
-        frames = userProfile?.vto;
+        userVTO = userProfile?.vto;
       } else {
-        frames = userProfile?.vto?.[`${getBrandStyleId()}`]?.[`${sku}`];
+        userVTO = userProfile?.vto?.[`${getBrandStyleId()}`]?.[`${sku}`];
       }
 
-      return frames || [];
+      return userVTO || null;
     }
 
-    return {frames: getUserVTOFrames()};
+    return {frames: getUserVTO()};
 
   }).catch(error => {
     console.log("getUserProfile error: ", error)
