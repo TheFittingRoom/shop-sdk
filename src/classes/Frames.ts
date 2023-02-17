@@ -5,28 +5,9 @@ export const getVTOFrames = async ({ sku }): Promise<ErrorType | void | {}> => {
   try {
     const userProfile = await Auth.getUserProfile();
 
-    console.log("userProfile: ", userProfile?.vto);
-    console.log("sku: ", sku);
+    const userVTOFrames = userProfile?.vto?.['1']?.[`${sku}`]?.frames || [];
 
-    const getBrandStyleId = () => {
-      const brandStyleId = sku?.split('-')?.[0];
-      return String(brandStyleId || "");
-    }
-
-    const getUserVTOFrames = () => {
-      let userVTOFrames = [];
-
-      if (userProfile?.vto) {
-        userVTOFrames = userProfile?.vto?.frames;
-      } else {
-        userVTOFrames = userProfile?.vto?.[`${getBrandStyleId()}`]?.[`${sku}`]?.frames;
-      }
-
-      return userVTOFrames || [];
-    }
-
-    return {userVTOFrames: getUserVTOFrames()}
-
+    return {userVTOFrames};
   } catch (error) {
     console.log("getUserProfile error: ", error)
     throw new Error(error)
@@ -49,5 +30,10 @@ export const getVTOFrames = async ({ sku }): Promise<ErrorType | void | {}> => {
     }
 
     return String(sku || "");
+  }
+
+  const getBrandStyleId = () => {
+    const brandStyleId = sku?.split('-')?.[0];
+    return String(brandStyleId || "");
   }
 */
