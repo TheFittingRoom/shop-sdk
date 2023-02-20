@@ -26,7 +26,7 @@ class Auth {
 
             await firebase.signInWithEmailAndPassword(FirebaseInstance.auth, email, password);
 
-            const userProfile = await Auth.listenToUserProfile();
+            const userProfile = await Auth.getUserProfile();
 
             const signOutButton = document.getElementById('thefittingroom-signout-button');
             showHideElement(true, signOutButton);
