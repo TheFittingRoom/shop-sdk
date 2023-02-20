@@ -1,11 +1,15 @@
-import { ErrorType } from "../types";
+import { ErrorType, UserVTOFrames } from "../types";
 import Auth from "./Auth";
 
-export const getVTOFrames = async ({ sku }): Promise<ErrorType | void | {}> => {
+export const getVTOFrames = async ({ sku }): Promise<ErrorType | UserVTOFrames> => {
   try {
     const userProfile = await Auth.getUserProfile();
+    const { key } = window.theFittingRoom;
 
-    const userVTOFrames = userProfile?.vto?.['1']?.[`${sku}`]?.frames || [];
+    console.log("userProfile: ", userProfile);
+    console.log("sku: ", sku, " key: ", key);
+
+    const userVTOFrames = userProfile?.vto?.[`${key}`]?.[`${sku}`]?.frames || [];
 
     return {userVTOFrames};
   } catch (error) {

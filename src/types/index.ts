@@ -67,10 +67,17 @@ export interface DownloadLinkEmailProps {
 export interface ProfileResponse {
     hasAvatar: boolean
 }
+export interface UserVTOFrames {
+    userVTOFrames: string[]
+}
 
 export type ErrorType = {
     code: number | null,
     errorMessage: string
+}
+
+export enum Response {
+    SUCCESS = 'success'
 }
 
 export enum AvatarState {
