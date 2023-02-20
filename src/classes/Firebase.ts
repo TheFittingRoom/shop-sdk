@@ -2,6 +2,7 @@ import * as firebase from "firebase/app";
 import * as firebaseAuth from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { showHideElement } from "../lib/updaters";
+import Auth from "./Auth";
 
 export class FirebaseInstance {
     static auth: firebaseAuth.Auth;
@@ -23,10 +24,13 @@ export class FirebaseInstance {
 
         FirebaseInstance.firestoreApp = getFirestore(firebaseApp);
 
-        firebaseAuth.onAuthStateChanged(FirebaseInstance.auth, (user) => {
+        firebaseAuth.onAuthStateChanged(FirebaseInstance.auth, async (user) => {
             const signOut = document.getElementById("thefittingroom-signout")
 
             showHideElement(user, signOut);
+            if (window.theFittingRoom.isLoggedIn()) {
+                await Auth.listenToUserProfile();
+            }
         })
     }
 
