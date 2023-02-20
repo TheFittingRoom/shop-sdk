@@ -4,11 +4,12 @@ import Auth from "./Auth";
 export const getVTOFrames = async ({ sku }): Promise<ErrorType | UserVTOFrames> => {
   try {
     const userProfile = await Auth.getUserProfile();
+    const { key } = window.theFittingRoom;
 
     console.log("userProfile: ", userProfile);
-    console.log("sku: ", sku);
+    console.log("sku: ", sku, " key: ", key);
 
-    const userVTOFrames = userProfile?.vto?.['1']?.[`${sku}`]?.frames || [];
+    const userVTOFrames = userProfile?.vto?.[`${key}`]?.[`${sku}`]?.frames || [];
 
     return {userVTOFrames};
   } catch (error) {
