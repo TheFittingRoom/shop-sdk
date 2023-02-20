@@ -1,9 +1,12 @@
-import { ErrorType } from "../types";
+import { ErrorType, UserVTOFrames } from "../types";
 import Auth from "./Auth";
 
-export const getVTOFrames = async ({ sku }): Promise<ErrorType | void | {}> => {
+export const getVTOFrames = async ({ sku }): Promise<ErrorType | UserVTOFrames> => {
   try {
     const userProfile = await Auth.getUserProfile();
+
+    console.log("userProfile: ", userProfile);
+    console.log("sku: ", sku);
 
     const userVTOFrames = userProfile?.vto?.['1']?.[`${sku}`]?.frames || [];
 

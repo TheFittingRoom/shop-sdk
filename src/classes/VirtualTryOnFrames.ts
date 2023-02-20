@@ -1,14 +1,20 @@
 import Api from './Api';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { AvatarState, VirtualTryOnFramesProps } from '../types';
+import { AvatarState, Response, UserVTOFrames, VirtualTryOnFramesProps } from '../types';
 import { FirebaseInstance } from './Firebase';
 import ErrorHandler from './ErrorHandler';
 import Auth from './Auth';
 import { getRecommendedSizes } from './Sizes';
+import { getVTOFrames } from './Frames';
 
 export const virtualTryOnFrames = async ({ sku }: VirtualTryOnFramesProps): Promise<any> => {
     try {
         const userProfile = await Auth.getUserProfile();
+        const { userVTOFrames } = await getVTOFrames({ sku: sku }) as UserVTOFrames;
+
+        if (userVTOFrames?.length) {
+            return Response.SUCCESS;
+        }
 
         if (userProfile?.avatar_status === AvatarState.PENDING) {
             window.theFittingRoom.renderLoadingAvatarModal();
@@ -55,7 +61,7 @@ export const virtualTryOnFrames = async ({ sku }: VirtualTryOnFramesProps): Prom
         if (colorwayId) {
             await Api.post(`/colorways/${colorwayId}/frames`);
 
-            return 'success';
+            return Response.SUCCESS;
         } else {
             window.theFittingRoom.renderErrorModal({errorText: 'Something went wrong while fetching colorway id. Try again!'});
         }
