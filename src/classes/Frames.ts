@@ -9,7 +9,17 @@ export const getVTOFrames = async ({ sku }): Promise<ErrorType | UserVTOFrames> 
     console.log("userProfile: ", userProfile);
     console.log("sku: ", sku, " key: ", key);
 
-    const userVTOFrames = userProfile?.vto?.[`${key}`]?.[`${sku}`]?.frames || [];
+    let userVTOFrames = [];
+
+    const userVTOFramesArr = userProfile?.vto?.[`${key}`]?.[`${sku}`]?.frames || [];
+
+    if (userVTOFramesArr?.length) {
+      userVTOFrames = userVTOFramesArr;
+    } else {
+      if (String(userProfile?.vto?.sku) === String(sku)) {
+        userVTOFrames = userProfile?.vto?.frames || [];
+      }
+    }
 
     return {userVTOFrames};
   } catch (error) {
