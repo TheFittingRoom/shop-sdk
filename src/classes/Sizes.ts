@@ -28,9 +28,23 @@ export const getRecommendedSizes = async ({ sku }: GetRecommendedSizeProps): Pro
 
         const data = await Api.get(`/styles/${style?.id}/recommendation`);
 
-        const results = await data.json();
+        const { available_sizes: availableSizes = [], recommended_sizes: recommendedSizes } = await data.json();
 
-        return results;
+        const recommendedSizeValue = recommendedSizes?.label || recommendedSizes?.size_value?.size || "";
+
+        let trySizes = '';
+
+        availableSizes?.forEach((item, index) => {
+            if ((availableSizes?.length - 1) === index) {
+                trySizes += `or ${item?.label || item?.size_value?.size}`;
+            } else {
+                trySizes += `${item?.label || item?.size_value?.size}, `;
+            }
+        });
+
+        const recommendedText = `You can try on a size ${trySizes}. We recommend starting with size ${recommendedSizeValue}!`;
+
+        return recommendedText || "";
     } catch (error) {
         console.log("error getRecommendedSizes: ", error)
         const errMsg = error?.message?.error;
