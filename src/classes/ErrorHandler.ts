@@ -18,6 +18,7 @@ class ErrorHandler {
 
     static OK: ErrorType = {code: 200, errorMessage: 'OK'};
 
+    static MISSING_BRAND_ID: ErrorType = {code: 400, errorMessage: 'Missing brand id'};
     static BAD_REQUEST: ErrorType = {code: 400, errorMessage: 'Bad Request'};
     static UNAUTHORIZED: ErrorType = {code: 401, errorMessage: 'Unauthorized'};
     static FORBIDDEN: ErrorType = {code: 403, errorMessage: 'Forbidden'};

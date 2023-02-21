@@ -13,12 +13,10 @@ class Api {
                 return reject(ErrorHandler.UNAUTHORIZED);
             }
 
-            // const { key } = window.theFittingRoom;
-            // if (!key) {
-            //     return reject(ErrorHandler.CLIENT_UNAUTHORIZED);
-            // }
-
-            // const path = window?.location?.pathname || "";
+            const { key } = window.theFittingRoom;
+            if (!key) {
+                return reject(ErrorHandler.MISSING_BRAND_ID);
+            }
 
             fetch(process.env.API_ENDPOINT+url, {
                 ...data,
@@ -27,7 +25,7 @@ class Api {
                     ...(data?.headers || {}),
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
-                    // "Brand-ID": key,
+                    "Brand-ID": key,
                 },
                 // Add credentials to requests on cross-origin calls
                 credentials: 'include',
