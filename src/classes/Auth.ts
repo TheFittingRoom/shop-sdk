@@ -109,11 +109,16 @@ class Auth {
         try {
             const userId = FirebaseInstance.auth.currentUser.uid;
             const db = FirebaseInstance.firestoreApp;
-        
-            const querySnapshot = await getDoc(doc(db, 'users', userId));
-            const userProfile = querySnapshot.data();
 
-            return userProfile;
+            const querySnapshot = await getDoc(doc(db, 'users', userId));
+
+            if (querySnapshot.exists()) {
+                const userProfile = querySnapshot.data();
+
+                return userProfile;
+            } else {
+                window.theFittingRoom.renderErrorModal({errorText: 'Unable to load user data. Please try refreshing'});
+            }
         } catch (error) {
             throw Error(error);
         }
