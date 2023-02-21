@@ -117,7 +117,7 @@ class Auth {
 
                 return userProfile;
             } else {
-                window.theFittingRoom.renderErrorModal({errorText: 'Something is wrong with this user. Try to re-authenticate again!'});
+                window.theFittingRoom.renderErrorModal({errorText: 'Unable to load user data. Please try refreshing'});
             }
         } catch (error) {
             throw Error(error);
