@@ -10,7 +10,7 @@ import { getVTOFrames } from './Frames';
 export const virtualTryOnFrames = async ({ sku }: VirtualTryOnFramesProps): Promise<any> => {
     try {
         const userProfile = await Auth.getUserProfile();
-        const { userVTOFrames } = await getVTOFrames({ sku: sku }) as UserVTOFrames;
+        const userVTOFrames = await getVTOFrames({ sku: sku }) as UserVTOFrames;
 
         if (userVTOFrames?.length) {
             return Response.SUCCESS;
@@ -70,24 +70,13 @@ export const virtualTryOnFrames = async ({ sku }: VirtualTryOnFramesProps): Prom
         const errMsg = error?.message?.error;
 
         if (errMsg === 'size id is outside of recommended range') {
-            getRecommendedSizes({ sku: sku }).then((data) => {
-                const recommendedSizeValue = data?.recommended_sizes?.size_value?.size;
-                const availableSizes = data?.available_sizes;
-  
-                let trySizes = '';
+            try {
+                const recommendedSizeText = await getRecommendedSizes({ sku: sku });
 
-                availableSizes?.forEach((item, index) => {
-                    if ((availableSizes?.length - 1) === index) {
-                        trySizes += `or ${item?.size_value?.size}`;
-                    } else {
-                        trySizes += `${item?.size_value?.size}, `;
-                    }
-                });
+                const errRecommendedSizeText = recommendedSizeText.replace('You can try on a size', 'Please try on one of the recommended sizes: ').replace('We recommend', 'We suggest');
 
-                let errorMsg = `Please try on one of the recommended sizes: ${trySizes}. We suggest starting with size ${recommendedSizeValue}!`;
-
-                window.theFittingRoom?.renderErrorModal({errorText: errorMsg});
-            }).catch(() => {})
+                window.theFittingRoom?.renderErrorModal({errorText: errRecommendedSizeText});
+            } catch (error) { }
         } else {
             window.theFittingRoom.renderErrorModal({errorText: errMsg || 'Something went wrong. Try again!'}); 
         }
