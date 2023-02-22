@@ -10,11 +10,6 @@ import { getVTOFrames } from './Frames';
 export const virtualTryOnFrames = async ({ sku }: VirtualTryOnFramesProps): Promise<any> => {
     try {
         const userProfile = await Auth.getUserProfile();
-        const userVTOFrames = await getVTOFrames({ sku: sku }) as UserVTOFrames;
-
-        if (userVTOFrames?.length) {
-            return Response.SUCCESS;
-        }
 
         if (userProfile?.avatar_status === AvatarState.PENDING) {
             window.theFittingRoom.renderLoadingAvatarModal();
@@ -24,6 +19,12 @@ export const virtualTryOnFrames = async ({ sku }: VirtualTryOnFramesProps): Prom
         if (userProfile?.avatar_status === AvatarState.NOT_CREATED) {
             window.theFittingRoom.renderNoAvatarModal();
             return;
+        }
+
+        const userVTOFrames = await getVTOFrames({ sku: sku }) as UserVTOFrames;
+
+        if (userVTOFrames?.length) {
+            return Response.SUCCESS;
         }
 
         const db = FirebaseInstance.firestoreApp;
