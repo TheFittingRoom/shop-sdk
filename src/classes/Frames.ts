@@ -1,19 +1,38 @@
 import { ErrorType, UserVTOFrames } from "../types";
 import Auth from "./Auth";
 
+export const isImgValid = (url: string) => {
+  const img = new Image();
+  img.src = url;
+
+  return new Promise((resolve) => {
+    img.onerror = () => resolve(false);
+    img.onload = () => resolve(true);
+  });
+}
+
 export const getVTOFrames = async ({ sku }): Promise<ErrorType | UserVTOFrames> => {
   try {
     const userProfile = await Auth.getUserProfile();
     const { key } = window.theFittingRoom;
 
-    console.log("userProfile: ", userProfile);
-    console.log("sku: ", sku, " key: ", key);
+    console.log("sku: ", sku, " brand_id: ", key, "userProfile: ", userProfile);
 
     const userVTOFrames = userProfile?.vto?.[`${key}`]?.[`${sku}`]?.frames || [];
 
-    return {userVTOFrames};
+    if (userVTOFrames?.length) {
+      const isValid = await isImgValid(userVTOFrames?.[0]);
+
+      console.log("is first image of vto frame valid: ", isValid);
+
+      if (isValid) {
+        return userVTOFrames;
+      } else {
+        return [];
+      }
+    }
   } catch (error) {
-    console.log("getUserProfile error: ", error)
+    console.log("getVTOFrames error: ", error)
     throw new Error(error)
   }
 }

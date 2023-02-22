@@ -67,9 +67,8 @@ export interface DownloadLinkEmailProps {
 export interface ProfileResponse {
     hasAvatar: boolean
 }
-export interface UserVTOFrames {
-    userVTOFrames: string[]
-}
+
+export type UserVTOFrames = string[];
 
 export type ErrorType = {
     code: number | null,
