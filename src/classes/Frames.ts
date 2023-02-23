@@ -27,10 +27,11 @@ export const getVTOFrames = async ({ sku }): Promise<ErrorType | UserVTOFrames> 
 
       if (isValid) {
         return userVTOFrames;
-      } else {
-        return [];
       }
     }
+
+    return []
+
   } catch (error) {
     console.log("getVTOFrames error: ", error)
     throw new Error(error)
