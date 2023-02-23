@@ -15,7 +15,7 @@ const ScanCodeModal = ({override}: ScanCodeModalProps) => {
 
                 <div class="tfr-modal-content">
                     <div class="tfr-modal-title-logo-container">
-                        <div class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
+                        <div tfr-element="true" class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
                         <div>
                             <object data="tfr-logo.svg" type="image/svg+xml">
                                 <img src="${TfrLogo}" />
@@ -23,7 +23,7 @@ const ScanCodeModal = ({override}: ScanCodeModalProps) => {
                         </div>
                     </div>
 
-                    <div class="tfr-poppins-light-22-300 tfr-c-dark tfr-w-85-p tfr-m-h-auto tfr-mt-30">${createAvatarSc}</div>
+                    <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-c-dark tfr-w-85-p tfr-m-h-auto tfr-mt-30">${createAvatarSc}</div>
 
                     <div class="tfr-w-150 tfr-h-150 tfr-mt-30 tfr-mb-20 tfr-m-h-auto">
                         <object data="qr-code-logo.svg" type="image/svg+xml">

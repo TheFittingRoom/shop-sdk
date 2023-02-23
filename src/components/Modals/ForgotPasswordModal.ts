@@ -15,7 +15,7 @@ const ForgotPasswordModal = ({override}: ForgotPasswordModalProps) => {
 
                 <div class="tfr-modal-content tfr-pt-20 tfr-pb-50">
                     <div class="tfr-modal-title-logo-container">
-                        <div class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
+                        <div tfr-element="true" class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
                         <div>
                             <object data="tfr-logo.svg" type="image/svg+xml">
                                 <img src="${TfrLogo}" />
@@ -23,20 +23,20 @@ const ForgotPasswordModal = ({override}: ForgotPasswordModalProps) => {
                         </div>
                     </div>
 
-                    <div class="tfr-poppins-light-22-300 tfr-c-dark tfr-mt-30">${forgotPassword}</div>
+                    <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-c-dark tfr-mt-30">${forgotPassword}</div>
 
-                    <div class="tfr-poppins-light-16-300 tfr-mt-20 tfr-w-70-p tfr-m-h-auto">${enterEmailAddress}</div>
+                    <div tfr-element="true" class="tfr-poppins-light-16-300 tfr-mt-20 tfr-w-70-p tfr-m-h-auto">${enterEmailAddress}</div>
 
                     <fieldset class="tfr-fieldset-element tfr-fieldset tfr-mt-30">
-                        <legend class="tfr-label-element tfr-roboto-14-default tfr-c-dark-o5">${emailAddress}</legend>
-                        <input type="email" id="email-input" />
+                        <legend tfr-element="true" class="tfr-label-element tfr-roboto-14-default tfr-c-dark-o5">${emailAddress}</legend>
+                        <input tfr-element="true" type="email" id="email-input" />
                     </fieldset>
 
-                    <div class="tfr-roboto-12-default tfr-c-red tfr-mt-10 tfr-d-none" id="error-msg"></div>
+                    <div tfr-element="true" class="tfr-roboto-12-default tfr-c-red tfr-mt-10 tfr-d-none" id="error-msg"></div>
 
-                    <div class="tfr-roboto-12-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mt-30" onclick="window.theFittingRoom.renderSignInModal()">${backToSignIn}</div>
+                    <div tfr-element="true" class="tfr-roboto-12-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mt-30" onclick="window.theFittingRoom.renderSignInModal()">${backToSignIn}</div>
 
-                    <button class="tfr-standard-button tfr-bg-aquamarina-strong tfr-c-white tfr-poppins-medium-16-default tfr-cursor tfr-mt-30"
+                    <button tfr-element="true" class="tfr-standard-button tfr-bg-aquamarina-strong tfr-c-white tfr-poppins-medium-16-default tfr-cursor tfr-mt-30"
                     onclick="
                             window.theFittingRoom._internal.validate()
                             const response = window.theFittingRoom._internal.sendPasswordResetEmail({email: document.querySelector('#thefittingroom-modal #email-input').value})

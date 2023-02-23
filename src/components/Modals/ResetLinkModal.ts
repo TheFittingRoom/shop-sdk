@@ -15,7 +15,7 @@ const ResetLinkModal = ({override}: ResetLinkModalProps) => {
 
                 <div class="tfr-modal-content">
                     <div class="tfr-modal-title-logo-container">
-                        <div class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
+                        <div tfr-element="true" class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
                         <div>
                             <object data="tfr-logo.svg" type="image/svg+xml">
                                 <img src="${TfrLogo}" />
@@ -23,11 +23,11 @@ const ResetLinkModal = ({override}: ResetLinkModalProps) => {
                         </div>
                     </div>
 
-                    <div class="tfr-poppins-regular-20-default tfr-c-dark tfr-mt-15-p tfr-mb-13-p tfr-w-80-p tfr-m-h-auto">${associatedEmail}</div>
+                    <div tfr-element="true" class="tfr-poppins-regular-20-default tfr-c-dark tfr-mt-15-p tfr-mb-13-p tfr-w-80-p tfr-m-h-auto">${associatedEmail}</div>
                 </div>
 
                 <div class="tfr-t-a-center">
-                    <span class="tfr-roboto-16-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mr-20" onclick="window.theFittingRoom.renderSignInModal()">${backToSignIn}</span>
+                    <span tfr-element="true" class="tfr-roboto-16-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mr-20" onclick="window.theFittingRoom.renderSignInModal()">${backToSignIn}</span>
                 </div>
             </div>
         </div>

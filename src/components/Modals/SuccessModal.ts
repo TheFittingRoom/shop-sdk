@@ -15,7 +15,7 @@ const SuccessModal = ({override}: SuccessModalProps) => {
 
                 <div class="tfr-modal-content">
                     <div class="tfr-modal-title-logo-container">
-                        <div class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
+                        <div tfr-element="true" class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
                         <div>
                             <object data="tfr-logo.svg" type="image/svg+xml">
                                 <img src="${TfrLogo}" />
@@ -23,12 +23,12 @@ const SuccessModal = ({override}: SuccessModalProps) => {
                         </div>
                     </div>
 
-                    <div class="tfr-poppins-light-22-300 tfr-mt-15-p tfr-mb-13-p">${successfullyLoggedOut}</div>
+                    <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-mt-15-p tfr-mb-13-p">${successfullyLoggedOut}</div>
                 </div>
 
                 <div class="tfr-t-a-center">
-                    <span class="tfr-roboto-16-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mr-20" onclick="window.theFittingRoom.renderSignInModal()">${signBackIn}</span>
-                    <span class="tfr-roboto-16-default tfr-c-dark-o5 tfr-underline tfr-cursor" id="returnToSite" onclick="window.theFittingRoom.closeModal()">${returnToSite}</span>
+                    <span tfr-element="true" class="tfr-roboto-16-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mr-20" onclick="window.theFittingRoom.renderSignInModal()">${signBackIn}</span>
+                    <span tfr-element="true" class="tfr-roboto-16-default tfr-c-dark-o5 tfr-underline tfr-cursor" id="returnToSite" onclick="window.theFittingRoom.closeModal()">${returnToSite}</span>
                 </div>
             </div>
         </div>

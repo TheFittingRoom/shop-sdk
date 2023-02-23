@@ -16,7 +16,7 @@ const LoadingAvatarModal = ({ override }: LoadingAvatarModalProps) => {
 
                 <div class="tfr-modal-content tfr-pt-20 tfr-pb-50">
                     <div class="tfr-modal-title-logo-container">
-                        <div class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
+                        <div tfr-element="true" class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
                         <div>
                             <object data="tfr-logo.svg" type="image/svg+xml">
                                 <img src="${TfrLogo}" />
@@ -24,7 +24,7 @@ const LoadingAvatarModal = ({ override }: LoadingAvatarModalProps) => {
                         </div>
                     </div>
 
-                    <div class="tfr-poppins-light-22-300 tfr-c-dark tfr-mt-60">${loadingAvatar}</div>
+                    <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-c-dark tfr-mt-60">${loadingAvatar}</div>
                 </div>
             </div>
         </div>

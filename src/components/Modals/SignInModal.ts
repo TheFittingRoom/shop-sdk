@@ -17,7 +17,7 @@ const SignInModal = ({override, imgUrl = defaultImg}: SignInModalProps) => {
 
                 <div class="tfr-modal-content tfr-pt-20 tfr-pb-50">
                     <div class="tfr-modal-title-logo-container">
-                        <div class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
+                        <div tfr-element="true" class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
                         <div>
                             <object data="tfr-logo.svg" type="image/svg+xml">
                                 <img src="${TfrLogo}" />
@@ -25,26 +25,26 @@ const SignInModal = ({override, imgUrl = defaultImg}: SignInModalProps) => {
                         </div>
                     </div>
 
-                    <div class="tfr-poppins-light-22-300 tfr-c-dark tfr-mt-30">${signIn}</div>
+                    <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-c-dark tfr-mt-30">${signIn}</div>
 
                     <fieldset class="tfr-fieldset-element tfr-fieldset tfr-mt-20">
-                        <legend class="tfr-label-element tfr-roboto-14-default tfr-c-dark-o5">${emailAddress}</legend>
-                        <input type="email" id="email-input" />
+                        <legend tfr-element="true" class="tfr-label-element tfr-roboto-14-default tfr-c-dark-o5">${emailAddress}</legend>
+                        <input tfr-element="true" type="email" id="email-input" />
                     </fieldset>
 
                     <fieldset class="tfr-fieldset-element tfr-fieldset tfr-mt-20">
-                        <legend class="tfr-label-element tfr-roboto-14-default tfr-c-dark-o5">${password}</legend>
-                        <input type="password" id="password-input" />
+                        <legend tfr-element="true" class="tfr-label-element tfr-roboto-14-default tfr-c-dark-o5">${password}</legend>
+                        <input tfr-element="true" type="password" id="password-input" />
                     </fieldset>
 
-                    <div class="tfr-roboto-12-default tfr-c-red tfr-mt-10 tfr-d-none" id="error-msg"></div>
+                    <div tfr-element="true" class="tfr-roboto-12-default tfr-c-red tfr-mt-10 tfr-d-none" id="error-msg"></div>
 
                     <div class="tfr-mt-30">
-                        <span class="tfr-roboto-12-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mr-15" onclick="window.theFittingRoom.renderForgotPasswordModal()">${forgotPasswordWithSymbol}</span>
-                        <span class="tfr-roboto-12-default tfr-c-dark-o5 tfr-underline tfr-cursor" onclick="window.theFittingRoom.renderScanCodeModal()">${dontHaveAcc}</span>
+                        <span tfr-element="true" class="tfr-roboto-12-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mr-15" onclick="window.theFittingRoom.renderForgotPasswordModal()">${forgotPasswordWithSymbol}</span>
+                        <span tfr-element="true" class="tfr-roboto-12-default tfr-c-dark-o5 tfr-underline tfr-cursor" onclick="window.theFittingRoom.renderScanCodeModal()">${dontHaveAcc}</span>
                     </div>
 
-                    <button class="tfr-standard-button tfr-bg-aquamarina-strong tfr-c-white tfr-poppins-medium-16-default tfr-cursor tfr-mt-30" id="sign-in-button"
+                    <button tfr-element="true" class="tfr-standard-button tfr-bg-aquamarina-strong tfr-c-white tfr-poppins-medium-16-default tfr-cursor tfr-mt-30" id="sign-in-button"
                     onclick="
                             window.theFittingRoom._internal.validate();
                             const response = window.theFittingRoom._internal.signIn({email: document.querySelector('#thefittingroom-modal #email-input').value, password: document.querySelector('#thefittingroom-modal #password-input').value});
@@ -60,14 +60,14 @@ const SignInModal = ({override, imgUrl = defaultImg}: SignInModalProps) => {
                     </button>
 
                     <div>
-                        <div class="tfr-poppins-light-24-300 tfr-c-dark tfr-mt-30">${howItWorks}</div>
+                        <div tfr-element="true" class="tfr-poppins-light-24-300 tfr-c-dark tfr-mt-30">${howItWorks}</div>
 
-                        <div class="tfr-poppins-light-16-300 tfr-c-dark tfr-mt-15">${howItWorksText}</div>
+                        <div tfr-element="true" class="tfr-poppins-light-16-300 tfr-c-dark tfr-mt-15">${howItWorksText}</div>
 
                         <div class="tfr-how-it-works-item tfr-mt-15">
                             <div>
-                                <div class="tfr-poppins-light-22-300 tfr-c-dark">${simplyScan}</div>
-                                <div class="tfr-poppins-light-16-300 tfr-c-dark tfr-mt-15">${simplyScanText}</div>
+                                <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-c-dark">${simplyScan}</div>
+                                <div tfr-element="true" class="tfr-poppins-light-16-300 tfr-c-dark tfr-mt-15">${simplyScanText}</div>
                             </div>
 
                             <div class="tfr-girl-clothes tfr-d-flex">
@@ -78,12 +78,12 @@ const SignInModal = ({override, imgUrl = defaultImg}: SignInModalProps) => {
                         <div class="tfr-how-it-works-item tfr-mt-15">
                             <img src='${imgUrl}' class="tfr-girl-clothes" />
                             <div class="tfr-try-on-content">
-                                <div class="tfr-poppins-light-22-300 tfr-c-dark">${tryOn}</div>
-                                <div class="tfr-poppins-light-16-300 tfr-c-dark tfr-mt-15">${tryOnText}</div>
+                                <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-c-dark">${tryOn}</div>
+                                <div tfr-element="true" class="tfr-poppins-light-16-300 tfr-c-dark tfr-mt-15">${tryOnText}</div>
                             </div>
                         </div>
 
-                        <div class="tfr-poppins-light-22-300 tfr-c-dark tfr-w-85-p tfr-m-h-auto tfr-mt-50">${createAvatarSc}</div>
+                        <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-c-dark tfr-w-85-p tfr-m-h-auto tfr-mt-50">${createAvatarSc}</div>
 
                         <div class="tfr-w-150 tfr-h-150 tfr-mt-30 tfr-m-h-auto">
                             <object data="qr-code-logo.svg" type="image/svg+xml">
@@ -91,7 +91,7 @@ const SignInModal = ({override, imgUrl = defaultImg}: SignInModalProps) => {
                             </object>
                         </div>
 
-                        <div class="tfr-poppins-light-22-300 tfr-c-dark tfr-w-85-p tfr-mt-20 tfr-m-h-auto">${or}</div>
+                        <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-c-dark tfr-w-85-p tfr-mt-20 tfr-m-h-auto">${or}</div>
 
                         <div class="tfr-mt-20 tfr-m-h-auto">
                             <object data="app-store-logo.svg" type="image/svg+xml">

@@ -15,7 +15,7 @@ const EnterEmailModal = ({override}: EnterEmailModalProps) => {
 
                 <div class="tfr-modal-content tfr-pt-20 tfr-pb-50">
                     <div class="tfr-modal-title-logo-container">
-                        <div class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
+                        <div tfr-element="true" class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
                         <div>
                             <object data="tfr-logo.svg" type="image/svg+xml">
                                 <img src="${TfrLogo}" />
@@ -23,15 +23,15 @@ const EnterEmailModal = ({override}: EnterEmailModalProps) => {
                         </div>
                     </div>
 
-                    <div class="tfr-poppins-light-22-300 tfr-c-dark tfr-w-85-p tfr-m-h-auto mt-40">${modalTitle}</div>
+                    <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-c-dark tfr-w-85-p tfr-m-h-auto mt-40">${modalTitle}</div>
 
                     <fieldset class="tfr-fieldset-element tfr-fieldset tfr-mt-60 tfr-mb-40">
-                        <legend class="tfr-label-element tfr-roboto-14-default tfr-c-dark-o5">${emailAddress}</legend>
-                        <input type="email" id="email-input" />
+                        <legend tfr-element="true" class="tfr-label-element tfr-roboto-14-default tfr-c-dark-o5">${emailAddress}</legend>
+                        <input tfr-element="true" type="email" id="email-input" />
                     </fieldset>
-                    <div class="tfr-roboto-12-default tfr-c-red tfr-mt-10 tfr-d-none" id="error-msg"></div>
+                    <div tfr-element="true" class="tfr-roboto-12-default tfr-c-red tfr-mt-10 tfr-d-none" id="error-msg"></div>
 
-                    <button id="signUpButton" class="tfr-standard-button tfr-bg-aquamarina-strong tfr-c-white tfr-poppins-medium-16-default tfr-cursor tfr-mt-30"
+                    <button tfr-element="true" id="signUpButton" class="tfr-standard-button tfr-bg-aquamarina-strong tfr-c-white tfr-poppins-medium-16-default tfr-cursor tfr-mt-30"
                         onclick="
                             window.theFittingRoom._internal.validate();
                             const response = window.theFittingRoom._internal.notifyEmail({email: document.querySelector('#thefittingroom-modal #email-input').value});
