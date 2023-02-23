@@ -1,4 +1,4 @@
-import { ErrorType, UserVTOFrames } from "../types";
+import { AvatarState, ErrorType, UserVTOFrames } from "../types";
 import Auth from "./Auth";
 
 export const isImgValid = (url: string) => {
@@ -11,10 +11,20 @@ export const isImgValid = (url: string) => {
   });
 }
 
-export const getVTOFrames = async ({ sku }): Promise<ErrorType | UserVTOFrames> => {
+export const getVTOFrames = async ({ sku }): Promise<ErrorType | UserVTOFrames | void> => {
   try {
     const userProfile = await Auth.getUserProfile();
     const { key } = window.theFittingRoom;
+
+    if (userProfile?.avatar_status === AvatarState.PENDING) {
+      window.theFittingRoom.renderLoadingAvatarModal();
+      return;
+    }
+
+    if (userProfile?.avatar_status === AvatarState.NOT_CREATED) {
+      window.theFittingRoom.renderNoAvatarModal();
+      return;
+    }
 
     console.log("sku: ", sku, " brand_id: ", key, "userProfile: ", userProfile);
 
