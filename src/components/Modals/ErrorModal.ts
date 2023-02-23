@@ -14,15 +14,15 @@ const ErrorModal = ({override, errorText, sizes}: ErrorModalProps) => {
     }
 
     return `
-        <div class="modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
-            <div class="modal-content-container pb-7-p pt-20 pr-20 pl-20">
-                <div class="close-container" onclick="window.theFittingRoom.closeModal()">
-                    <span class="close cursor">&times;</span>
+        <div class="tfr-modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
+            <div class="tfr-modal-content-container tfr-pb-7-p tfr-pt-20 tfr-pr-20 tfr-pl-20">
+                <div class="tfr-close-container" onclick="window.theFittingRoom.closeModal()">
+                    <span class="tfr-close tfr-cursor">&times;</span>
                 </div>
 
-                <div class="modal-content">
-                    <div class="modal-title-logo-container">
-                        <div class="poppins-light-24-300 c-dark mr-10">${title}</div>
+                <div class="tfr-modal-content">
+                    <div class="tfr-modal-title-logo-container">
+                        <div class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
                         <div>
                             <object data="tfr-logo.svg" type="image/svg+xml">
                                 <img src="${TfrLogo}" />
@@ -30,13 +30,13 @@ const ErrorModal = ({override, errorText, sizes}: ErrorModalProps) => {
                         </div>
                     </div>
 
-                    <div class="body-text-container mt-15-p mb-13-p">
-                        <div class="poppins-regular-20-default c-dark">${errorMsg}</div>
+                    <div class="tfr-mt-15-p tfr-mb-13-p">
+                        <div class="tfr-poppins-regular-20-default tfr-c-dark">${errorMsg}</div>
                     </div>
 
-                    <div class="t-a-center">
-                        <span class="roboto-16-default c-dark-o5 underline cursor mr-20" onclick="window.history.back()">${returnToCatalogPage || "Return to Catalog Page"}</span>
-                        <span class="roboto-16-default c-dark-o5 underline cursor" id="returnToSite" onclick="window.theFittingRoom.closeModal()">${returnToProductPage || "Return to Product Page"}</span>
+                    <div class="tfr-t-a-center">
+                        <span class="tfr-roboto-16-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mr-20" onclick="window.history.back()">${returnToCatalogPage || "Return to Catalog Page"}</span>
+                        <span class="tfr-roboto-16-default tfr-c-dark-o5 tfr-underline tfr-cursor" id="returnToSite" onclick="window.theFittingRoom.closeModal()">${returnToProductPage || "Return to Product Page"}</span>
                     </div>
                 </div>
             </div>

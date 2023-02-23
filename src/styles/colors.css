@@ -1,23 +1,20 @@
-.grey {
-    color: grey;
-}
 
-.bg-aquamarina-strong {
+.tfr-bg-aquamarina-strong {
     background-color: #209DA7;
 }
 
-.c-white {
+.tfr-c-white {
     color: white;
 }
 
-.c-dark {
+.tfr-c-dark {
     color: #000000;
 }
 
-.c-dark-o5 {
+.tfr-c-dark-o5 {
     color: rgba(0, 0, 0, 0.5);
 }
 
-.c-red {
+.tfr-c-red {
     color: red;
 }

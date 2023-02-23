@@ -1,79 +1,46 @@
-/* @font-face {
-    font-family: "Poppins-Light";
-    src: url(../fonts/Poppins-Light.ttf) format("truetype");
-} */
-
-/* @font-face {
-    font-family: "Poppins-Regular";
-    src: url(../fonts/Poppins-Regular.ttf) format("truetype");
-} */
-
-/* @font-face {
-    font-family: "Arial-Regular";
-    src: url(../fonts/Arial-Regular.ttf) format("truetype");
-} */
-
-/* @font-face {
-    font-family: "Poppins-Medium";
-    src: url(../fonts/Poppins-Medium.ttf) format("truetype");
-} */
-
-.poppins-regular-20-default {
+.tfr-poppins-regular-20-default {
     font-family: 'Poppins', sans-serif;
-    /* font-family: "Poppins-Regular"; */
     font-size: 20px;
 }
 
-.poppins-regular-20-300 {
-    font-family: 'Poppins', sans-serif;
-    /* font-family: "Poppins-Regular"; */
-    font-size: 20px;
-    font-weight: 300;
-}
-
-.poppins-light-22-300 {
+.tfr-poppins-light-22-300 {
     font-family: 'Poppins', sans-serif;
     /* font-family: "Poppins-Light"; */
     font-size: 22px;
     font-weight: 300;
 }
 
-.poppins-light-24-300 {
+.tfr-poppins-light-24-300 {
     font-family: 'Poppins', sans-serif;
     /* font-family: "Poppins-Light"; */
     font-size: 24px;
     font-weight: 300;
 }
 
-.poppins-light-16-300 {
+.tfr-poppins-light-16-300 {
     font-family: 'Poppins', sans-serif;
     /* font-family: "Poppins-Light"; */
     font-size: 16px;
     font-weight: 300;
 }
 
-.poppins-medium-16-default {
+.tfr-poppins-medium-16-default {
     font-family: 'Poppins', sans-serif;
     /* font-family: "Poppins-Medium"; */
     font-size: 16px;
 }
 
-.roboto-12-default {
+.tfr-roboto-12-default {
     font-family: 'Roboto', sans-serif;
     font-size: 12px;
 }
 
-.roboto-14-default {
+.tfr-roboto-14-default {
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
 }
 
-.roboto-16-default {
+.tfr-roboto-16-default {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
-}
-
-.roboto-18-default {
-    font-family: 'Roboto', sans-serif;
-    font-size: 18px;
 }

@@ -7,15 +7,15 @@ const ResetLinkModal = ({override}: ResetLinkModalProps) => {
     const { title, backToSignIn, associatedEmail } = Strings;
 
     return `
-        <div class="modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
-            <div class="modal-content-container pb-7-p pt-20 pr-20 pl-20">
-                <div class="close-container" onclick="window.theFittingRoom.closeModal()">
-                    <span class="close cursor">&times;</span>
+        <div class="tfr-modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
+            <div class="tfr-modal-content-container tfr-pb-7-p tfr-pt-20 tfr-pr-20 tfr-pl-20">
+                <div class="tfr-close-container" onclick="window.theFittingRoom.closeModal()">
+                    <span class="tfr-close tfr-cursor">&times;</span>
                 </div>
 
-                <div class="modal-content">
-                    <div class="modal-title-logo-container">
-                        <div class="poppins-light-24-300 c-dark mr-10">${title}</div>
+                <div class="tfr-modal-content">
+                    <div class="tfr-modal-title-logo-container">
+                        <div class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
                         <div>
                             <object data="tfr-logo.svg" type="image/svg+xml">
                                 <img src="${TfrLogo}" />
@@ -23,11 +23,11 @@ const ResetLinkModal = ({override}: ResetLinkModalProps) => {
                         </div>
                     </div>
 
-                    <div class="poppins-regular-20-default c-dark mt-15-p mb-13-p w-80-p m-h-auto">${associatedEmail}</div>
+                    <div class="tfr-poppins-regular-20-default tfr-c-dark tfr-mt-15-p tfr-mb-13-p tfr-w-80-p tfr-m-h-auto">${associatedEmail}</div>
                 </div>
 
-                <div class="t-a-center">
-                    <span class="roboto-16-default c-dark-o5 underline cursor mr-20" onclick="window.theFittingRoom.renderSignInModal()">${backToSignIn}</span>
+                <div class="tfr-t-a-center">
+                    <span class="tfr-roboto-16-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mr-20" onclick="window.theFittingRoom.renderSignInModal()">${backToSignIn}</span>
                 </div>
             </div>
         </div>
