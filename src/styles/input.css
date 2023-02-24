@@ -11,7 +11,7 @@ select:focus {
     border: none;
 }
 
-.fieldset {
+.tfr-fieldset {
     border-radius: 10px;
     text-align: left;
     border-width: 1px;
@@ -21,7 +21,7 @@ select:focus {
     margin-left: auto;
 }
 
-.fieldset-err {
+.tfr-fieldset-err {
     border-color: red;
 }
 

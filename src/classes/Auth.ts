@@ -19,7 +19,7 @@ class Auth {
         try {
             if (signInBtn) {
                 signInBtn.innerText = loading || 'Loading...';
-                signInBtn.classList.remove('bg-aquamarina-strong', 'c-white');
+                signInBtn.classList.remove('tfr-bg-aquamarina-strong', 'tfr-c-white');
                 signInBtn.classList.add('c-black');
                 signInBtn.disabled = true;
             }
@@ -46,7 +46,7 @@ class Auth {
         } catch (error) {
             if (signInBtn) {
                 signInBtn.innerText = signIn;
-                signInBtn.classList.add('bg-aquamarina-strong', 'c-white');
+                signInBtn.classList.add('tfr-bg-aquamarina-strong', 'tfr-c-white');
                 signInBtn.classList.remove('c-black');
                 signInBtn.disabled = false;
             }

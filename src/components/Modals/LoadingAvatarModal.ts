@@ -8,15 +8,15 @@ const LoadingAvatarModal = ({ override }: LoadingAvatarModalProps) => {
     const { title, loadingAvatar } = Strings;
 
     return `
-        <div class="modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
-            <div class="modal-content-container p-20">
-                <div class="close-container" onclick="window.theFittingRoom.closeModal()">
-                    <span class="close cursor">&times;</span>
+        <div class="tfr-modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
+            <div class="tfr-modal-content-container tfr-p-20">
+                <div class="tfr-close-container" onclick="window.theFittingRoom.closeModal()">
+                    <span class="tfr-close tfr-cursor">&times;</span>
                 </div>
 
-                <div class="modal-content pt-20 pb-50">
-                    <div class="modal-title-logo-container">
-                        <div class="poppins-light-24-300 c-dark mr-10">${title}</div>
+                <div class="tfr-modal-content tfr-pt-20 tfr-pb-50">
+                    <div class="tfr-modal-title-logo-container">
+                        <div tfr-element="true" class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
                         <div>
                             <object data="tfr-logo.svg" type="image/svg+xml">
                                 <img src="${TfrLogo}" />
@@ -24,7 +24,7 @@ const LoadingAvatarModal = ({ override }: LoadingAvatarModalProps) => {
                         </div>
                     </div>
 
-                    <div class="poppins-light-22-300 c-dark mt-60">${loadingAvatar}</div>
+                    <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-c-dark tfr-mt-60">${loadingAvatar}</div>
                 </div>
             </div>
         </div>

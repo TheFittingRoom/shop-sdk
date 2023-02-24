@@ -41,28 +41,28 @@ export const closeModal = (isCalledFromParent?: boolean) => {
 
 export const validate = (errorMessage?: string) => {
     const errorMsgElement = document.querySelector('#thefittingroom-modal #error-msg');
-    errorMsgElement.classList.remove('d-block');
+    errorMsgElement.classList.remove('tfr-d-block');
 
-    const fieldsetElement = document.querySelectorAll('#thefittingroom-modal .fieldset-element');
+    const fieldsetElement = document.querySelectorAll('#thefittingroom-modal .tfr-fieldset-element');
     fieldsetElement.forEach(element => {
-        element.classList.remove('fieldset-err');
+        element.classList.remove('tfr-fieldset-err');
     })
 
-    const labelElement = document.querySelectorAll('#thefittingroom-modal .label-element');
+    const labelElement = document.querySelectorAll('#thefittingroom-modal .tfr-label-element');
     labelElement.forEach(element => {
-        element.classList.remove('c-red');
+        element.classList.remove('tfr-c-red');
     })
     
     if (errorMessage) {
-        errorMsgElement.classList.add('d-block');
+        errorMsgElement.classList.add('tfr-d-block');
         errorMsgElement.innerHTML = errorMessage;
 
         fieldsetElement.forEach(element => {
-            element.classList.add('fieldset-err');
+            element.classList.add('tfr-fieldset-err');
         })
 
         labelElement.forEach(element => {
-            element.classList.add('c-red');
+            element.classList.add('tfr-c-red');
         })
     }
 }

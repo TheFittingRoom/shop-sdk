@@ -7,15 +7,15 @@ const ScanCodeModal = ({override}: ScanCodeModalProps) => {
     const { title, createAvatarSc } = Strings;
 
     return `
-        <div class="modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
-            <div class="modal-content-container p-20">
-                <div class="close-container" onclick="window.theFittingRoom.closeModal()">
-                    <span class="close cursor">&times;</span>
+        <div class="tfr-modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
+            <div class="tfr-modal-content-container tfr-p-20">
+                <div class="tfr-close-container" onclick="window.theFittingRoom.closeModal()">
+                    <span class="tfr-close tfr-cursor">&times;</span>
                 </div>
 
-                <div class="modal-content">
-                    <div class="modal-title-logo-container">
-                        <div class="poppins-light-24-300 c-dark mr-10">${title}</div>
+                <div class="tfr-modal-content">
+                    <div class="tfr-modal-title-logo-container">
+                        <div tfr-element="true" class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
                         <div>
                             <object data="tfr-logo.svg" type="image/svg+xml">
                                 <img src="${TfrLogo}" />
@@ -23,15 +23,15 @@ const ScanCodeModal = ({override}: ScanCodeModalProps) => {
                         </div>
                     </div>
 
-                    <div class="poppins-light-22-300 c-dark w-85-p m-h-auto mt-30">${createAvatarSc}</div>
+                    <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-c-dark tfr-w-85-p tfr-m-h-auto tfr-mt-30">${createAvatarSc}</div>
 
-                    <div class="w-150 h-150 mt-30 mb-20 m-h-auto">
+                    <div class="tfr-w-150 tfr-h-150 tfr-mt-30 tfr-mb-20 tfr-m-h-auto">
                         <object data="qr-code-logo.svg" type="image/svg+xml">
                             <img src="${QrCodeLogo}" />
                         </object>
                     </div>
 
-                    <div class="mt-20 mb-20 m-h-auto">
+                    <div class="tfr-mt-20 tfr-mb-20 tfr-m-h-auto">
                         <object data="app-store-logo.svg" type="image/svg+xml">
                             <img src="${AppStoreLogo}" />
                         </object>
