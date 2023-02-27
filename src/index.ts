@@ -15,8 +15,9 @@ import {
     renderResetLinkModal,
     renderLoadingAvatarModal,
 } from './lib/previewModal';
-import { tryOnWithTheFittingRoom } from './classes/TryOnWithTheFittingRoom';
 import { getVTOFrames } from './classes/Frames';
+import { tryOnWithTheFittingRoom } from './classes/TryOnWithTheFittingRoom';
+import { tryOnWithTheFittingRoomData } from './classes/TryOnWithTheFittingRoomData';
 
 declare global {
     interface Window {
@@ -68,5 +69,6 @@ window.addEventListener('load', () => {
         renderSuccessModal,
         renderResetLinkModal,
         tryOnWithTheFittingRoom,
+        tryOnWithTheFittingRoomData
     }
 });
