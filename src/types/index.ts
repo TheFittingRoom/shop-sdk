@@ -76,7 +76,8 @@ export type ErrorType = {
 }
 
 export enum Response {
-    SUCCESS = 'success'
+    SUCCESS = 'success',
+    NO_AVATAR = 'no_avatar'
 }
 
 export enum AvatarState {
