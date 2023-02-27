@@ -1,18 +1,27 @@
 import Api from './Api';
 import ErrorHandler from './ErrorHandler';
+import Auth from './Auth';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { ErrorType, Response, UserVTOFrames, VirtualTryOnFramesProps } from '../types';
+import { AvatarState, ErrorType, Response, UserVTOFrames, VirtualTryOnFramesProps } from '../types';
 import { FirebaseInstance } from './Firebase';
 import { getRecommendedSizes } from './Sizes';
 import { getVTOFrames } from './Frames';
 
-export const virtualTryOnFrames = async ({ sku }: VirtualTryOnFramesProps): Promise<UserVTOFrames | Response.SUCCESS | ErrorType | void > => {
+export const virtualTryOnFrames = async ({ sku }: VirtualTryOnFramesProps): Promise<UserVTOFrames | Response.SUCCESS | ErrorType | void> => {
     try {
-        const userVTOFramesResponse = await getVTOFrames({ sku: sku }) as UserVTOFrames | Response.NO_AVATAR;
+        const userProfile = await Auth.getUserProfile();
 
-        if (userVTOFramesResponse === Response.NO_AVATAR) {
+        if (userProfile?.avatar_status === AvatarState.PENDING) {
+            window.theFittingRoom.renderLoadingAvatarModal();
             return;
         }
+
+        if (userProfile?.avatar_status === AvatarState.NOT_CREATED) {
+            window.theFittingRoom.renderNoAvatarModal();
+            return;
+        }
+
+        const userVTOFramesResponse = await getVTOFrames({ sku: sku }) as UserVTOFrames;
 
         if (userVTOFramesResponse?.length) {
             return userVTOFramesResponse as UserVTOFrames;
