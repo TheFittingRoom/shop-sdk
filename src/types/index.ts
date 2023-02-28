@@ -48,7 +48,7 @@ export interface SignInResponse { }
 export interface PasswordResetEmailProps {
     email: string
 }
-export interface VirtualTryOnFramesProps {
+export interface TryOnTheFittingRoomProps {
     sku: any,
 }
 

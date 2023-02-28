@@ -3,7 +3,6 @@ import { FirebaseInstance } from './classes/Firebase';
 import { TheFittingRoomInit } from './classes/Initialization';
 import { Locale } from './classes/Locale';
 import { getRecommendedSizes } from './classes/Sizes';
-import { virtualTryOnFrames } from './classes/VirtualTryOnFrames';
 import { initializeModal, closeModal, validate } from './components';
 import {
     renderNoAvatarModal,
@@ -16,7 +15,7 @@ import {
     renderLoadingAvatarModal,
 } from './lib/previewModal';
 import { getVTOFrames } from './classes/Frames';
-import { tryOnWithTheFittingRoom } from './classes/TryOnWithTheFittingRoom';
+import { tryOnWithTheFittingRoom } from './classes/TryOnTheFittingRoom';
 
 declare global {
     interface Window {
@@ -50,8 +49,6 @@ window.addEventListener('load', () => {
         listenToUserProfile: Auth.listenToUserProfile,
         // Sizes
         getRecommendedSizes,
-        // Avatar
-        virtualTryOnFrames,
         // Frames
         getVTOFrames,
         // Language service
