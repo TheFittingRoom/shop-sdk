@@ -48,7 +48,7 @@ export interface SignInResponse { }
 export interface PasswordResetEmailProps {
     email: string
 }
-export interface VirtualTryOnFramesProps {
+export interface TryOnTheFittingRoomProps {
     sku: any,
 }
 
@@ -76,7 +76,8 @@ export type ErrorType = {
 }
 
 export enum Response {
-    SUCCESS = 'success'
+    SUCCESS = 'success',
+    NO_AVATAR = 'no_avatar'
 }
 
 export enum AvatarState {

@@ -11,9 +11,10 @@ export const isImgValid = (url: string) => {
   });
 }
 
-export const getVTOFrames = async ({ sku }): Promise<ErrorType | UserVTOFrames> => {
+export const getVTOFrames = async ({ sku }): Promise<ErrorType | UserVTOFrames | void> => {
   try {
     const userProfile = await Auth.getUserProfile();
+
     const { key } = window.theFittingRoom;
 
     console.log("sku: ", sku, " brand_id: ", key, "userProfile: ", userProfile);
@@ -30,8 +31,7 @@ export const getVTOFrames = async ({ sku }): Promise<ErrorType | UserVTOFrames> 
       }
     }
 
-    return []
-
+    return [];
   } catch (error) {
     console.log("getVTOFrames error: ", error)
     throw new Error(error)
