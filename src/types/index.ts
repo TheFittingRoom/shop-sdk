@@ -2,16 +2,16 @@ export interface ModalProps {
     override?: any
 }
 export interface EnterEmailModalProps extends ModalProps {
-    // 
+    //
 };
 export interface ForgotPasswordModalProps extends ModalProps {
-    // 
+    //
 };
 export interface NoAvatarModalProps extends ModalProps {
-    // 
+    //
 };
 export interface LoadingAvatarModalProps extends ModalProps {
-    // 
+    //
 };
 export interface ErrorModalProps extends ModalProps {
     errorText?: string
@@ -21,16 +21,16 @@ export interface ErrorModalProps extends ModalProps {
     };
 };
 export interface ResetLinkModalProps extends ModalProps {
-    // 
+    //
 };
 export interface ScanCodeModalProps extends ModalProps {
-    // 
+    //
 };
 export interface SignInModalProps extends ModalProps {
     imgUrl?: string
 };
 export interface SuccessModalProps extends ModalProps {
-    // 
+    //
 };
 export interface SignInParams {
     email: string,
@@ -68,7 +68,7 @@ export interface ProfileResponse {
     hasAvatar: boolean
 }
 
-export type UserVTOFrames = string[];
+export type TryOnFrames = string[];
 
 export type ErrorType = {
     code: number | null,

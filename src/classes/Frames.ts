@@ -1,4 +1,4 @@
-import { ErrorType, UserVTOFrames } from "../types";
+import { ErrorType, TryOnFrames } from "../types";
 import Auth from "./Auth";
 
 export const isImgValid = (url: string) => {
@@ -11,7 +11,7 @@ export const isImgValid = (url: string) => {
   });
 }
 
-export const getVTOFrames = async ({ sku }): Promise<ErrorType | UserVTOFrames | void> => {
+export const getVTOFrames = async ({ sku }): Promise<ErrorType | TryOnFrames | void> => {
   try {
     const userProfile = await Auth.getUserProfile();
 
@@ -19,7 +19,7 @@ export const getVTOFrames = async ({ sku }): Promise<ErrorType | UserVTOFrames |
 
     console.log("sku: ", sku, " brand_id: ", key, "userProfile: ", userProfile);
 
-    const userVTOFrames = userProfile?.vto?.[`${key}`]?.[`${sku}`]?.frames || [];
+
 
     if (userVTOFrames?.length) {
       const isValid = await isImgValid(userVTOFrames?.[0]);

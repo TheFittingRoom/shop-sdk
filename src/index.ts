@@ -13,7 +13,7 @@ import {
     renderSuccessModal,
     renderResetLinkModal,
     renderLoadingAvatarModal,
-} from './lib/previewModal';
+} from './Modals/previewModal';
 import { getVTOFrames } from './classes/Frames';
 import { tryOnWithTheFittingRoom } from './classes/TryOnTheFittingRoom';
 

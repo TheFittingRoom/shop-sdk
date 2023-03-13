@@ -1,7 +1,7 @@
 import * as firebase from "firebase/app";
 import * as firebaseAuth from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { showHideElement } from "../lib/updaters";
+import { showHideElement } from "../Modals/updaters";
 import Auth from "./Auth";
 
 export class FirebaseInstance {

@@ -1,6 +1,6 @@
 import * as firebase from "firebase/auth";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
-import { showHideElement } from "../lib/updaters";
+import { showHideElement } from "../Modals/updaters";
 import { SignInProps, SignInResponse, PasswordResetEmailProps, ErrorType, AvatarState } from "../types";
 import ErrorHandler from "./ErrorHandler";
 import { FirebaseInstance } from "./Firebase";

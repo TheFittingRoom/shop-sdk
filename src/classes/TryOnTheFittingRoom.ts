@@ -1,13 +1,13 @@
 import Api from './Api';
 import Auth from './Auth';
 import { collection, query, where, getDocs, documentId } from 'firebase/firestore';
-import { AvatarState, UserVTOFrames, TryOnTheFittingRoomProps } from '../types';
+import { AvatarState, TryOnFrames, TryOnTheFittingRoomProps } from '../types';
 import { FirebaseInstance } from './Firebase';
 import { getRecommendedSizes } from './Sizes';
 import { getVTOFrames } from './Frames';
 import { onSnapshot } from "firebase/firestore";
 
-export const tryOnWithTheFittingRoom = async ({ sku }: TryOnTheFittingRoomProps): Promise<UserVTOFrames | void> => {
+export const tryOnWithTheFittingRoom = async ({ sku }: TryOnTheFittingRoomProps): Promise<TryOnFrames | void> => {
     try {
         const db = FirebaseInstance.firestoreApp;
         const userId = FirebaseInstance.auth.currentUser.uid;
@@ -18,10 +18,10 @@ export const tryOnWithTheFittingRoom = async ({ sku }: TryOnTheFittingRoomProps)
             throw new Error("No avatar created");
         }
 
-        const userVTOFramesResponse = await getVTOFrames({ sku: sku }) as UserVTOFrames;
+        const userVTOFramesResponse = await getVTOFrames({ sku: sku }) as TryOnFrames;
 
         if (userVTOFramesResponse?.length) {
-            return userVTOFramesResponse as UserVTOFrames;
+            return userVTOFramesResponse as TryOnFrames;
         }
 
         console.log("sku: ", sku)
@@ -60,14 +60,14 @@ export const tryOnWithTheFittingRoom = async ({ sku }: TryOnTheFittingRoomProps)
             const resoleUserVTOFrames = () => {
                 return new Promise((resolve, reject) => {
                     const q = query(collection(db, "users"),where(documentId(), "==", userId));
-    
+
                     const unsubscribe = onSnapshot(q, (snapshot) => {
                         snapshot.docChanges().forEach(async (change) => {
                             if (change.type === "modified") {
                                 const userProfile = change.doc.data();
                                 console.log("Modified userProfile: ", userProfile);
 
-                                const userVTOFrames = await getVTOFrames({ sku: sku }) as UserVTOFrames;
+                                const userVTOFrames = await getVTOFrames({ sku: sku }) as TryOnFrames;
 
                                 console.log("userVTOFrames::: ", userVTOFrames)
 
@@ -82,10 +82,10 @@ export const tryOnWithTheFittingRoom = async ({ sku }: TryOnTheFittingRoomProps)
                     });
                 });
             }
-    
+
             const result = await resoleUserVTOFrames();
-    
-            return result as UserVTOFrames;
+
+            return result as TryOnFrames;
         } else {
             throw new Error('Something went wrong while fetching colorway id. Try again!');
         }

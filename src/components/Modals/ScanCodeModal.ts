@@ -1,6 +1,6 @@
 import { Locale } from "../../classes/Locale";
 import { ScanCodeModalProps } from "../../types";
-import { QrCodeLogo, AppStoreLogo, TfrLogo } from "../../lib/svgUrl";
+import { QrCodeLogo, AppStoreLogo, TfrLogo } from "../../Modals/svgUrl";
 
 const ScanCodeModal = ({override}: ScanCodeModalProps) => {
     const { Strings } = override || Locale.getLocale();

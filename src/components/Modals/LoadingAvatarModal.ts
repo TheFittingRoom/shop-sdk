@@ -1,5 +1,5 @@
 import { Locale } from "../../classes/Locale";
-import { TfrLogo } from "../../lib/svgUrl";
+import { TfrLogo } from "../../Modals/svgUrl";
 import { LoadingAvatarModalProps } from "../../types";
 
 const LoadingAvatarModal = ({ override }: LoadingAvatarModalProps) => {
