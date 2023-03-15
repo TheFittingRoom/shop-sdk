@@ -2,7 +2,7 @@ import * as firebaseAuth from "firebase/auth";
 import { GetFriendlyFirebaseError, FriendlyError } from "./errors";
 import { getDoc, doc, DocumentData, onSnapshot, DocumentSnapshot, } from "firebase/firestore";
 import {PasswordResetEmailProps } from "../types";
-import { Firebase as Firebase } from "./Firebase";
+import { Firebase } from "./Firebase";
 
 
 
