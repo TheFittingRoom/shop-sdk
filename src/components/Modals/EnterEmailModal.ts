@@ -1,9 +1,9 @@
-import { Locale } from "../../classes/Locale";
+import { L} from "../../api/Locale";
 import { TfrLogo } from "../../Modals/svgUrl";
 import { EnterEmailModalProps } from "../../types";
 
 const EnterEmailModal = ({override}: EnterEmailModalProps) => {
-    const { Strings } = override || Locale.getLocale();
+    const { Strings } = override || L;
     const { title, emailAddress, signUp, modalTitle } = Strings;
 
     return `

@@ -1,9 +1,9 @@
-import { Locale } from "../../classes/Locale";
+import { L } from "../../api/Locale";
 import { ScanCodeModalProps } from "../../types";
 import { QrCodeLogo, AppStoreLogo, TfrLogo } from "../../Modals/svgUrl";
 
 const ScanCodeModal = ({override}: ScanCodeModalProps) => {
-    const { Strings } = override || Locale.getLocale();
+    const { Strings } = override || L;
     const { title, createAvatarSc } = Strings;
 
     return `

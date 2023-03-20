@@ -1,27 +1,35 @@
 import * as firebaseAuth from "firebase/auth";
-import { GetFriendlyFirebaseError, FriendlyError } from "./errors";
+import { FriendlyError } from "../api/FriendlyError";
+import {GetFriendlyFirebaseError} from "./Firebase";
 import { getDoc, doc, DocumentData, onSnapshot, DocumentSnapshot, } from "firebase/firestore";
 import {PasswordResetEmailProps } from "../types";
 import { Firebase } from "./Firebase";
+import { UserCredential } from "firebase/auth";
+import { onLog } from "firebase/app";
 
 
 
 
 class FirebaseUser {
-	static UserCredential: firebaseAuth.UserCredential;
+	UserCredential: firebaseAuth.UserCredential;
 
-	public static UserNotLoggedIn = new Error('user not logged in');
+	onLogout: () => Promise<any>;
+
+	public static NotLoggedIn = new Error('user not logged in');
+
+	constructor(UserCredential: firebaseAuth.UserCredential, onLogout: () => Promise<any>) {
+		this.UserCredential = UserCredential;
+	}
 
 	/**
 	* Sign in with email and password
-	* @throws UserNotLoggedIn
+	* @throws NotLoggedIn
 	*/
-	static async Login(auth: firebaseAuth.Auth, username, password: string): Promise<firebaseAuth.UserCredential> {
+	static async Login(username, password: string, onLogout: () => any): Promise<FirebaseUser> {
 		return new Promise((resolve, reject) => {
-			firebaseAuth.signInWithEmailAndPassword(auth, username, password)
+			firebaseAuth.signInWithEmailAndPassword(Firebase.Auth, username, password)
 				.then((userCredential) => {
-					this.UserCredential = userCredential;
-					resolve(userCredential);
+					resolve(new FirebaseUser(userCredential, onLogout));
 				}).catch((error) => {
 					reject(GetFriendlyFirebaseError(error));
 				})
@@ -29,35 +37,70 @@ class FirebaseUser {
 	}
 
 	/**
+ * Sends a password reset email to the given email address.
+ * @param {PasswordResetEmailProps} email - the email address to send the password reset email to.
+ * @throws NotLoggedIn
+ */
+	static async SendPasswordResetEmail(email: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			firebaseAuth.sendPasswordResetEmail(Firebase.Auth, email).
+				then(() => {
+					resolve();
+				})
+				.catch((error) => {
+					reject(GetFriendlyFirebaseError(error))
+				});
+		});
+	}
+
+	/**
+ * Confirms the password reset with the given code and new password.
+ * @param {string} code - The password reset code sent to the user.
+ * @param {string} newPassword - The new password.
+ * @throws NotLoggedIn
+ */
+	static async ConfirmPasswordReset(code: string, newPassword: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			firebaseAuth.confirmPasswordReset(Firebase.Auth, code, newPassword)
+				.then(() => {
+					resolve();
+				})
+				.catch((error) => {
+					reject(GetFriendlyFirebaseError(error));
+				});
+		});
+	}
+
+	/**
 	 * Ensures that the user is logged in
-	 * @throws UserNotLoggedIn
+	 * @throws NotLoggedIn
 	 */
-	static EnsureLogin(): void {
-		if (FirebaseUser.UserCredential === null) {
-			throw FirebaseUser.UserNotLoggedIn;
+	EnsureLogin(): void {
+		if (this.UserCredential === null) {
+			throw FirebaseUser.NotLoggedIn;
 		}
 	}
 
 	/**
 	 * Returns the user's ID
-	 * @throws UserNotLoggedIn
+	 * @throws NotLoggedIn
 	 */
-	static ID(): string {
+	ID(): string {
 		try{
-			return FirebaseUser.UserCredential.user.uid;
+			return this.UserCredential.user.uid;
 		} catch(error){
-			throw FirebaseUser.UserNotLoggedIn;
+			throw FirebaseUser.NotLoggedIn;
 		}
 	}
 
 	/**
 	 * Returns the user's JWT Token
-	 * @throws UserNotLoggedIn
+	 * @throws NotLoggedIn
 	 */
-	static async Token(): Promise<string> {
+	async Token(): Promise<string> {
 		this.EnsureLogin();
 		return new Promise((resolve, reject) => {
-			FirebaseUser.UserCredential.user.getIdToken()
+			this.UserCredential.user.getIdToken()
 				.then((token) => {
 					resolve(token);
 				}).catch((error) => {
@@ -68,12 +111,12 @@ class FirebaseUser {
 
 	/**
 	 * Returns the user profile
-	 * @throws UserNotLoggedIn
+	 * @throws NotLoggedIn
 	 */
-	static async GetUserProfile(): Promise<DocumentData | FriendlyError> {
+	async GetUserProfile(): Promise<DocumentData | FriendlyError> {
 		this.EnsureLogin()
 		return new Promise((resolve, reject) => {
-			getDoc(doc(Firebase.Firestore, 'users', FirebaseUser.ID()))
+			getDoc(doc(Firebase.Firestore, 'users', this.ID()))
 				.then((documentSnapshot: DocumentSnapshot<DocumentData>) => {
 					resolve(documentSnapshot.data())
 				}).catch((error) => {
@@ -82,50 +125,16 @@ class FirebaseUser {
 			})
 	}
 
-	/**
-	 * Listens to the user profile and dispatches a 'userProfile' event when the user profile changes.
-	 * @throws UserNotLoggedIn
-	 */
-	static async ListenToUserProfile(): Promise<any> {
-		this.EnsureLogin()
-		const db = Firebase.Firestore;
-
-		return new Promise((resolve) => {
-			onSnapshot(doc(db, 'users', FirebaseUser.ID()), (doc) => {
-				const userProfile = doc.data();
-
-				const userProfileEvent = new CustomEvent('userProfile', {
-					detail: {
-						userProfile: userProfile
-					}
-				});
-				document.dispatchEvent(userProfileEvent);
-				resolve(userProfile);
-			})
-		});
-	}
-
- /**
-  * Sends a password reset email to the given email address.
-  * @param {PasswordResetEmailProps} email - the email address to send the password reset email to.
-  * @returns None
-  */
-	static async SendPasswordResetEmail({ email }: PasswordResetEmailProps): Promise<void> {
-		this.EnsureLogin()
-		await firebaseAuth.sendPasswordResetEmail(Firebase.Auth, email).catch((error) => {
-			throw GetFriendlyFirebaseError(error);
-		})
-	}
-
  /**
   * Signs the user out of Firebase.
   * @returns None
   */
-	static async SignOut(): Promise<void> {
+	async SignOut(): Promise<void> {
 		return new Promise((resolve, reject) => {
 			firebaseAuth.signOut(Firebase.Auth)
-			.then(() => {
+			.then(async () => {
 				this.UserCredential = null;
+				await this.onLogout();
 				resolve();
 			})
 			.catch((error) => {

@@ -1,11 +1,11 @@
-import { Locale } from "../../classes/Locale";
+import { L } from "../../api/Locale";
 import { SignInModalProps } from "../../types";
 import { QrCodeLogo, AppStoreLogo, AposeLogo, TfrLogo } from "../../Modals/svgUrl";
 
 const defaultImg = "https://cdn.shopify.com/s/files/1/0551/2180/5443/products/SpeckledCrepeBodycon.png?v=1664304344";
 
 const SignInModal = ({override, imgUrl = defaultImg}: SignInModalProps) => {
-    const { Strings } = override || Locale.getLocale();
+    const { Strings } = override || L;
     const { title, emailAddress, password, forgotPasswordWithSymbol, dontHaveAcc, signIn, howItWorks, howItWorksText, simplyScan, simplyScanText, tryOn, tryOnText, or, createAvatarSc } = Strings;
 
     return `

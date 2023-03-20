@@ -1,9 +1,9 @@
-import { Locale } from "../../classes/Locale";
+import { L } from "../../api/Locale";
 import { TfrLogo } from "../../Modals/svgUrl";
 import { ResetLinkModalProps } from "../../types";
 
 const ResetLinkModal = ({override}: ResetLinkModalProps) => {
-    const { Strings } = override || Locale.getLocale();
+    const { Strings } = override || L;
     const { title, backToSignIn, associatedEmail } = Strings;
 
     return `

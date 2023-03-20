@@ -1,9 +1,9 @@
-import { Locale } from "../../classes/Locale";
+import { L } from "../../api/Locale";
 import { TfrLogo } from "../../Modals/svgUrl";
 import { ForgotPasswordModalProps } from "../../types";
 
 const ForgotPasswordModal = ({override}: ForgotPasswordModalProps) => {
-    const { Strings } = override || Locale.getLocale();
+    const { Strings } = override || L;
     const { title, emailAddress, forgotPassword, backToSignIn, send, enterEmailAddress } = Strings;
 
     return `

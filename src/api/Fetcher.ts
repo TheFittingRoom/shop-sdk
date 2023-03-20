@@ -1,12 +1,9 @@
 import { FirebaseUser } from "../auth/FirebaseUser";
 
 class Fetcher {
-
-
-
-	private static async Fetch(endpointPath: string, method: string, request: object|null): Promise<object> {
+	private static async Fetch(user: FirebaseUser, endpointPath: string, method: string, request: object|null): Promise<object> {
 		return new Promise(async (resolve, reject) => {
-			FirebaseUser.Token().then((token) => {
+			user.Token().then((token) => {
 				let config: RequestInit = {
 					method: method,
 					headers: {
@@ -34,24 +31,24 @@ class Fetcher {
 		})
 	}
 
-	static async Get(endpointPath: string, body: any): Promise<object> {
-		return Fetcher.Fetch(endpointPath, "GET", body)
+	static async Get(user: FirebaseUser, endpointPath: string, body: any): Promise<object> {
+		return Fetcher.Fetch(user, endpointPath, "GET", body)
 	}
 
-	static async Post(endpointPath: string, body:object): Promise<object> {
-		return Fetcher.Fetch(endpointPath, "POST", body)
+	static async Post(user: FirebaseUser, endpointPath: string, body:object): Promise<object> {
+		return Fetcher.Fetch(user, endpointPath, "POST", body)
 	}
 
-	static async Put(endpointPath: string, body: object): Promise<object> {
-		return Fetcher.Fetch(endpointPath, "PUT", body)
+	static async Put(user: FirebaseUser, endpointPath: string, body: object): Promise<object> {
+		return Fetcher.Fetch(user, endpointPath, "PUT", body)
 	}
 
-	static async Patch(endpointPath: string, body: object): Promise<object> {
-		return Fetcher.Fetch(endpointPath, "PATCH", body)
+	static async Patch(user: FirebaseUser, endpointPath: string, body: object): Promise<object> {
+		return Fetcher.Fetch(user, endpointPath, "PATCH", body)
 	}
 
-	static async Delete(endpointPath: string, body: object): Promise<object> {
-		return Fetcher.Fetch(endpointPath, "DELETE", body)
+	static async Delete(user: FirebaseUser, endpointPath: string, body: object): Promise<object> {
+		return Fetcher.Fetch(user, endpointPath, "DELETE", body)
 	}
 }
 

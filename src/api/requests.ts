@@ -114,6 +114,9 @@ export interface Style {
   garment_category_id: number /* int64 */;
   sizes: Size[];
 }
+export interface StylePatch {
+  publish: boolean;
+}
 export interface StyleUpdate {
   brand_style_id: string;
   name: string;

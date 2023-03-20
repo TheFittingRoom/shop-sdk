@@ -1,9 +1,9 @@
-import { Locale } from "../../classes/Locale";
+import { L } from "../../api/Locale";
 import { TfrLogo } from "../../Modals/svgUrl";
 import { SuccessModalProps } from "../../types";
 
 const SuccessModal = ({override}: SuccessModalProps) => {
-    const { Strings } = override || Locale.getLocale();
+    const { Strings } = override || L;
     const { title, signBackIn, successfullyLoggedOut, returnToSite } = Strings;
 
     return `

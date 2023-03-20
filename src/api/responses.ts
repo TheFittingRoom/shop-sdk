@@ -72,8 +72,8 @@ export interface UserID {
 export interface UpdatedAt {
   updated_at: any /* time.Time */;
 }
-export interface PublishedAt {
-  published_at: any /* time.Time */;
+export interface IsPublished {
+  is_published: boolean;
 }
 
 //////////
@@ -133,6 +133,7 @@ export interface Style {
   sale_type?: string;
   garment_category?: GarmentCategory;
   sizes: Size[];
+  is_published: boolean;
 }
 
 //////////

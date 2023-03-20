@@ -1,7 +1,10 @@
+function GetVarName(variable: Object) { return Object.keys(variable)[0]; }
+
 export interface ModalProps {
-    override?: any
+    override?: any;
 }
 export interface EnterEmailModalProps extends ModalProps {
+
     //
 };
 export interface ForgotPasswordModalProps extends ModalProps {
@@ -14,10 +17,10 @@ export interface LoadingAvatarModalProps extends ModalProps {
     //
 };
 export interface ErrorModalProps extends ModalProps {
-    errorText?: string
+    errorText?: string;
     sizes?: {
         recommended: string,
-        optionalSizes: string[]
+        optionalSizes: string[];
     };
 };
 export interface ResetLinkModalProps extends ModalProps {
@@ -27,26 +30,26 @@ export interface ScanCodeModalProps extends ModalProps {
     //
 };
 export interface SignInModalProps extends ModalProps {
-    imgUrl?: string
+    imgUrl?: string;
 };
 export interface SuccessModalProps extends ModalProps {
     //
 };
 export interface SignInParams {
     email: string,
-    password: string
+    password: string;
 }
 export interface RecommendedSizeParams {
     sku: string,
 }
 export interface SignInProps {
     email: string,
-    password: string
+    password: string;
 }
 
-export interface SignInResponse { }
+export interface SignInResponse {}
 export interface PasswordResetEmailProps {
-    email: string
+    email: string;
 }
 export interface TryOnTheFittingRoomProps {
     sku: any,
@@ -58,22 +61,22 @@ export interface GetRecommendedSizeProps {
 }
 export interface GetRecommendedSizesResponse {
     recommended: string,
-    optionalSizes: string[]
+    optionalSizes: string[];
 }
 export interface DownloadLinkEmailProps {
-    email: string
+    email: string;
 }
 
 export interface ProfileResponse {
-    hasAvatar: boolean
+    hasAvatar: boolean;
 }
 
 export type TryOnFrames = string[];
 
 export type ErrorType = {
     code: number | null,
-    errorMessage: string
-}
+    errorMessage: string;
+};
 
 export enum Response {
     SUCCESS = 'success',

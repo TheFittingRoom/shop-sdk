@@ -1,4 +1,4 @@
-import { Locale } from "./Locale";
+import { L, SetLocale } from "./Locale";
 import "../styles"
 
 export class TheFittingRoomInit {
@@ -36,13 +36,7 @@ export class TheFittingRoomInit {
         this.key = key;
         this.apiVersion = version;
 
-        Locale.setLocale(language);
-
-        window.theFittingRoom = {
-            language, 
-            version,
-            key,
-        }
+        SetLocale(language);
 
         /*
         if(!key) {
@@ -50,8 +44,8 @@ export class TheFittingRoomInit {
 
             window.theFittingRoom = {
                 error: errorMessage,
-                language, 
-                key, 
+                language,
+                key,
                 version,
             }
         }

@@ -3,30 +3,20 @@
         <title>TheFittingRoom</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- <script src="http://127.0.0.1:8080/dist/cjs/main.js?key=asd&language=en" type="text/javascript"></script> -->
-        <script src="http://127.0.0.1:8080/dist/cjs/main.js?language=en" type="text/javascript"></script>
+        <script type="module">
+            import { Shop, FriendlyError, FirebaseUser, Modals } from 'http://127.0.0.1:8080/dist/esm/main.js?language=en';
+            let shop = new Shop(1);
+            try{
+                let user = shop.User()
+            }catch(e){
+                if(e === FirebaseUser.NotLoggedIn){
+
+                }
+            }
+
+        </script>
     </head>
     <body>
-        <div class="tfr-home-button-container">
-            <button onclick="window.theFittingRoom.renderSignInModal()">Sign In Modal</button>
-            <br>
-            <button onclick="window.theFittingRoom.renderErrorModal()">Error Modal default text</button>
-            <br>
-            <button onclick="window.theFittingRoom.renderSuccessModal()">Success Modal</button>
-            <br>
-            <button onclick="window.theFittingRoom.renderForgotPasswordModal()">Forgot Password Modal</button>
-            <br>
-            <button onclick="window.theFittingRoom.renderResetLinkModal()">Reset Link Modal</button>
-            <br>
-            <button onclick="window.theFittingRoom.renderNoAvatarModal()">No Avatar Modal</button>
-            <br>
-            <button onclick="window.theFittingRoom.renderLoadingAvatarModal()">Loading Avatar Modal</button>
-            <br>
-            <button onclick="window.theFittingRoom.renderScanCodeModal()">Scan Code Modal</button>
-            <br>
-            <button onclick="window.theFittingRoom.renderSuccessModal()">Success Modal</button>
-            <br>
-        </div>
-
-        <div id="thefittingroom-modal" style="display:none;"/>
+        <div id="thefittingroom-modal" />
     </body>
 </html>

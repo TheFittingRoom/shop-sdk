@@ -1,9 +1,9 @@
-import { Locale } from "../../classes/Locale";
+import { L } from "../../api/Locale";
 import { TfrLogo } from "../../Modals/svgUrl";
 import { NoAvatarModalProps } from "../../types";
 
 const NoAvatarModal = ({override}: NoAvatarModalProps) => {
-    const { Strings } = override || Locale.getLocale();
+    const { Strings } = override || L;
     const { title, dontHaveAvatar, returnToTfr } = Strings;
 
     return `

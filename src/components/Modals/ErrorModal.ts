@@ -1,9 +1,9 @@
-import { Locale } from "../../classes/Locale";
+import { L } from "../../api/Locale";
 import { TfrLogo } from "../../Modals/svgUrl";
 import { ErrorModalProps } from "../../types";
 
 const ErrorModal = ({override, errorText, sizes}: ErrorModalProps) => {
-    const { Strings } = override || Locale.getLocale();
+    const { Strings } = override || L
     const { title, noSizeAvailable, trySize, orSize, somethingWentWrong, returnToProductPage, returnToCatalogPage, somethingIsWrongWithThisUser } = Strings;
 
     const sizeText = `${noSizeAvailable} ${trySize} ${sizes?.recommended} ${orSize} ${sizes?.optionalSizes?.join(", ")}.`;

@@ -5,6 +5,7 @@
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
   "module": "build/module/index.js",
+  "type": "module",
   "scripts": {
     "build:rollup": "rm -rf dist && rollup --config",
     "dev:rollup": "rm -rf dist && rollup --config -w",

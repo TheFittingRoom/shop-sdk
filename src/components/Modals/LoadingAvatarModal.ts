@@ -1,10 +1,10 @@
-import { Locale } from "../../classes/Locale";
+import { L } from "../../api/Locale";
 import { TfrLogo } from "../../Modals/svgUrl";
 import { LoadingAvatarModalProps } from "../../types";
 
 const LoadingAvatarModal = ({ override }: LoadingAvatarModalProps) => {
 
-    const { Strings } = override || Locale.getLocale();
+    const { Strings } = override || L;
     const { title, loadingAvatar } = Strings;
 
     return `
