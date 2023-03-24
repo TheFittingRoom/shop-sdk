@@ -1,38 +1,51 @@
+import { ModalManager } from "../components/Modals/ModalManager";
+
 function GetVarName(variable: Object) { return Object.keys(variable)[0]; }
 
-export interface ModalProps {
-    override?: any;
+export interface ModalContent {
+    Title: string;
+    Body: () => string;
+    Hook(): void;
+    Unhook(): void;
 }
-export interface EnterEmailModalProps extends ModalProps {
 
+export interface ModalProps{
+    manager: ModalManager;
+    title: string;
+}
+export interface EnterEmailModalProps {
+    Error: string;
+};
+export interface ForgotPasswordModalProps {
     //
 };
-export interface ForgotPasswordModalProps extends ModalProps {
+export interface NoAvatarModalProps {
     //
 };
-export interface NoAvatarModalProps extends ModalProps {
+export interface LoadingAvatarModalProps {
     //
 };
-export interface LoadingAvatarModalProps extends ModalProps {
-    //
-};
-export interface ErrorModalProps extends ModalProps {
-    errorText?: string;
+export interface ErrorModalProps extends ErrorType {
+    error: string,
     sizes?: {
         recommended: string,
         optionalSizes: string[];
     };
 };
-export interface ResetLinkModalProps extends ModalProps {
+export interface ResetLinkModalProps {
     //
 };
-export interface ScanCodeModalProps extends ModalProps {
+export interface ScanCodeModalProps {
     //
 };
 export interface SignInModalProps extends ModalProps {
-    imgUrl?: string;
-};
-export interface SuccessModalProps extends ModalProps {
+    email: string,
+    password: string;
+    onSignIn: (email: string, password: string) => void;
+    onForgotPassword: (email?: string) => void;
+    onScanCode: () => void;
+}
+export interface SuccessModalProps {
     //
 };
 export interface SignInParams {
@@ -41,10 +54,6 @@ export interface SignInParams {
 }
 export interface RecommendedSizeParams {
     sku: string,
-}
-export interface SignInProps {
-    email: string,
-    password: string;
 }
 
 export interface SignInResponse {}

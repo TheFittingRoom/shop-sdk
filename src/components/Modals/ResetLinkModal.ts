@@ -7,9 +7,9 @@ const ResetLinkModal = ({override}: ResetLinkModalProps) => {
     const { title, backToSignIn, associatedEmail } = Strings;
 
     return `
-        <div class="tfr-modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
+        <div class="tfr-modal" id="modalContainer">
             <div class="tfr-modal-content-container tfr-pb-7-p tfr-pt-20 tfr-pr-20 tfr-pl-20">
-                <div class="tfr-close-container" onclick="window.theFittingRoom.closeModal()">
+                <div class="tfr-close-container">
                     <span class="tfr-close tfr-cursor">&times;</span>
                 </div>
 

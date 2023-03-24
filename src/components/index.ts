@@ -1,30 +1,14 @@
-// Modals
-import {
-    initializeModal,
-    closeModal,
-    NoAvatarModal,
-    SignInModal,
-    ForgotPasswordModal,
-    ScanCodeModal,
-    EnterEmailModal,
-    ErrorModal,
-    SuccessModal,
-    ResetLinkModal,
-    LoadingAvatarModal,
-    validate
-} from './Modals';
+import SignInModal from './Modals/SignInModal';
+import ForgotPasswordModal from './Modals/ForgotPasswordModal';
+import ScanCodeModal from './Modals/ScanCodeModal';
+import ErrorModal from './Modals/ErrorModal';
+import LoadingAvatarModal from './Modals/LoadingAvatarModal';
+import "../styles";
 
 export {
-    initializeModal,
-    closeModal,
-    NoAvatarModal,
     SignInModal,
     ForgotPasswordModal,
     ScanCodeModal,
-    EnterEmailModal,
     ErrorModal,
-    SuccessModal,
-    ResetLinkModal,
-    LoadingAvatarModal,
-    validate
+    LoadingAvatarModal
 };

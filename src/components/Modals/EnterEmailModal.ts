@@ -1,54 +1,37 @@
 import { L} from "../../api/Locale";
 import { TfrLogo } from "../../Modals/svgUrl";
 import { EnterEmailModalProps } from "../../types";
+import { ModalContent } from "../../types";
 
-const EnterEmailModal = ({override}: EnterEmailModalProps) => {
-    const { Strings } = override || L;
-    const { title, emailAddress, signUp, modalTitle } = Strings;
+/* let EnterEmailModal = {
+    title = "The Fitting Room";
+    emailAddress: string;
+    signUp: string;
+    modalTitle: string;
 
-    return `
-        <div class="tfr-modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
-            <div class="tfr-modal-content-container tfr-p-20">
-                <div class="tfr-close-container" onclick="window.theFittingRoom.closeModal()">
-                    <span class="tfr-close tfr-cursor">&times;</span>
-                </div>
+    Hook() {
+        document.getElementById("signUpButton").addEventListener("click", this.SignUp);
+    }
 
-                <div class="tfr-modal-content tfr-pt-20 tfr-pb-50">
-                    <div class="tfr-modal-title-logo-container">
-                        <div tfr-element="true" class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
-                        <div>
-                            <object data="tfr-logo.svg" type="image/svg+xml">
-                                <img src="${TfrLogo}" />
-                            </object>
-                        </div>
-                    </div>
+    Unhook() {
+        document.getElementById("signUpbutton").removeEventListener("click", this.SignUp);
+        return () => {};
+    }
 
-                    <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-c-dark tfr-w-85-p tfr-m-h-auto mt-40">${modalTitle}</div>
-
-                    <fieldset class="tfr-fieldset-element tfr-fieldset tfr-mt-60 tfr-mb-40">
-                        <legend tfr-element="true" class="tfr-label-element tfr-roboto-14-default tfr-c-dark-o5">${emailAddress}</legend>
-                        <input tfr-element="true" type="email" id="email-input" />
-                    </fieldset>
-                    <div tfr-element="true" class="tfr-roboto-12-default tfr-c-red tfr-mt-10 tfr-d-none" id="error-msg"></div>
-
-                    <button tfr-element="true" id="signUpButton" class="tfr-standard-button tfr-bg-aquamarina-strong tfr-c-white tfr-poppins-medium-16-default tfr-cursor tfr-mt-30"
-                        onclick="
-                            window.theFittingRoom._internal.validate();
-                            const response = window.theFittingRoom._internal.notifyEmail({email: document.querySelector('#thefittingroom-modal #email-input').value});
-
-                            response.then(data => {
-                                if (data?.errorMessage) {
-                                    window.theFittingRoom._internal.validate(data.errorMessage)
-                                }
-                            })
-                        "
-                    >
-                        ${signUp}
-                    </button>
-                </div>
-            </div>
-        </div>
+    SignUp() {
+        console.log(document.getElementById("email-input").nodeValue)
+    }
+    Body() {
+        return `
+        <fieldset class="tfr-fieldset-element tfr-fieldset tfr-mt-60 tfr-mb-40">
+            <legend tfr-element="true" class="tfr-label-element tfr-roboto-14-default tfr-c-dark-o5">${this.emailAddress}</legend>
+            <input tfr-element="true" type="email" id="email-input" />
+        </fieldset>
+        <div tfr-element="true" class="tfr-roboto-12-default tfr-c-red tfr-mt-10 tfr-d-none" id="error-msg"></div>
+        <button tfr-element="true" id="signUpButton" class="tfr-standard-button tfr-bg-aquamarina-strong tfr-c-white tfr-poppins-medium-16-default tfr-cursor tfr-mt-30">
+        ${this.signUp}
+        </button>
     `;
-};
+    }
+}; */
 
-export default EnterEmailModal;

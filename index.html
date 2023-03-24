@@ -2,15 +2,47 @@
     <head>
         <title>TheFittingRoom</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- <script src="http://127.0.0.1:8080/dist/cjs/main.js?key=asd&language=en" type="text/javascript"></script> -->
         <script type="module">
-            import { Shop, FriendlyError, FirebaseUser, Modals } from 'http://127.0.0.1:8080/dist/esm/main.js?language=en';
-            let shop = new Shop(1);
+            const link1 = document.createElement('link');
+            link1.rel = 'preconnect';
+            link1.href = 'https://fonts.googleapis.com';
+
+            const link2 = document.createElement('link');
+            link2.rel = 'preconnect';
+            link2.href = 'https://fonts.gstatic.com';
+            link2.crossOrigin = 'crossOrigin';
+
+            const link3 = document.createElement('link');
+            link3.rel = 'stylesheet';
+            link3.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Roboto&display=swap';
+
+            document.getElementsByTagName('head')[0].appendChild(link1);
+            document.getElementsByTagName('head')[0].appendChild(link2);
+            document.getElementsByTagName('head')[0].appendChild(link3);
+
+
+            import { Shop, FriendlyError, FirebaseUser, Modals, ModalManager } from 'http://localhost:8080/dist/esm/main.js?language=en';
+            let m = new ModalManager("thefittingroom-modal");
+            let api = new Shop(1);
+
+            const onLogout = () =>{
+                m.Close()
+            }
+
+            const onSignOn =  (username, password) => {
+                console.log(username, password)
+                api.Login(username, password, onLogout).then(() => {
+                    window.alert(api.User())
+                }).catch((e) => {
+                    window.alert("invalid credentials")
+                })
+            }
+
             try{
-                let user = shop.User()
+                let user = api.User()
             }catch(e){
                 if(e === FirebaseUser.NotLoggedIn){
-
+                    m.Open(new Modals.SignInModal(m, onSignOn))
                 }
             }
 

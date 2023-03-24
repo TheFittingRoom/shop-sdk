@@ -7,9 +7,9 @@ const NoAvatarModal = ({override}: NoAvatarModalProps) => {
     const { title, dontHaveAvatar, returnToTfr } = Strings;
 
     return `
-        <div class="tfr-modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
+        <div class="tfr-modal" id="modalContainer">
             <div class="tfr-modal-content-container tfr-p-20">
-                <div class="tfr-close-container" onclick="window.theFittingRoom.closeModal()">
+                <div class="tfr-close-container">
                     <span class="tfr-close tfr-cursor">&times;</span>
                 </div>
 

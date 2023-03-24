@@ -2,7 +2,7 @@ import { ErrorType } from '../types';
 import { FriendlyError } from './FriendlyError';
 
 var L = {
-    Title: "Virtual try on with",
+    VirtualTryOnWith: "Virtual try on with",
     EmailAddress: "Email address",
     Password: "Password",
     SignBackIn: "Sign back in",

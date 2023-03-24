@@ -1,47 +1,35 @@
 import { L } from "../../api/Locale";
-import { TfrLogo } from "../../Modals/svgUrl";
 import { ErrorModalProps } from "../../types";
+import { ModalContent } from "../../types";
+import {ModalManager} from "./ModalManager";
+import Modal from "./Modal";
 
-const ErrorModal = ({override, errorText, sizes}: ErrorModalProps) => {
-    const { Strings } = override || L
-    const { title, noSizeAvailable, trySize, orSize, somethingWentWrong, returnToProductPage, returnToCatalogPage, somethingIsWrongWithThisUser } = Strings;
-
-    const sizeText = `${noSizeAvailable} ${trySize} ${sizes?.recommended} ${orSize} ${sizes?.optionalSizes?.join(", ")}.`;
-    let errorMsg = errorText || (Boolean(sizes?.recommended) && `${sizeText}`) || somethingWentWrong;
-
-    if (errorMsg.toLocaleLowerCase() === 'user not found') {
-        errorMsg = somethingIsWrongWithThisUser;
+class ErrorModal extends Modal implements ModalContent {
+    constructor(title, modalTitle, error: string) {
+        super(title, modalTitle);
+        this.Error = error;
     }
+    Error: string;
+    Hook(): void {
+        document.getElementById("tfr-back").addEventListener("click", window.history.back);
+        document.getElementById("tfr-close").addEventListener("click", ModalManager.Manager().Close);
+    }
+    Unhook(): void {
+        document.getElementById("tfr-back").removeEventListener("click", window.history.back);
+        document.getElementById("tfr-close").removeEventListener("click", ModalManager.Manager().Close);
+    }
+    Body() {
+        return `
+    <div class="tfr-mt-15-p tfr-mb-13-p">
+        <div tfr-element="true" class="tfr-poppins-regular-20-default tfr-c-dark">${this.Error}</div>
+    </div>
 
-    return `
-        <div class="tfr-modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
-            <div class="tfr-modal-content-container tfr-pb-7-p tfr-pt-20 tfr-pr-20 tfr-pl-20">
-                <div class="tfr-close-container" onclick="window.theFittingRoom.closeModal()">
-                    <span class="tfr-close tfr-cursor">&times;</span>
-                </div>
-
-                <div class="tfr-modal-content">
-                    <div class="tfr-modal-title-logo-container">
-                        <div tfr-element="true" class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
-                        <div>
-                            <object data="tfr-logo.svg" type="image/svg+xml">
-                                <img src="${TfrLogo}" />
-                            </object>
-                        </div>
-                    </div>
-
-                    <div class="tfr-mt-15-p tfr-mb-13-p">
-                        <div tfr-element="true" class="tfr-poppins-regular-20-default tfr-c-dark">${errorMsg}</div>
-                    </div>
-
-                    <div class="tfr-t-a-center">
-                        <span tfr-element="true" class="tfr-roboto-16-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mr-20" onclick="window.history.back()">${returnToCatalogPage || "Return to Catalog Page"}</span>
-                        <span tfr-element="true" class="tfr-roboto-16-default tfr-c-dark-o5 tfr-underline tfr-cursor" id="returnToSite" onclick="window.theFittingRoom.closeModal()">${returnToProductPage || "Return to Product Page"}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="tfr-t-a-center">
+        <span id="tfr-back" tfr-element="true" class="tfr-roboto-16-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mr-20">${L.ReturnToCatalogPage || "Return to Catalog Page"}</span>
+        <span id="tfr-close" tfr-element="true" class="tfr-roboto-16-default tfr-c-dark-o5 tfr-underline tfr-cursor" id="returnToSite">${L.ReturnToProductPage || "Return to Product Page"}</span>
+    </div>
     `;
+    }
 }
 
 export default ErrorModal;
