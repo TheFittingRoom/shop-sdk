@@ -1,32 +1,42 @@
+import { UIError } from "../api/UIError";
 import { ModalManager } from "../components/Modals/ModalManager";
 
 function GetVarName(variable: Object) { return Object.keys(variable)[0]; }
 
 export interface ModalContent {
-    Title: string;
     Body: () => string;
     Hook(): void;
     Unhook(): void;
 }
 
-export interface ModalProps{
-    manager: ModalManager;
+export interface ModalProps {
     title: string;
 }
-export interface EnterEmailModalProps {
-    Error: string;
+
+export interface SignInParams {
+    email: string,
+    password: string;
+}
+export interface SignInModalProps extends ModalProps {
+    email: string,
+    onSignIn: (email: string, password: string) => void;
+    onNavForgotPassword: (email?: string) => void;
+    onNavScanCode: () => void;
+}
+export interface ForgotPasswordModalProps extends ModalProps {
+    email: string;
+    onNavSignIn: (email: string) => void;
+    onPasswordReset: (email: string) => void;
 };
-export interface ForgotPasswordModalProps {
+export interface NoAvatarModalProps extends ModalProps {
     //
 };
-export interface NoAvatarModalProps {
-    //
+export interface LoadingAvatarModalProps extends ModalProps {
 };
-export interface LoadingAvatarModalProps {
-    //
-};
-export interface ErrorModalProps extends ErrorType {
+export interface ErrorModalProps extends ModalProps {
     error: string,
+    onNavBack: () => void;
+    onClose: () => void;
     sizes?: {
         recommended: string,
         optionalSizes: string[];
@@ -35,23 +45,17 @@ export interface ErrorModalProps extends ErrorType {
 export interface ResetLinkModalProps {
     //
 };
-export interface ScanCodeModalProps {
+export interface ScanCodeModalProps extends ModalProps {
     //
 };
-export interface SignInModalProps extends ModalProps {
-    email: string,
-    password: string;
-    onSignIn: (email: string, password: string) => void;
-    onForgotPassword: (email?: string) => void;
-    onScanCode: () => void;
-}
-export interface SuccessModalProps {
-    //
+export interface EnterEmailModalProps {
 };
-export interface SignInParams {
-    email: string,
-    password: string;
-}
+
+export interface LoggedOutModalProps {
+    onClose: () => void;
+    onNavSignIn: (email: string) => void;
+};
+
 export interface RecommendedSizeParams {
     sku: string,
 }

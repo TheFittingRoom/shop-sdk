@@ -1,21 +1,17 @@
 import { L } from "../../api/Locale";
 import { ScanCodeModalProps } from "../../types";
 import { QrCodeLogo, AppStoreLogo, TfrLogo } from "../../Modals/svgUrl";
-import Modal from "./Modal";
 import { ModalContent } from "../../types";
 
 
-class ScanCodeModal extends Modal implements ModalContent {
-    constructor(title: string, modalTitle: string) {
-        super(title, modalTitle);
-    }
-    Hook() {
+const ScanCodeModal = (props: ScanCodeModalProps): ModalContent => {
+    const Hook = () => {
 
     }
-    Unhook(){
+    const Unhook= () => {
 
     }
-    Body() {
+    const Body = () => {
         return `
         <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-c-dark tfr-w-85-p tfr-m-h-auto tfr-mt-30">${L.CreateAvatarSc}</div>
 
@@ -31,6 +27,12 @@ class ScanCodeModal extends Modal implements ModalContent {
             </object>
         </div>
     `;
+    }
+
+    return {
+        Hook,
+        Unhook,
+        Body,
     }
 }
 

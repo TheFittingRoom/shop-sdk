@@ -1,48 +1,45 @@
 import { L } from "../../api/Locale";
 import { ModalContent, SignInModalProps } from "../../types";
-import { QrCodeLogo, AppStoreLogo, AposeLogo, TfrLogo } from "../../Modals/svgUrl";
-import ScanCodeModal from "./ScanCodeModal";
-import Modal from "./Modal";
-import { ModalManager } from "./ModalManager";
-import ForgotPasswordModal from "./ForgotPasswordModal";
+import { QrCodeLogo, AppStoreLogo, AposeLogo } from "../../Modals/svgUrl";
 
 
-const SignInModal = (props: SignInModalProps) => {
-    const OnSignIn = (username, password: string) => {
-        onSignIn(username, password);
-    };
+const SignInModal = (props: SignInModalProps): ModalContent =>  {
+    const { email } = props;
 
-    const OnForgotPassword = () => {
-    };
-
-    const OnScanCode = () => {
-    };
-
-    const { manager, onSignIn, onForgotPassword, onScanCode, title } = props;
-
-    const onSignInSetup = () => {
-        let username = (<HTMLInputElement>document.getElementById("email-input")).value;
+    const onSignIn = () => {
+        console.log("onSignIn")
+        let email = (<HTMLInputElement>document.getElementById("email-input")).value;
         let password = (<HTMLInputElement>document.getElementById("password-input")).value;
-        OnSignIn(username, password);
+        props.onSignIn(email, password);
     };
+
+    const onNavForgotPassword = () => {
+        console.log("onNavForgotPassword")
+        let email = (<HTMLInputElement>document.getElementById("email-input")).value;
+        props.onNavForgotPassword(email);
+    }
+
+    const onNavScanCode = () => {
+        props.onNavScanCode();
+    }
 
     const onHook = () => {
-        document.getElementById("tfr-forgot-password").addEventListener("click", OnForgotPassword);
-        document.getElementById("tfr-scan-code").addEventListener("click", OnScanCode);
-        document.getElementById("tfr-sign-in").addEventListener("click", onSignInSetup);
+        document.getElementById("tfr-sign-in").addEventListener("click", onSignIn);
+        document.getElementById("tfr-forgot-password").addEventListener("click", onNavForgotPassword);
+        document.getElementById("tfr-scan-code").addEventListener("click", onNavScanCode);
     };
 
     const onUnhook = () => {
-        document.getElementById("tfr-forgot-password").removeEventListener("click", OnForgotPassword);
-        document.getElementById("tfr-scan-code").removeEventListener("click", OnScanCode);
-        document.getElementById("tfr-sign-in").removeEventListener("click", onSignInSetup);
+        document.getElementById("tfr-sign-in").removeEventListener("click", onSignIn);
+        document.getElementById("tfr-forgot-password").removeEventListener("click", onNavForgotPassword);
+        document.getElementById("tfr-scan-code").removeEventListener("click", onNavScanCode);
     };
 
     const body = () => {
         return `
             <fieldset class="tfr-fieldset-element tfr-fieldset tfr-mt-20">
                 <legend tfr-element="true" class="tfr-label-element tfr-roboto-14-default tfr-c-dark-o5">${L.EmailAddress}</legend>
-                <input tfr-element="true" type="email" id="email-input" />
+                <input tfr-element="true" type="email" id="email-input" value="${email}" />
             </fieldset>
 
             <fieldset class="tfr-fieldset-element tfr-fieldset tfr-mt-20">
@@ -104,10 +101,10 @@ const SignInModal = (props: SignInModalProps) => {
             `;
     };
 
-return {
-    Title: title,
-    Hook: onHook,
-    Unhook: onUnhook,
-    Body: body,
-}
+    return {
+        Hook: onHook,
+        Unhook: onUnhook,
+        Body: body,
+    };
+};
 export default SignInModal;

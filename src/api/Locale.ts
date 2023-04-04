@@ -1,5 +1,5 @@
 import { ErrorType } from '../types';
-import { FriendlyError } from './FriendlyError';
+import { createUIError } from './UIError';
 
 var L = {
     VirtualTryOnWith: "Virtual try on with",
@@ -53,7 +53,7 @@ async function SetLocale(locale: string): Promise<void | ErrorType> {
         L = data;
     })
     .catch((error) => {
-        return new FriendlyError(L.FailedToLoadLocale, error);
+        return createUIError(L.FailedToLoadLocale, error);
     });
 }
 

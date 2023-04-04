@@ -1,8 +1,7 @@
-import { Shop } from "./api/Shop";
-import { FriendlyError } from "./api/FriendlyError";
-import { FirebaseUser } from "./auth/FirebaseUser";
-import { ModalManager } from "./components/Modals/ModalManager";
-export { Shop, FriendlyError, FirebaseUser };
-export {ModalManager} from "./components/Modals/ModalManager";
-export * as Modals from "./components/index"
-
+export {InitFirebase, InitFirebaseUser, FirebaseUser} from "./auth/Firebase";
+export {ModalManager, SignInModal, ErrorModal, ForgotPasswordModal, ScanCodeModal, NoAvatarModal, LoadingAvatarModal, LoggedOutModal} from "./components";
+export {Shop} from "./api/Shop";
+export {UIError} from "./api/UIError";
+export * as types from "./types" ;
+export {Fetcher} from "./api/Fetcher";
+export {L} from "./api/Locale";

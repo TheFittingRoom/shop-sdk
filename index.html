@@ -1,54 +1,174 @@
 <html lang="en">
-    <head>
-        <title>TheFittingRoom</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script type="module">
-            const link1 = document.createElement('link');
-            link1.rel = 'preconnect';
-            link1.href = 'https://fonts.googleapis.com';
 
-            const link2 = document.createElement('link');
-            link2.rel = 'preconnect';
-            link2.href = 'https://fonts.gstatic.com';
-            link2.crossOrigin = 'crossOrigin';
+<head>
+    <title>TheFittingRoom</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="module">
+        const link1 = document.createElement('link');
+        link1.rel = 'preconnect';
+        link1.href = 'https://fonts.googleapis.com';
 
-            const link3 = document.createElement('link');
-            link3.rel = 'stylesheet';
-            link3.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Roboto&display=swap';
+        const link2 = document.createElement('link');
+        link2.rel = 'preconnect';
+        link2.href = 'https://fonts.gstatic.com';
+        link2.crossOrigin = 'crossOrigin';
 
-            document.getElementsByTagName('head')[0].appendChild(link1);
-            document.getElementsByTagName('head')[0].appendChild(link2);
-            document.getElementsByTagName('head')[0].appendChild(link3);
+        const link3 = document.createElement('link');
+        link3.rel = 'stylesheet';
+        link3.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Roboto&display=swap';
 
+        document.getElementsByTagName('head')[0].appendChild(link1);
+        document.getElementsByTagName('head')[0].appendChild(link2);
+        document.getElementsByTagName('head')[0].appendChild(link3);
 
-            import { Shop, FriendlyError, FirebaseUser, Modals, ModalManager } from 'http://localhost:8080/dist/esm/main.js?language=en';
-            let m = new ModalManager("thefittingroom-modal");
-            let api = new Shop(1);
+        import { InitFirebase, ModalManager, Shop, SignInModal, ForgotPasswordModal, ScanCodeModal, NoAvatarModal, LoadingAvatarModal, LoggedOutModal, ErrorModal, types, L } from 'http://localhost:3000/dist/esm/main.js?language=en';
 
-            const onLogout = () =>{
-                m.Close()
-            }
+        let user;
+        let firebase = InitFirebase()
+        let manager = ModalManager("thefittingroom-modal")
+        let shop;
+        let tempColorwaySKU = "5003-008-00"
 
-            const onSignOn =  (username, password) => {
-                console.log(username, password)
-                api.Login(username, password, onLogout).then(() => {
-                    window.alert(api.User())
-                }).catch((e) => {
-                    window.alert("invalid credentials")
+        const onLogout = () => {
+            manager.Open(LoggedOutModal({
+                onNavSignIn,
+                onClose
+            }))
+        }
+
+        const onClose = () => {
+            manager.Close()
+        }
+
+        const onNavBack = () => {
+            window.history.back()
+        }
+
+        const tryOn = (colorwaySKU) => {
+            manager.Open(LoadingAvatarModal())
+            shop.TryOn(colorwaySKU).then((frames) => {
+                console.log(frames)
+                // TODO: add model frames functionality
+            }).catch((error) => {
+                manager.Open(ErrorModal({
+                    error: error.message,
+                    onClose,
+                    onNavBack
+                }))
+            })
+        }
+
+        const afterSignIn = (user, colorwaySKU) => {
+            shop = Shop(user, 1) // todo: pass in shop id
+            user.GetUserProfile().then((profile) => {
+                switch (profile.avatar_status) {
+                    case types.AvatarState.NOT_CREATED:
+                        console.log("avatar not created")
+                        manager.Open(NoAvatarModal({
+                            onClose,
+                            onNavBack
+                        }))
+                        break;
+                    case types.AvatarState.PENDING:
+                        console.log("avatar pending")
+                        manager.Open(LoadingAvatarModal())
+                        shop.AwaitAvatarCreated().then((frames) => {
+                            tryOn(colorwaySKU)
+                        }).catch((UIError) => {
+                            console.error(UIError.error)
+                            manager.Open(ErrorModal({
+                                error: UIError.message,
+                                onClose,
+                                onNavBack
+                            }))
+                        })
+                        break;
+                    case types.AvatarState.CREATED:
+                        console.log("avatar created")
+                        tryOn(colorwaySKU)
+                        break;
+                    default:
+                        console.error("profile.avatar_status is invalid", profile)
+                        manager.Open(ErrorModal({
+                            error: "todo: something went wrong",
+                            onClose,
+                            onNavBack
+                        }))
+                }
+            }).catch((UIError) => {
+                console.error(UIError)
+                manager.Open(ErrorModal({
+                    error: UIError.message,
+                    onClose,
+                    onNavBack
+                }))
+            })
+        }
+
+        const onSignIn = (colorwaySKU) => {
+            return (username, password) => {
+                firebase.Login(username, password, onLogout).then((u) => {
+                    user = u
+                    afterSignIn(user, colorwaySKU)
+                }).catch((UIError) => {
+                    console.log(UIError)
+                    manager.Open(ErrorModal({
+                        error: UIError.message,
+                        onClose,
+                        onNavBack
+                    }))
                 })
             }
+        }
 
-            try{
-                let user = api.User()
-            }catch(e){
-                if(e === FirebaseUser.NotLoggedIn){
-                    m.Open(new Modals.SignInModal(m, onSignOn))
-                }
+        const onNavSignIn = (email) => {
+            manager.Open(SignInModal({
+                email,
+                onSignIn: onSignIn("5003-008-00"),
+                onNavForgotPassword,
+                onNavScanCode
+            }))
+        }
+
+        const onNavForgotPassword = (email) => {
+            manager.Open(ForgotPasswordModal({
+                email,
+                onNavSignIn
+            }))
+        }
+
+        const onNavScanCode = () => {
+            manager.Open(ScanCodeModal())
+        }
+
+        // retrieving firebase user from local storage
+        firebase.User(onLogout).then((u) => {
+            user = u
+            afterSignIn(user, tempColorwaySKU)
+        }).catch((error) => {
+            if (error.message == "user not logged in") {
+                console.info("user not logged in")
+                manager.Open(SignInModal({
+                    email: "",
+                    onSignIn: onSignIn("5003-008-00"),
+                    onNavForgotPassword,
+                    onNavScanCode
+                }))
+            } else {
+                console.error(error)
+                manager.Open(ErrorModal({
+                    error: L.SomethingWentWrong,
+                    onClose,
+                    onNavBack
+                }))
             }
+        })
 
-        </script>
-    </head>
-    <body>
-        <div id="thefittingroom-modal" />
-    </body>
+    </script>
+</head>
+
+<body>
+    <div id="thefittingroom-modal" />
+</body>
+
 </html>

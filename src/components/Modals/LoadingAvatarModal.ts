@@ -1,24 +1,26 @@
 import { L } from "../../api/Locale";
-import Modal from "./Modal";
 import { ModalContent } from "../../types";
-import {ModalManager} from "./ModalManager";
-import SignInModal from "./SignInModal";
+import { LoadingAvatarModalProps } from "../../types";
 
-class LoadingAvatarModal extends Modal implements ModalContent{
-    constructor(title:string = L.Loading, modalTitle: string = L.Loading){
-        super(title, modalTitle);
-    }
-
-    Hook(): void {
+const LoadingAvatarModal = (props:LoadingAvatarModalProps): ModalContent => {
+    const Hook = () => {
 
     }
-    Unhook(): void {
+
+    const Unhook = () => {
 
     }
-    Body(){
+
+    const Body = () => {
         return `
         <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-c-dark tfr-mt-60" > ${L.LoadingAvatar} </div>
         `;
+    }
+
+    return {
+        Hook,
+        Unhook,
+        Body
     }
 }
 

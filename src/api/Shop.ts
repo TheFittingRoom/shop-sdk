@@ -1,18 +1,18 @@
 import { UserProfile } from "firebase/auth";
-import { FriendlyError } from "./FriendlyError";
+import { UIError } from "./UIError";
 import { AvatarNotCreated, AvatarNotReady, ErrorResponse, SizeIDOutsideRecommendedRange, ErrorOutsideRecommendedSizes } from "./errors";
 import { TryOnFrames } from "../types";
-import { FirebaseUser } from "../auth/FirebaseUser";
 import { Fetcher } from "./Fetcher";
 import { SizeRecommendation } from "../api/responses";
 import { collection, query, where, getDocs, documentId, onSnapshot } from "firebase/firestore";
-import { Firebase } from "../auth/Firebase";
+import { InitFirebase, NotLoggedIn, FirebaseUser } from "../auth/Firebase";
+
 import { L } from "./Locale";
 import { User } from "./requests";
-import { UserID } from "./responses";
+import { createUIError } from "./UIError";
 
 
-function IsImgValid(url: string) {
+function TestImage(url: string): Promise<boolean> {
 	const img = new Image();
 	img.src = url;
 
@@ -22,133 +22,75 @@ function IsImgValid(url: string) {
 	});
 }
 
+const Shop = (u: FirebaseUser, id: number) => {
+	let firebaseUser = u;
+	let brandID = id;
 
-class Shop {
-	private brandID: number;
-	private user: FirebaseUser;
-	static NoFramesFound = new Error('No frames found for this colorway');
+	const NoFramesFound = new Error('No frames found for this colorway');
 
-	constructor(brandID: number) {
-		Firebase.Init(
-			process.env.FIREBASE_API_KEY,
-			process.env.FIREBASE_AUTH_DOMAIN,
-			process.env.FIREBASE_PROJECT_ID,
-			process.env.FIREBASE_STORAGE_BUCKET,
-			process.env.FIREBASE_MESSAGING_SENDER_ID,
-			process.env.FIREBASE_APP_ID,
-		);
+	const User = (): FirebaseUser => {
+		firebaseUser.EnsureLogin();
+		return firebaseUser;
+	};
 
-		this.brandID = brandID;
-	}
-
-	User(): FirebaseUser {
-		if (!this.user) {
-			throw FirebaseUser.NotLoggedIn;
-		}
-		return this.user;
-	}
-
-	/**
- * Finishes the account creation process for the user
- * @param {User} user - the user information to create the profile with
- * @returns {Promise<UserID | ErrorResponse | Error>} - the user ID of the user if successful, an APIError or javascript Error if not.
- * @throws {FirebaseUser.NotLoggedIn} - if the user is not logged in.
- */
-	async SignUp(user: User): Promise<UserID | ErrorResponse | Error> {
-		return new Promise((resolve, reject) => {
-			Fetcher.Get(this.User(), `/user/${this.User().ID()}`, user)
-				.then((response: UserID) => {
-					resolve(response);
-				}).catch((error) => {
-					if (error instanceof Error) {
-						reject(new FriendlyError("There was an error when trying to create your account", error.message));
-					}
-					if (error as ErrorResponse) {
-						reject(reject(new FriendlyError("There was an error when trying to create your account", error.error)));
-					}
-					reject(error);
-				});
-		});
-	}
-
-	async SendPasswordResetEmail(email: string): Promise<void> {
-		return FirebaseUser.SendPasswordResetEmail(email);
-	}
-
-	async Login(username, password: string, onLogout: () => any): Promise<void> {
-		return new Promise((resolve, reject) => {
-			FirebaseUser.Login(username, password, onLogout).then((user) => {
-				this.user = user;
-				resolve();
-			}).catch((error) => {
-				reject(error)
-			});
-		});
-	}
-
-	async RequestColorwayFrames(colorwayID: number): Promise<void> {
-		return new Promise((resolve, reject) => {
-			Fetcher.Post(this.User(),`/colorways/${colorwayID}/frames`, null).then(() => {
-				resolve();
-			}).catch((error: ErrorResponse | ErrorOutsideRecommendedSizes) => {
-				switch (error.error) {
-					case AvatarNotCreated:
-						reject(new FriendlyError(L.DontHaveAvatar, error.error));
-						break;
-					case AvatarNotReady:
-						reject(new FriendlyError(L.LoadingAvatar, error.error));
-						break;
-					case SizeIDOutsideRecommendedRange:
-						reject(error);
-						break;
-					default:
-						reject(new FriendlyError(L.SomethingWentWrong, error.error));
-				}
-			});
-		});
-	}
-
-	async AwaitColorwayFrames(colorwaySKU: string): Promise<TryOnFrames> {
+	const AwaitAvatarCreated = async (): Promise<void> => {
 		return new Promise((resolve, reject) => {
 			window.setTimeout(() => {
 				unsubscribe();
-				reject(new FriendlyError(L.SomethingWentWrong, "timed out waiting for frames"));
+				reject(createUIError(L.SomethingWentWrong, new Error("timed out waiting for avatar creation")));
 			}, 60 * 1000);
-			const q = query(collection(Firebase.Firestore, "users"), where(documentId(), "==", this.User().ID()));
+			const q = query(collection(User().FirebaseInstance.Firestore, "users"), where(documentId(), "==", User().ID()));
 			const unsubscribe = onSnapshot(q, (snapshot) => {
-				this.GetColorwayFrames(colorwaySKU).then((frames) => {
+				const userProfile = snapshot.docs[0].data();
+				if (userProfile.avatar_status === 'CREATED') {
 					unsubscribe();
-					resolve(frames);
-				}).catch((error) => {
-					if (error === Shop.NoFramesFound) {
-						// we caught an event that was not a vto event
-						return;
-					} else {
-						unsubscribe();
-						reject(new FriendlyError(L.SomethingWentWrong, error.message));
-					}
-				});
+					resolve();
+				}
+				return;
 			});
 		});
-	}
+	};
 
-	async GetStyles(): Promise<object[]> {
+	const AwaitColorwayFrames = async (colorwaySKU: string): Promise<TryOnFrames> => {
+
 		return new Promise((resolve, reject) => {
-			this.User().EnsureLogin();
-			const q = query(collection(Firebase.Firestore, "styles"), where("brand_id", "==", this.brandID));
-			getDocs(q).then((querySnapshot) => {
-				const styles: any = [];
-				querySnapshot.forEach((doc) => {
-					styles.push(doc.data());
-				});
-				resolve(styles);
-			}).catch((error) => {
-				reject(error);
-			});
+			resolve([
+				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_0.png",
+				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_1.png",
+				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_2.png",
+				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_3.png",
+				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_4.png",
+				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_5.png",
+				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_6.png",
+				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_7.png",
+			]);
+			/* 			window.setTimeout(() => {
+							unsubscribe();
+							reject(createUIError(L.SomethingWentWrong, new Error("timed out waiting for frames")));
+						}, 60 * 1000);
+						const q = query(collection(User().FirebaseInstance.Firestore, "users"), where(documentId(), "==", User().ID()));
+						const unsubscribe = onSnapshot(q, (snapshot) => {
+							console.log("shapshop retrieved", snapshot)
+							//TODO: make this more effecient by using the snapshot response
+							GetColorwayFrames(colorwaySKU).then((frames) => {
+								unsubscribe();
+								resolve(frames);
+							}).catch((error) => {
+								if (error === NoFramesFound) {
+									// we caught an event that was not a vto event
+									return;
+								} else {
+									unsubscribe();
+									reject(createUIError(L.SomethingWentWrong, error));
+								}
+							});
+						}); */
 		});
-	}
+	};
 
-	LookupColorwayBySKU(colorwaySKU: string, styles: any[]): any | undefined {
+
+
+	const LookupColorwayBySKU = (colorwaySKU: string, styles: any[]): any | undefined => {
 		for (const style of styles) {
 			for (const size of style.sizes) {
 				for (const colorway of size.colorways) {
@@ -159,68 +101,145 @@ class Shop {
 			}
 		}
 		return undefined;
-	}
+	};
 
-	async GetColorwayFrames(colorwaySKU: string): Promise<TryOnFrames> {
+	const GetRecommendedSizes = async (BrandStyleID: string): Promise<SizeRecommendation | ErrorResponse> => {
 		return new Promise((resolve, reject) => {
-			this.User().GetUserProfile().then((profile: UserProfile) => {
-				const frames = profile?.vto?.[this.brandID]?.[colorwaySKU]?.frames || [];
-				if (frames.length > 0 && IsImgValid(frames[0])) {
-					resolve(frames as TryOnFrames);
-				}
-				reject(Shop.NoFramesFound);
-			}).catch((error) => {
-				reject(error);
-			});
-		});
-	}
-
-	async GetRecommendedSizes(BrandStyleID: string): Promise<SizeRecommendation | ErrorResponse> {
-		return new Promise((resolve, reject) => {
-			Fetcher.Get(this.User(), `/styles/${BrandStyleID}/recommendation`, null).then((data) => {
-				resolve(data as SizeRecommendation);
+			Fetcher.Get(User(), `/styles/${BrandStyleID}/recommendation`, null).then((r: Response) => {
+				r.json().then((data) => {
+					resolve(data);
+				}).catch((error: SyntaxError | ErrorResponse) => {
+					if (error instanceof SyntaxError) {
+						reject(createUIError(L.SomethingWentWrong, error));
+					} else {
+						reject(createUIError(L.SomethingWentWrong, new Error(error.error)));
+					}
+				});
 			}).catch((error: ErrorResponse) => {
 				switch (error.error) {
 					case AvatarNotCreated:
-						reject(new FriendlyError(L.DontHaveAvatar, error.error));
+						reject(createUIError(L.DontHaveAvatar, new Error(error.error)));
 						break;
 					case AvatarNotReady:
-						reject(new FriendlyError(L.LoadingAvatar, error.error));
+						reject(createUIError(L.LoadingAvatar, new Error(error.error)));
 						break;
 					default:
-						reject(new FriendlyError(L.SomethingWentWrong, error.error));
+						reject(createUIError(L.SomethingWentWrong, new Error(error.error)));
 				}
 			});
 		});
-	}
+	};
 
-	async TryOn(ColorwaySKU: string): Promise<TryOnFrames> {
+	const GetStyles = async (): Promise<object[]> => {
 		return new Promise((resolve, reject) => {
-			this.GetStyles().then((styles) => {
-				const colorway = this.LookupColorwayBySKU(ColorwaySKU, styles);
+			const q = query(collection(User().FirebaseInstance.Firestore, "styles"), where("brand_id", "==", brandID));
+			getDocs(q).then((querySnapshot) => {
+				const styles: any = [];
+				querySnapshot.forEach((doc) => {
+					styles.push(doc.data());
+				});
+				resolve(styles);
+			}).catch((error) => {
+				reject(createUIError(L.SomethingWentWrong,));
+			});
+		});
+	};
+
+	const GetColorwayFrames = async (colorwaySKU: string): Promise<TryOnFrames> => {
+		return new Promise((resolve, reject) => {
+			resolve([
+				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_0.png",
+				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_1.png",
+				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_2.png",
+				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_3.png",
+				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_4.png",
+				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_5.png",
+				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_6.png",
+				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_7.png",
+			]
+/* 			User().GetUserProfile().then((profile: UserProfile) => {
+				const frames = profile?.vto?.[brandID]?.[colorwaySKU]?.frames || [];
+				if (frames.length > 0 && TestImage(frames[0])) {
+					resolve(frames as TryOnFrames);
+				}
+				reject(NoFramesFound);
+			}).catch((error: UIError) => {
+				reject(error);
+			}); */
+		});
+	};
+
+	const RequestColorwayFrames = async (colorwayID: number): Promise<void> => {
+		return new Promise((resolve, reject) => {
+			Fetcher.Post(User(), `/colorway-size-assets/${colorwayID}/frames`, null).then(() => {
+				resolve();
+			}).catch((error: ErrorResponse | ErrorOutsideRecommendedSizes) => {
+				switch (error.error) {
+					case AvatarNotCreated:
+						reject(createUIError(L.DontHaveAvatar, new Error(error.error)));
+						break;
+					case AvatarNotReady:
+						reject(createUIError(L.LoadingAvatar, new Error(error.error)));
+						break;
+					case SizeIDOutsideRecommendedRange:
+						reject(error);
+						break;
+					default:
+						if (error instanceof Error) {
+							reject(createUIError(L.SomethingWentWrong, error));
+						} else {
+							reject(createUIError(L.SomethingWentWrong, new Error(error.error)));
+						}
+				}
+			});
+		});
+	};
+
+	const TryOn = async (ColorwaySKU: string): Promise<TryOnFrames> => {
+		return new Promise((resolve, reject) => {
+			GetStyles().then((styles) => {
+				console.debug(styles);
+				const colorway = LookupColorwayBySKU(ColorwaySKU, styles);
 				if (colorway) {
-					this.GetColorwayFrames(colorway.id).then((frames) => {
+					GetColorwayFrames(colorway.id).then((frames) => {
 						resolve(frames);
 					}).catch((error) => {
-						if (error == Shop.NoFramesFound) {
-							this.RequestColorwayFrames(colorway.id).then(() => {
+						if (error == NoFramesFound) {
+							console.info("requesting new colorway frames");
+							RequestColorwayFrames(colorway.id).then(() => {
 								// listen for changes in firebase
-								return this.AwaitColorwayFrames(ColorwaySKU);
-							}).catch((error) => {
+								console.info("waiting for rendered colorway frames");
+								AwaitColorwayFrames(ColorwaySKU).then((frames) => {
+									resolve(frames);
+								}).catch((error: UIError) => {
+									reject(error);
+								});
+							}).catch((error: UIError) => {
+								console.error("error requesting colorway frames", error);
 								reject(error);
 							});
+						} else {
+							reject(createUIError(L.SomethingWentWrong, new Error(error)));
 						}
-						reject(error);
 					});
 				} else {
-					reject(new FriendlyError(L.SomethingWentWrong, "No colorway found"));
+					reject(createUIError(L.SomethingWentWrong, new Error("No colorway found")));
 				}
 			}).catch((error) => {
 				reject(error);
 			});
 		});
-	}
-}
+	};
 
-export { Shop, IsImgValid };
+	return {
+		GetStyles,
+		GetRecommendedSizes,
+		GetColorwayFrames,
+		LookupColorwayBySKU,
+		AwaitAvatarCreated,
+		TryOn,
+	};
+};
+
+export { Shop, TestImage };
 

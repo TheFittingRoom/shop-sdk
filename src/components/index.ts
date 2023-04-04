@@ -3,6 +3,9 @@ import ForgotPasswordModal from './Modals/ForgotPasswordModal';
 import ScanCodeModal from './Modals/ScanCodeModal';
 import ErrorModal from './Modals/ErrorModal';
 import LoadingAvatarModal from './Modals/LoadingAvatarModal';
+import NoAvatarModal from './Modals/NoAvatarModal';
+import LoggedOutModal from './Modals/LoggedOutModal';
+import { ModalManager } from './Modals/ModalManager';
 import "../styles";
 
 export {
@@ -10,5 +13,8 @@ export {
     ForgotPasswordModal,
     ScanCodeModal,
     ErrorModal,
-    LoadingAvatarModal
+    LoadingAvatarModal,
+    ModalManager,
+    NoAvatarModal,
+    LoggedOutModal
 };
