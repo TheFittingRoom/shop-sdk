@@ -24,9 +24,9 @@
         import { InitFirebase, ModalManager, Shop, SignInModal, ForgotPasswordModal, ScanCodeModal, NoAvatarModal, LoadingAvatarModal, LoggedOutModal, ErrorModal, types, L } from 'http://localhost:3000/dist/esm/main.js?language=en';
 
         let user;
+        let shop;
         let firebase = InitFirebase()
         let manager = ModalManager("thefittingroom-modal")
-        let shop;
         let tempColorwaySKU = "5003-008-00"
 
         const onLogout = () => {
@@ -144,7 +144,8 @@
         // retrieving firebase user from local storage
         firebase.User(onLogout).then((u) => {
             user = u
-            afterSignIn(user, tempColorwaySKU)
+            shop = Shop(user, 1)
+            // afterSignIn(user, tempColorwaySKU)
         }).catch((error) => {
             if (error.message == "user not logged in") {
                 console.info("user not logged in")

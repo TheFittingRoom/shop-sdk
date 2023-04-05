@@ -1,7 +1,7 @@
 import { UserProfile } from "firebase/auth";
 import { UIError } from "./UIError";
 import { AvatarNotCreated, AvatarNotReady, ErrorResponse, SizeIDOutsideRecommendedRange, ErrorOutsideRecommendedSizes } from "./errors";
-import { TryOnFrames } from "../types";
+import { TryOnFrames, FirebaseStyles } from "../types";
 import { Fetcher } from "./Fetcher";
 import { SizeRecommendation } from "../api/responses";
 import { collection, query, where, getDocs, documentId, onSnapshot } from "firebase/firestore";
@@ -52,50 +52,37 @@ const Shop = (u: FirebaseUser, id: number) => {
 	};
 
 	const AwaitColorwayFrames = async (colorwaySKU: string): Promise<TryOnFrames> => {
-
 		return new Promise((resolve, reject) => {
-			resolve([
-				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_0.png",
-				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_1.png",
-				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_2.png",
-				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_3.png",
-				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_4.png",
-				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_5.png",
-				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_6.png",
-				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_7.png",
-			]);
-			/* 			window.setTimeout(() => {
-							unsubscribe();
-							reject(createUIError(L.SomethingWentWrong, new Error("timed out waiting for frames")));
-						}, 60 * 1000);
-						const q = query(collection(User().FirebaseInstance.Firestore, "users"), where(documentId(), "==", User().ID()));
-						const unsubscribe = onSnapshot(q, (snapshot) => {
-							console.log("shapshop retrieved", snapshot)
-							//TODO: make this more effecient by using the snapshot response
-							GetColorwayFrames(colorwaySKU).then((frames) => {
-								unsubscribe();
-								resolve(frames);
-							}).catch((error) => {
-								if (error === NoFramesFound) {
-									// we caught an event that was not a vto event
-									return;
-								} else {
-									unsubscribe();
-									reject(createUIError(L.SomethingWentWrong, error));
-								}
-							});
-						}); */
+			window.setTimeout(() => {
+				unsubscribe();
+				reject(createUIError(L.SomethingWentWrong, new Error("timed out waiting for frames")));
+			}, 60 * 1000);
+			const q = query(collection(User().FirebaseInstance.Firestore, "users"), where(documentId(), "==", User().ID()));
+			const unsubscribe = onSnapshot(q, (snapshot) => {
+				console.log("shapshop retrieved", snapshot);
+				//TODO: make this more effecient by using the snapshot response
+				GetColorwayFrames(colorwaySKU).then((frames) => {
+					unsubscribe();
+					resolve(frames);
+				}).catch((error) => {
+					if (error === NoFramesFound) {
+						// we caught an event that was not a vto event
+						return;
+					} else {
+						unsubscribe();
+						reject(createUIError(L.SomethingWentWrong, error));
+					}
+				});
+			});
 		});
 	};
 
-
-
-	const LookupColorwayBySKU = (colorwaySKU: string, styles: any[]): any | undefined => {
-		for (const style of styles) {
-			for (const size of style.sizes) {
-				for (const colorway of size.colorways) {
-					if (colorway.sku === colorwaySKU) {
-						return colorway;
+	const LookupColorwayIDBySKU = (colorwaySKU: string, styles: FirebaseStyles): number | undefined => {
+		for (const style of styles.values()) {
+			for (const size of style.sizes.values()) {
+				for (const colorway_size_asset of size.colorways_size_assets) {
+					if (colorway_size_asset.sku === colorwaySKU) {
+						return colorway_size_asset.colorway.id;
 					}
 				}
 			}
@@ -130,7 +117,7 @@ const Shop = (u: FirebaseUser, id: number) => {
 		});
 	};
 
-	const GetStyles = async (): Promise<object[]> => {
+	const GetStyles = async (): Promise<FirebaseStyles> => {
 		return new Promise((resolve, reject) => {
 			const q = query(collection(User().FirebaseInstance.Firestore, "styles"), where("brand_id", "==", brandID));
 			getDocs(q).then((querySnapshot) => {
@@ -147,17 +134,7 @@ const Shop = (u: FirebaseUser, id: number) => {
 
 	const GetColorwayFrames = async (colorwaySKU: string): Promise<TryOnFrames> => {
 		return new Promise((resolve, reject) => {
-			resolve([
-				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_0.png",
-				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_1.png",
-				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_2.png",
-				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_3.png",
-				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_4.png",
-				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_5.png",
-				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_6.png",
-				"https://assets.dev.thefittingroom.xyz/user-H0xIgzZKNIdQ21xQwL8V7Nywtet2/avatar-9/frames/image_7.png",
-			]
-/* 			User().GetUserProfile().then((profile: UserProfile) => {
+			User().GetUserProfile().then((profile: UserProfile) => {
 				const frames = profile?.vto?.[brandID]?.[colorwaySKU]?.frames || [];
 				if (frames.length > 0 && TestImage(frames[0])) {
 					resolve(frames as TryOnFrames);
@@ -165,7 +142,7 @@ const Shop = (u: FirebaseUser, id: number) => {
 				reject(NoFramesFound);
 			}).catch((error: UIError) => {
 				reject(error);
-			}); */
+			});
 		});
 	};
 
@@ -198,15 +175,14 @@ const Shop = (u: FirebaseUser, id: number) => {
 	const TryOn = async (ColorwaySKU: string): Promise<TryOnFrames> => {
 		return new Promise((resolve, reject) => {
 			GetStyles().then((styles) => {
-				console.debug(styles);
-				const colorway = LookupColorwayBySKU(ColorwaySKU, styles);
-				if (colorway) {
-					GetColorwayFrames(colorway.id).then((frames) => {
-						resolve(frames);
-					}).catch((error) => {
-						if (error == NoFramesFound) {
+				GetColorwayFrames(ColorwaySKU).then((frames) => {
+					resolve(frames);
+				}).catch((error) => {
+					if (error == NoFramesFound) {
+						const colorwayID = LookupColorwayIDBySKU(ColorwaySKU, styles);
+						if (colorwayID) {
 							console.info("requesting new colorway frames");
-							RequestColorwayFrames(colorway.id).then(() => {
+							RequestColorwayFrames(colorwayID).then(() => {
 								// listen for changes in firebase
 								console.info("waiting for rendered colorway frames");
 								AwaitColorwayFrames(ColorwaySKU).then((frames) => {
@@ -219,12 +195,12 @@ const Shop = (u: FirebaseUser, id: number) => {
 								reject(error);
 							});
 						} else {
-							reject(createUIError(L.SomethingWentWrong, new Error(error)));
+							reject(createUIError(L.SomethingWentWrong, new Error("No colorway found")));
 						}
-					});
-				} else {
-					reject(createUIError(L.SomethingWentWrong, new Error("No colorway found")));
-				}
+					} else {
+						reject(createUIError(L.SomethingWentWrong, new Error(error)));
+					}
+				});
 			}).catch((error) => {
 				reject(error);
 			});
@@ -235,7 +211,7 @@ const Shop = (u: FirebaseUser, id: number) => {
 		GetStyles,
 		GetRecommendedSizes,
 		GetColorwayFrames,
-		LookupColorwayBySKU,
+		LookupColorwayBySKU: LookupColorwayIDBySKU,
 		AwaitAvatarCreated,
 		TryOn,
 	};

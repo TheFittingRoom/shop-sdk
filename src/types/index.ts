@@ -101,3 +101,29 @@ export enum AvatarState {
     CREATED = 'CREATED',
     PENDING = 'PENDING'
 }
+
+export type FirebaseStyles = Map<string, {
+    id: number;
+    brand_id: number;
+    brand_style_id: string;
+    name: string;
+    description: string;
+    garment_category: string;
+    is_published: boolean;
+    sale_type: string;
+    colorways: [{ id: number, name: string; }];
+    sizes: Map<number, {
+        colorways_size_assets: [{
+            id: number;
+            sku: string;
+            colorway: {
+                id: number;
+                name: string;
+            };
+        }],
+        garment_measurements: Map<string, {
+            tolerance: number;
+            value: number;
+        }>;
+    }>;
+}>;

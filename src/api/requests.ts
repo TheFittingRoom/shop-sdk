@@ -70,13 +70,16 @@ export interface Collection {
 }
 
 //////////
-// source: colorway.go
+// source: colorway_size_asset.go
 
-export interface Colorway {
+export interface PatchColorwaySizeAsset {
+  Sku: string;
+}
+export interface ColorwaySizeAsset {
   Sku: string;
   File?: any /* multipart.FileHeader */;
 }
-export interface UpdateColorwayWebhook {
+export interface UpdateColorwaySizeAssetWebhook {
   avatar_id: number /* int64 */;
   frames_storage_path: string;
   frame_count: number /* int */;
@@ -105,24 +108,21 @@ export interface Size {
   label: string;
   garment_measurements: GarmentMeasurement[];
 }
+export interface Colorway {
+  name: string;
+}
 export interface Style {
   brand_style_id: string;
-  collection_id: number /* int64 */;
+  collection_id?: number /* int64 */; // POST only
   name: string;
   description: string;
   sale_type: string;
   garment_category_id: number /* int64 */;
   sizes: Size[];
+  colorways: Colorway[];
 }
 export interface StylePatch {
   publish: boolean;
-}
-export interface StyleUpdate {
-  brand_style_id: string;
-  name: string;
-  description: string;
-  sale_type: string;
-  garment_category_id: number /* int64 */;
 }
 
 //////////

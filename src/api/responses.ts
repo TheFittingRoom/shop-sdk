@@ -48,12 +48,13 @@ export interface Collection {
 }
 
 //////////
-// source: colorway.go
+// source: colorway_size_asset.go
 
-export interface Colorway {
+export interface ColorwaySizeAsset {
   id: number /* int64 */;
   sku: string;
   size_id: number /* int64 */;
+  colorway_id: number /* int64 */;
   folder_storage_path: string;
   obj_file_name: string;
   mtl_file_name: string;
@@ -123,6 +124,10 @@ export interface GarmentCategory {
   garment_category: string;
   garment_subcategory: string;
 }
+export interface Colorway {
+  id: number /* int64 */;
+  name: string;
+}
 export interface Style {
   id: number /* int64 */;
   brand_id?: number /* int64 */;
@@ -133,6 +138,7 @@ export interface Style {
   sale_type?: string;
   garment_category?: GarmentCategory;
   sizes: Size[];
+  colorways: Colorway[];
   is_published: boolean;
 }
 
