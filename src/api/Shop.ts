@@ -5,28 +5,40 @@ import { TryOnFrames, FirebaseStyles } from "../types";
 import { Fetcher } from "./Fetcher";
 import { SizeRecommendation } from "../api/responses";
 import { collection, query, where, getDocs, documentId, onSnapshot } from "firebase/firestore";
-import { InitFirebase, NotLoggedIn, FirebaseUser } from "../auth/Firebase";
-
+import { FirebaseUser, GetFirebaseUIError } from "../auth/Firebase";
 import { L } from "./Locale";
-import { User } from "./requests";
 import { createUIError } from "./UIError";
 
 
-function TestImage(url: string): Promise<boolean> {
+function TestImage(url: string): Promise<void> {
 	const img = new Image();
 	img.src = url;
 
-	return new Promise((resolve) => {
-		img.onerror = () => resolve(false);
-		img.onload = () => resolve(true);
+	return new Promise((resolve, reject) => {
+		img.onerror = () => reject();
+		img.onload = () => resolve();
 	});
 }
 
-const Shop = (u: FirebaseUser, id: number) => {
+interface Shop {
+	LookupColorwayIDBySKU: (colorwaySKU: string, styles: FirebaseStyles) => number | undefined;
+	User: () => FirebaseUser;
+	AwaitAvatarCreated: () => Promise<void>;
+	AwaitColorwayFrames: (colorwaySKU: string) => Promise<TryOnFrames>;
+	GetColorwayFrames: (colorwaySKU: string) => Promise<TryOnFrames>;
+	TryOn: (colorwaySKU: string) => Promise<TryOnFrames>;
+	GetRecommendedSizes(BrandStyleID: string): Promise<SizeRecommendation | ErrorResponse>;
+
+	GetStyles: () => Promise<FirebaseStyles>;
+	RequestColorwayFrames(colorwayID: number): Promise<void>;
+}
+
+const NoFramesFound = new Error('No frames found for this colorway');
+
+const InitShop = (u: FirebaseUser, id: number): Shop => {
 	let firebaseUser = u;
 	let brandID = id;
 
-	const NoFramesFound = new Error('No frames found for this colorway');
 
 	const User = (): FirebaseUser => {
 		firebaseUser.EnsureLogin();
@@ -35,14 +47,16 @@ const Shop = (u: FirebaseUser, id: number) => {
 
 	const AwaitAvatarCreated = async (): Promise<void> => {
 		return new Promise((resolve, reject) => {
-			window.setTimeout(() => {
+			let cancel = window.setTimeout(() => {
 				unsubscribe();
 				reject(createUIError(L.SomethingWentWrong, new Error("timed out waiting for avatar creation")));
 			}, 60 * 1000);
 			const q = query(collection(User().FirebaseInstance.Firestore, "users"), where(documentId(), "==", User().ID()));
 			const unsubscribe = onSnapshot(q, (snapshot) => {
 				const userProfile = snapshot.docs[0].data();
+				console.log('detected event', userProfile.avatar_status);
 				if (userProfile.avatar_status === 'CREATED') {
+					window.clearTimeout(cancel);
 					unsubscribe();
 					resolve();
 				}
@@ -127,7 +141,7 @@ const Shop = (u: FirebaseUser, id: number) => {
 				});
 				resolve(styles);
 			}).catch((error) => {
-				reject(createUIError(L.SomethingWentWrong,));
+				reject(GetFirebaseUIError(error));
 			});
 		});
 	};
@@ -138,13 +152,15 @@ const Shop = (u: FirebaseUser, id: number) => {
 				const frames = profile?.vto?.[brandID]?.[colorwaySKU]?.frames || [];
 				if (frames.length > 0 && TestImage(frames[0])) {
 					resolve(frames as TryOnFrames);
+				} else {
+					reject(NoFramesFound);
 				}
-				reject(NoFramesFound);
 			}).catch((error: UIError) => {
 				reject(error);
 			});
 		});
 	};
+
 
 	const RequestColorwayFrames = async (colorwayID: number): Promise<void> => {
 		return new Promise((resolve, reject) => {
@@ -156,7 +172,8 @@ const Shop = (u: FirebaseUser, id: number) => {
 						reject(createUIError(L.DontHaveAvatar, new Error(error.error)));
 						break;
 					case AvatarNotReady:
-						reject(createUIError(L.LoadingAvatar, new Error(error.error)));
+						console.error("RequestColorwayFrames recieved AvatarNotReady");
+						reject(createUIError(L.SomethingWentWrong, new Error(error.error)));
 						break;
 					case SizeIDOutsideRecommendedRange:
 						reject(error);
@@ -165,6 +182,7 @@ const Shop = (u: FirebaseUser, id: number) => {
 						if (error instanceof Error) {
 							reject(createUIError(L.SomethingWentWrong, error));
 						} else {
+							// UIError
 							reject(createUIError(L.SomethingWentWrong, new Error(error.error)));
 						}
 				}
@@ -174,11 +192,11 @@ const Shop = (u: FirebaseUser, id: number) => {
 
 	const TryOn = async (ColorwaySKU: string): Promise<TryOnFrames> => {
 		return new Promise((resolve, reject) => {
-			GetStyles().then((styles) => {
-				GetColorwayFrames(ColorwaySKU).then((frames) => {
-					resolve(frames);
-				}).catch((error) => {
-					if (error == NoFramesFound) {
+			GetColorwayFrames(ColorwaySKU).then((frames) => {
+				resolve(frames)
+			}).catch((error: NoFramesFound) => {
+				if (error == NoFramesFound) {
+					GetStyles().then((styles) => {
 						const colorwayID = LookupColorwayIDBySKU(ColorwaySKU, styles);
 						if (colorwayID) {
 							console.info("requesting new colorway frames");
@@ -197,25 +215,28 @@ const Shop = (u: FirebaseUser, id: number) => {
 						} else {
 							reject(createUIError(L.SomethingWentWrong, new Error("No colorway found")));
 						}
-					} else {
-						reject(createUIError(L.SomethingWentWrong, new Error(error)));
-					}
-				});
-			}).catch((error) => {
-				reject(error);
+					}).catch((error: UIError) => {
+						reject(error);
+					});
+				} else {
+					reject(createUIError(L.SomethingWentWrong, new Error(error)));
+				}
 			});
 		});
 	};
 
 	return {
-		GetStyles,
-		GetRecommendedSizes,
-		GetColorwayFrames,
-		LookupColorwayBySKU: LookupColorwayIDBySKU,
+		User,
 		AwaitAvatarCreated,
+		GetStyles,
+		AwaitColorwayFrames,
+		LookupColorwayIDBySKU: LookupColorwayIDBySKU,
+		GetColorwayFrames,
 		TryOn,
+		GetRecommendedSizes,
+		RequestColorwayFrames,
 	};
 };
 
-export { Shop, TestImage };
+export { InitShop, TestImage, Shop };
 

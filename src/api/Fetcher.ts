@@ -1,5 +1,4 @@
 import { FirebaseUser } from "../auth/Firebase";
-import { createUIError } from "./UIError";
 import { ErrorResponse } from "./errors";
 
 const Fetcher = {

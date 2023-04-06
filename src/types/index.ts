@@ -10,7 +10,6 @@ export interface ModalContent {
 }
 
 export interface ModalProps {
-    title: string;
 }
 
 export interface SignInParams {
@@ -43,7 +42,7 @@ export interface ErrorModalProps extends ModalProps {
     };
 };
 export interface ResetLinkModalProps {
-    //
+    onNavSignIn: (email: string) => void;
 };
 export interface ScanCodeModalProps extends ModalProps {
     //

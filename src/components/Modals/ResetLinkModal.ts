@@ -2,11 +2,32 @@ import { L } from "../../api/Locale";
 import { ResetLinkModalProps } from "../../types";
 
 const ResetLinkModal = (props: ResetLinkModalProps) => {
-    return `
+
+    let onNavSignIn = () => {
+        props.onNavSignIn("");
+    };
+
+    const Hook = () => {
+        document.getElementById("tfr-back-to-signin").addEventListener("click", onNavSignIn);
+    };
+
+    const Unhook = () => {
+        document.getElementById("tfr-back-to-signin").removeEventListener("click", onNavSignIn);
+    };
+
+    const Body = () => {
+        return `
     <div tfr-element="true" class="tfr-poppins-regular-20-default tfr-c-dark tfr-mt-15-p tfr-mb-13-p tfr-w-80-p tfr-m-h-auto">${L.AssociatedEmail}</div>
     <div class="tfr-t-a-center">
-        <span tfr-element="true" class="tfr-roboto-16-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mr-20" onclick="window.theFittingRoom.renderSignInModal()">${L.BackToSignIn}</span>
+        <span id="tfr-back-to-signin" tfr-element="true" class="tfr-roboto-16-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mr-20">${L.BackToSignIn}</span>
     </div>
     `;
-}
+    };
+
+    return {
+        Hook,
+        Unhook,
+        Body,
+    };
+};
 export default ResetLinkModal;

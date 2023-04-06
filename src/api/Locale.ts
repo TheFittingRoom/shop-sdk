@@ -47,7 +47,7 @@ var L = {
 };
 
 async function SetLocale(locale: string): Promise<void | ErrorType> {
-    fetch(`${process.env.LANGUAGE_URL}/${L}.json`)
+    fetch(`${process.env.LANGUAGE_URL}/${locale}.json`)
     .then((response) => response.json())
     .then((data) => {
         L = data;

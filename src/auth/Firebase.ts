@@ -4,10 +4,7 @@ import { Firestore, getFirestore } from "firebase/firestore";
 import { AuthErrorCodes } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { createUIError, UIError } from "../api/UIError";
-import { UserCredential } from "firebase/auth";
-import { getDoc, doc, DocumentData, onSnapshot, DocumentSnapshot, } from "firebase/firestore";
-import { PasswordResetEmailProps } from "../types";
-import {L} from "../api/Locale";
+import { getDoc, doc, DocumentData, DocumentSnapshot, } from "firebase/firestore";
 
 function GetFirebaseUIError(e: FirebaseError): UIError {
 	switch (e.code) {
@@ -18,7 +15,7 @@ function GetFirebaseUIError(e: FirebaseError): UIError {
 		case AuthErrorCodes.USER_DELETED:
 			return createUIError('Your email or password is incorrect', new Error(e.message));
 		case AuthErrorCodes.USER_DISABLED:
-			return createUIError('Your account has been disabled', );
+			return createUIError('Your account has been disabled',);
 		case AuthErrorCodes.TOO_MANY_ATTEMPTS_TRY_LATER:
 			return createUIError('Too many failed login attempts. Please try again later', new Error(e.message));
 		case AuthErrorCodes.OPERATION_NOT_ALLOWED:
@@ -28,20 +25,25 @@ function GetFirebaseUIError(e: FirebaseError): UIError {
 	}
 }
 
-interface FirebaseInstance {
+interface Firebase {
 	App: firebase.FirebaseApp;
 	Auth: firebaseAuth.Auth;
 	Firestore: Firestore;
-	/* 	SendPasswordResetEmail: (email: string) => Promise<void>;
-		ConfirmPasswordReset: (code: string, newPassword: string) => Promise<void>;
-		Login: (username: string, password: string, onLogout: () => Promise<void>) => Promise<FirebaseUser>; */
+}
+
+interface FirebaseInstance {
+	Firebase: Firebase,
+	SendPasswordResetEmail(email: string): Promise<void>;
+	ConfirmPasswordReset(code: string, newPassword: string): Promise<void>;
+	Login(email: string, password: string, onLogout: () => void): Promise<FirebaseUser>;
+	User(onLogout: () => void): Promise<FirebaseUser>;
 }
 
 const NotLoggedIn = new Error('user not logged in');
 
 interface FirebaseUser {
 	User: firebaseAuth.User | null;
-	FirebaseInstance: FirebaseInstance;
+	FirebaseInstance: Firebase;
 	EnsureLogin: () => void;
 	ID: () => string;
 	Token: () => Promise<string>;
@@ -50,7 +52,7 @@ interface FirebaseUser {
 }
 
 
-const InitFirebaseUser = (firebase: FirebaseInstance, user: firebaseAuth.User, onLogout: () => Promise<void>): FirebaseUser => {
+const InitFirebaseUser = (firebase: Firebase, user: firebaseAuth.User, onLogout: () => void): FirebaseUser => {
 	let FirebaseInstance = firebase;
 	let User = user;
 
@@ -97,11 +99,8 @@ const InitFirebaseUser = (firebase: FirebaseInstance, user: firebaseAuth.User, o
 			firebaseAuth.signOut(firebase.Auth)
 				.then(async () => {
 					User = null;
-					onLogout().then(() => {
-						resolve();
-					}).catch((error) => {
-						reject(error);
-					});
+					onLogout();
+					resolve();
 				})
 				.catch((error) => {
 					reject(error);
@@ -120,7 +119,7 @@ const InitFirebaseUser = (firebase: FirebaseInstance, user: firebaseAuth.User, o
 	};
 };
 
-const InitFirebase = () => {
+const InitFirebase = (): FirebaseInstance => {
 	let App = firebase.initializeApp({
 		apiKey: process.env.FIREBASE_API_KEY,
 		authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -131,7 +130,7 @@ const InitFirebase = () => {
 	});
 
 	let Auth = firebaseAuth.getAuth(App);
-	Auth.setPersistence(firebaseAuth.browserLocalPersistence)
+	Auth.setPersistence(firebaseAuth.browserLocalPersistence);
 	let Firestore = getFirestore(App);
 
 	let instance = {
@@ -164,21 +163,21 @@ const InitFirebase = () => {
 		});
 	};
 
-	const User = (onLogout: () => Promise<void>): Promise<FirebaseUser> => {
+	const User = (onLogout: () => void): Promise<FirebaseUser> => {
 		return new Promise((resolve, reject) => {
 			let unsubscribe = firebaseAuth.onAuthStateChanged(Auth, async (user) => {
 				if (user) {
-					unsubscribe()
-					resolve(InitFirebaseUser(instance,user, onLogout));
+					unsubscribe();
+					resolve(InitFirebaseUser(instance, user, onLogout));
 				} else {
-					unsubscribe()
+					unsubscribe();
 					reject(NotLoggedIn);
 				}
 			});
-		})
+		});
 	};
 
-	const Login = (username, password: string, onLogout: () => Promise<void>): Promise<FirebaseUser> => {
+	const Login = (username, password: string, onLogout: () => void): Promise<FirebaseUser> => {
 		return new Promise((resolve, reject) => {
 			let auth = firebaseAuth.getAuth(App);
 			if (auth.currentUser) {
@@ -196,7 +195,7 @@ const InitFirebase = () => {
 	};
 
 	return {
-		FirebaseInstance: instance,
+		Firebase: instance,
 		SendPasswordResetEmail,
 		ConfirmPasswordReset,
 		Login,
@@ -204,5 +203,5 @@ const InitFirebase = () => {
 	};
 };
 
-export { InitFirebase, InitFirebaseUser, FirebaseUser, NotLoggedIn}
+export { InitFirebase, InitFirebaseUser, FirebaseUser, NotLoggedIn, GetFirebaseUIError }
 
