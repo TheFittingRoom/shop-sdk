@@ -39,7 +39,6 @@ const InitShop = (u: FirebaseUser, id: number): Shop => {
 	let firebaseUser = u;
 	let brandID = id;
 
-
 	const User = (): FirebaseUser => {
 		firebaseUser.EnsureLogin();
 		return firebaseUser;
@@ -73,7 +72,7 @@ const InitShop = (u: FirebaseUser, id: number): Shop => {
 			}, 60 * 1000);
 			const q = query(collection(User().FirebaseInstance.Firestore, "users"), where(documentId(), "==", User().ID()));
 			const unsubscribe = onSnapshot(q, (snapshot) => {
-				console.log("shapshop retrieved", snapshot);
+				console.log("snapshot retrieved", snapshot);
 				//TODO: make this more effecient by using the snapshot response
 				GetColorwayFrames(colorwaySKU).then((frames) => {
 					unsubscribe();
@@ -96,7 +95,8 @@ const InitShop = (u: FirebaseUser, id: number): Shop => {
 			for (const size of style.sizes.values()) {
 				for (const colorway_size_asset of size.colorways_size_assets) {
 					if (colorway_size_asset.sku === colorwaySKU) {
-						return colorway_size_asset.colorway.id;
+						console.log(size)
+						return colorway_size_asset.id;
 					}
 				}
 			}
@@ -162,9 +162,10 @@ const InitShop = (u: FirebaseUser, id: number): Shop => {
 	};
 
 
-	const RequestColorwayFrames = async (colorwayID: number): Promise<void> => {
+	const RequestColorwayFrames = async (colorwaySizeAssetID: number): Promise<void> => {
+		console.info("requesting colorway frames", colorwaySizeAssetID)
 		return new Promise((resolve, reject) => {
-			Fetcher.Post(User(), `/colorway-size-assets/${colorwayID}/frames`, null).then(() => {
+			Fetcher.Post(User(), `/colorway-size-assets/${colorwaySizeAssetID}/frames`, null).then(() => {
 				resolve();
 			}).catch((error: ErrorResponse | ErrorOutsideRecommendedSizes) => {
 				switch (error.error) {
@@ -194,18 +195,18 @@ const InitShop = (u: FirebaseUser, id: number): Shop => {
 		return new Promise((resolve, reject) => {
 			GetColorwayFrames(ColorwaySKU).then((frames) => {
 				resolve(frames)
-			}).catch((error: NoFramesFound) => {
+			}).catch((error) => {
 				if (error == NoFramesFound) {
 					GetStyles().then((styles) => {
-						const colorwayID = LookupColorwayIDBySKU(ColorwaySKU, styles);
-						if (colorwayID) {
+						const colorwaySizeAssetID = LookupColorwayIDBySKU(ColorwaySKU, styles);
+						if (colorwaySizeAssetID) {
 							console.info("requesting new colorway frames");
-							RequestColorwayFrames(colorwayID).then(() => {
+							RequestColorwayFrames(colorwaySizeAssetID).then(() => {
 								// listen for changes in firebase
 								console.info("waiting for rendered colorway frames");
 								AwaitColorwayFrames(ColorwaySKU).then((frames) => {
 									resolve(frames);
-								}).catch((error: UIError) => {
+								}).catch((error: UIError | Error) => {
 									reject(error);
 								});
 							}).catch((error: UIError) => {

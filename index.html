@@ -11,7 +11,10 @@
     <script type="module">
         import { TheFittingRoom } from 'http://localhost:3000/dist/esm/main.js?language=en';
         let tfr = TheFittingRoom(1, "thefittingroom-modal")
-        tfr.TryOn("5003-007-00")
+        let callback = (frames) => {
+            console.log("frames", frames)
+        }
+        tfr.TryOn("5003-007-10", callback)
     </script>
 </head>
 

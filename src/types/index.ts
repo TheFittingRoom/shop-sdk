@@ -36,11 +36,17 @@ export interface ErrorModalProps extends ModalProps {
     error: string,
     onNavBack: () => void;
     onClose: () => void;
+};
+
+export interface SizeErrorModalProps  {
+    onNavBack: () => void;
+    onClose: () => void;
     sizes?: {
         recommended: string,
-        optionalSizes: string[];
+        avaliable: string[];
     };
-};
+}
+
 export interface ResetLinkModalProps {
     onNavSignIn: (email: string) => void;
 };
@@ -112,6 +118,10 @@ export type FirebaseStyles = Map<string, {
     sale_type: string;
     colorways: [{ id: number, name: string; }];
     sizes: Map<number, {
+        id: number;
+        size: string;
+        size_system: string;
+        size_value_id: string;
         colorways_size_assets: [{
             id: number;
             sku: string;

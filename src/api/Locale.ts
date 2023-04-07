@@ -31,7 +31,7 @@ var L = {
     EnterEmailAddress: "Enter your email address, we will send you a link to reset your password.",
     NoSizeAvailable: "Unfortunately, that size is not available for try on.",
     TrySize: "You can try on a size",
-    OrSize: "or size",
+    OrSize: "or",
     AssociatedEmail: "If there is an account associated with that email, We have sent a link to reset your password.",
     CreateAvatarSc: "Scan the QR code/click link to download our app and create an avatar:",
     SomethingWentWrong: "Something went wrong. Try again!",
@@ -46,14 +46,17 @@ var L = {
     FailedToLoadLocale: "Something went wrong when fetching another language.",
 };
 
-async function SetLocale(locale: string): Promise<void | ErrorType> {
-    fetch(`${process.env.LANGUAGE_URL}/${locale}.json`)
-    .then((response) => response.json())
-    .then((data) => {
-        L = data;
-    })
-    .catch((error) => {
-        return createUIError(L.FailedToLoadLocale, error);
+async function SetLocale(locale: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+        fetch(`${process.env.LANGUAGE_URL}/${locale}.json`)
+            .then((response) => response.json())
+            .then((data) => {
+                L = data;
+                resolve();
+            })
+            .catch((error) => {
+                reject(createUIError(L.FailedToLoadLocale, error));
+            });
     });
 }
 
