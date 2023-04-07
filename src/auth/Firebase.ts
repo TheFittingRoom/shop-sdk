@@ -9,9 +9,7 @@ import { getDoc, doc, DocumentData, DocumentSnapshot, } from "firebase/firestore
 function GetFirebaseUIError(e: FirebaseError): UIError {
 	switch (e.code) {
 		case AuthErrorCodes.INVALID_EMAIL:
-			return createUIError('Your email or password is incorrect', new Error(e.message));
 		case AuthErrorCodes.INVALID_PASSWORD:
-			return createUIError('Your email or password is incorrect', new Error(e.message));
 		case AuthErrorCodes.USER_DELETED:
 			return createUIError('Your email or password is incorrect', new Error(e.message));
 		case AuthErrorCodes.USER_DISABLED:

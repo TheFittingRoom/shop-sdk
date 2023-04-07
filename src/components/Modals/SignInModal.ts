@@ -14,7 +14,6 @@ const SignInModal = (props: SignInModalProps): ModalContent =>  {
     };
 
     const onNavForgotPassword = () => {
-        console.log("onNavForgotPassword")
         let email = (<HTMLInputElement>document.getElementById("email-input")).value;
         props.onNavForgotPassword(email);
     }

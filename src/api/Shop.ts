@@ -46,10 +46,10 @@ const InitShop = (u: FirebaseUser, id: number): Shop => {
 
 	const AwaitAvatarCreated = async (): Promise<void> => {
 		return new Promise((resolve, reject) => {
-			let cancel = window.setTimeout(() => {
+			const cancel = window.setTimeout(() => {
 				unsubscribe();
 				reject(createUIError(L.SomethingWentWrong, new Error("timed out waiting for avatar creation")));
-			}, 60 * 1000);
+			}, parseInt(process.env.AVATAR_TIMEOUT_MS));
 			const q = query(collection(User().FirebaseInstance.Firestore, "users"), where(documentId(), "==", User().ID()));
 			const unsubscribe = onSnapshot(q, (snapshot) => {
 				const userProfile = snapshot.docs[0].data();
@@ -69,7 +69,7 @@ const InitShop = (u: FirebaseUser, id: number): Shop => {
 			window.setTimeout(() => {
 				unsubscribe();
 				reject(createUIError(L.SomethingWentWrong, new Error("timed out waiting for frames")));
-			}, 60 * 1000);
+			}, parseInt(process.env.VTO_TIMEOUT_MS));
 			const q = query(collection(User().FirebaseInstance.Firestore, "users"), where(documentId(), "==", User().ID()));
 			const unsubscribe = onSnapshot(q, (snapshot) => {
 				console.log("snapshot retrieved", snapshot);

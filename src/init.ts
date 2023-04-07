@@ -85,7 +85,7 @@ export const TheFittingRoom = (shopID: number, modalDivID: string) => {
 	};
 
 	let afterSignIn = (user, colorwaySKU) => {
-		shop = InitShop(user, shopID); // todo: pass in shop id
+		shop = InitShop(user, shopID);
 		user.GetUserProfile().then((profile) => {
 			switch (profile.avatar_status) {
 				case types.AvatarState.NOT_CREATED:
@@ -213,7 +213,7 @@ export const TheFittingRoom = (shopID: number, modalDivID: string) => {
 						manager.Open(SignInModal({
 							email: "",
 							onSignIn: onSignIn(colorwaySKU),
-							onNavForgotPassword,
+							onNavForgotPassword: onNavForgotPassword(colorwaySKU),
 							onNavScanCode
 						}));
 					} else {
@@ -230,7 +230,7 @@ export const TheFittingRoom = (shopID: number, modalDivID: string) => {
 					manager.Open(SignInModal({
 						email: "",
 						onSignIn: onSignIn(colorwaySKU),
-						onNavForgotPassword,
+						onNavForgotPassword: onNavForgotPassword(colorwaySKU),
 						onNavScanCode
 					}));
 				} else {

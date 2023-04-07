@@ -11,8 +11,10 @@ const ForgotPasswordModal = (props: ForgotPasswordModalProps): ModalContent => {
     }
 
     let onPasswordReset = () => {
+        let email = (<HTMLInputElement>document.getElementById("tfr-email")).value;
         props.onPasswordReset(email);
     }
+
 
     const Hook = () => {
         document.getElementById("tfr-send-password-reset").addEventListener("click", onPasswordReset);
