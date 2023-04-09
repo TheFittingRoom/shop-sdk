@@ -2,16 +2,13 @@
 import { InitFirebase, FirebaseUser, NotLoggedIn } from "./auth/Firebase";
 import { ModalManager, SignInModal, ForgotPasswordModal, ScanCodeModal, NoAvatarModal, LoadingAvatarModal, LoggedOutModal, ErrorModal, SizeErrorModal } from "./components";
 import { InitShop, Shop } from "./api/Shop";
-import { L, SetLocale } from "./api/Locale";
+import { L, InitLocale} from "./api/Locale";
 import * as types from "./types";
 import ResetLinkModal from "./components/Modals/ResetLinkModal";
 
 
 export const TheFittingRoom = (shopID: number, modalDivID: string) => {
-	const searchParams = new URL(window.location.href).searchParams;
-	const language = searchParams.get("language") || "en";
-
-	SetLocale(language).catch((error) => {
+	InitLocale().catch((error) => {
 		console.error(error);
 	});
 
