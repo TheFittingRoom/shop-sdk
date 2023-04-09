@@ -46,15 +46,47 @@ var L = {
     FailedToLoadLocale: "Something went wrong when fetching another language.",
 };
 
+function findMissingLocales(defaultLocale: {any}, newLocale: {any}): { default: any; new: any } {
+    let missingLocales = { default: {}, new: {} };
+    for (const key in defaultLocale) {
+        if (newLocale[key] === undefined) {
+            missingLocales.default[key] = defaultLocale[key];
+        }
+    }
+    for (const key in newLocale) {
+        if (defaultLocale[key] === undefined) {
+            missingLocales.new[key] = newLocale[key];
+        }
+    }
+    return missingLocales;
+}
+
 async function SetLocale(locale: string): Promise<void> {
     return new Promise((resolve, reject) => {
         fetch(`${process.env.LANGUAGE_URL}/${locale}.json`)
-            .then((response) => response.json())
-            .then((data) => {
-                L = data;
-                resolve();
-            })
-            .catch((error) => {
+            .then((response) => {
+                if (response.ok) {
+                    response.json().then((data) => {
+                        let missingLocales = findMissingLocales(L, data);
+                        if (Object.keys(missingLocales.default).length > 0) {
+                            console.warn(`The following locales are missing from the new locale: ${JSON.stringify(missingLocales.default)}`);
+                        }
+                        if (Object.keys(missingLocales.new).length > 0) {
+                            console.warn(`The following locales are missing from the default locale: ${JSON.stringify(missingLocales.new)}`);
+                        }
+                        L = data;
+                        resolve();
+                    }).catch((error) => {
+                        reject(createUIError(L.FailedToLoadLocale, error));
+                    });
+                } else {
+                    response.text().then((bodyText) => {
+                        reject(createUIError(L.FailedToLoadLocale, new Error(bodyText)));
+                    }).catch((error) => {
+                        reject(createUIError(L.FailedToLoadLocale, error));
+                    });
+                }
+            }).catch((error) => {
                 reject(createUIError(L.FailedToLoadLocale, error));
             });
     });
