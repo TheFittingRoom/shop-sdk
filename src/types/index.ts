@@ -1,7 +1,48 @@
-import { UIError } from "../api/UIError";
-import { InitModalManager } from "../components/Modals/ModalManager";
+import * as firebase from "firebase/app";
+import * as firebaseAuth from "firebase/auth";
+import {DocumentData } from "firebase/firestore";
+import { Firestore } from "firebase/firestore";
+import * as responses from "../api/responses";
+import * as errors from "../api/errors";
 
-function GetVarName(variable: Object) { return Object.keys(variable)[0]; }
+export const NotLoggedIn = new Error('user not logged in');
+
+export interface Firebase {
+    App: firebase.FirebaseApp;
+    Auth: firebaseAuth.Auth;
+    Firestore: Firestore;
+}
+
+export interface FirebaseInstance {
+    Firebase: Firebase,
+    SendPasswordResetEmail(email: string): Promise<void>;
+    ConfirmPasswordReset(code: string, newPassword: string): Promise<void>;
+    Login(email: string, password: string, onLogout: () => void): Promise<FirebaseUser>;
+    User(onLogout: () => void): Promise<FirebaseUser>;
+}
+
+export interface FirebaseUser {
+    User: firebaseAuth.User | null;
+    FirebaseInstance: Firebase;
+    EnsureLogin: () => void;
+    ID: () => string;
+    Token: () => Promise<string>;
+    GetUserProfile: () => Promise<DocumentData | null>;
+    SignOut: () => Promise<void>;
+}
+
+export interface Shop {
+    LookupColorwayIDBySKU: (colorwaySKU: string, styles: FirebaseStyles) => number | undefined;
+    User: () => FirebaseUser;
+    AwaitAvatarCreated: () => Promise<void>;
+    AwaitColorwayFrames: (colorwaySKU: string) => Promise<TryOnFrames>;
+    GetColorwayFrames: (colorwaySKU: string) => Promise<TryOnFrames>;
+    TryOn: (colorwaySKU: string) => Promise<TryOnFrames>;
+    GetRecommendedSizes(BrandStyleID: string): Promise<responses.SizeRecommendation | errors.ErrorResponse>;
+
+    GetStyles: () => Promise<FirebaseStyles>;
+    RequestColorwayFrames(colorwayID: number): Promise<void>;
+}
 
 export interface ModalContent {
     Body: () => string;
@@ -27,18 +68,15 @@ export interface ForgotPasswordModalProps extends ModalProps {
     onNavSignIn: (email: string) => void;
     onPasswordReset: (email: string) => void;
 };
-export interface NoAvatarModalProps extends ModalProps {
-    //
-};
-export interface LoadingAvatarModalProps extends ModalProps {
-};
+export interface NoAvatarModalProps extends ModalProps {};
+export interface LoadingAvatarModalProps extends ModalProps {};
 export interface ErrorModalProps extends ModalProps {
     error: string,
     onNavBack: () => void;
     onClose: () => void;
 };
 
-export interface SizeErrorModalProps  {
+export interface SizeErrorModalProps {
     onNavBack: () => void;
     onClose: () => void;
     sizes?: {
@@ -53,53 +91,12 @@ export interface ResetLinkModalProps {
 export interface ScanCodeModalProps extends ModalProps {
     //
 };
-export interface EnterEmailModalProps {
-};
-
 export interface LoggedOutModalProps {
     onClose: () => void;
     onNavSignIn: (email: string) => void;
 };
 
-export interface RecommendedSizeParams {
-    sku: string,
-}
-
-export interface SignInResponse {}
-export interface PasswordResetEmailProps {
-    email: string;
-}
-export interface TryOnTheFittingRoomProps {
-    sku: any,
-}
-
-export type VirtualTryOnFramesResponse = string[];
-export interface GetRecommendedSizeProps {
-    sku: any,
-}
-export interface GetRecommendedSizesResponse {
-    recommended: string,
-    optionalSizes: string[];
-}
-export interface DownloadLinkEmailProps {
-    email: string;
-}
-
-export interface ProfileResponse {
-    hasAvatar: boolean;
-}
-
 export type TryOnFrames = string[];
-
-export type ErrorType = {
-    code: number | null,
-    errorMessage: string;
-};
-
-export enum Response {
-    SUCCESS = 'success',
-    NO_AVATAR = 'no_avatar'
-}
 
 export enum AvatarState {
     NOT_CREATED = 'NOT_CREATED',

@@ -25,7 +25,7 @@ const InitModalManager = (elementID: string): ModalManager => {
 
                 <div class="tfr-modal-content tfr-pt-20 tfr-pb-50">
                     <div class="tfr-modal-title-logo-container">
-                        <div tfr-element="true" class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${L.VirtualTryOnWith}</div>
+                        <div tfr-element="true" class="tfr-title-font tfr-light-24-300 tfr-c-dark tfr-mr-10">${L.VirtualTryOnWith}</div>
                         <div>
                             <object data="tfr-logo.svg" type="image/svg+xml">
                                 <img src="${TfrLogo}" />

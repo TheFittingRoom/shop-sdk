@@ -1,10 +1,11 @@
 import * as firebase from "firebase/app";
 import * as firebaseAuth from "firebase/auth";
-import { Firestore, getFirestore } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 import { AuthErrorCodes } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { createUIError, UIError } from "../api/UIError";
 import { getDoc, doc, DocumentData, DocumentSnapshot, } from "firebase/firestore";
+import * as types from "../types";
 
 function GetFirebaseUIError(e: FirebaseError): UIError {
 	switch (e.code) {
@@ -23,40 +24,14 @@ function GetFirebaseUIError(e: FirebaseError): UIError {
 	}
 }
 
-interface Firebase {
-	App: firebase.FirebaseApp;
-	Auth: firebaseAuth.Auth;
-	Firestore: Firestore;
-}
 
-interface FirebaseInstance {
-	Firebase: Firebase,
-	SendPasswordResetEmail(email: string): Promise<void>;
-	ConfirmPasswordReset(code: string, newPassword: string): Promise<void>;
-	Login(email: string, password: string, onLogout: () => void): Promise<FirebaseUser>;
-	User(onLogout: () => void): Promise<FirebaseUser>;
-}
-
-const NotLoggedIn = new Error('user not logged in');
-
-interface FirebaseUser {
-	User: firebaseAuth.User | null;
-	FirebaseInstance: Firebase;
-	EnsureLogin: () => void;
-	ID: () => string;
-	Token: () => Promise<string>;
-	GetUserProfile: () => Promise<DocumentData | null>;
-	SignOut: () => Promise<void>;
-}
-
-
-const InitFirebaseUser = (firebase: Firebase, user: firebaseAuth.User, onLogout: () => void): FirebaseUser => {
+const InitFirebaseUser = (firebase: types.Firebase, user: firebaseAuth.User, onLogout: () => void): types.FirebaseUser => {
 	let FirebaseInstance = firebase;
 	let User = user;
 
 	let EnsureLogin = () => {
 		if (user === null) {
-			throw NotLoggedIn;
+			throw types.NotLoggedIn;
 		}
 	};
 
@@ -64,7 +39,7 @@ const InitFirebaseUser = (firebase: Firebase, user: firebaseAuth.User, onLogout:
 		try {
 			return User.uid;
 		} catch (error) {
-			throw NotLoggedIn;
+			throw types.NotLoggedIn;
 		}
 	};
 
@@ -117,7 +92,7 @@ const InitFirebaseUser = (firebase: Firebase, user: firebaseAuth.User, onLogout:
 	};
 };
 
-const InitFirebase = (): FirebaseInstance => {
+const InitFirebase = (): types.FirebaseInstance => {
 	let App = firebase.initializeApp({
 		apiKey: process.env.FIREBASE_API_KEY,
 		authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -161,7 +136,7 @@ const InitFirebase = (): FirebaseInstance => {
 		});
 	};
 
-	const User = (onLogout: () => void): Promise<FirebaseUser> => {
+	const User = (onLogout: () => void): Promise<types.FirebaseUser> => {
 		return new Promise((resolve, reject) => {
 			let unsubscribe = firebaseAuth.onAuthStateChanged(Auth, async (user) => {
 				if (user) {
@@ -169,13 +144,13 @@ const InitFirebase = (): FirebaseInstance => {
 					resolve(InitFirebaseUser(instance, user, onLogout));
 				} else {
 					unsubscribe();
-					reject(NotLoggedIn);
+					reject(types.NotLoggedIn);
 				}
 			});
 		});
 	};
 
-	const Login = (username, password: string, onLogout: () => void): Promise<FirebaseUser> => {
+	const Login = (username, password: string, onLogout: () => void): Promise<types.FirebaseUser> => {
 		return new Promise((resolve, reject) => {
 			let auth = firebaseAuth.getAuth(App);
 			if (auth.currentUser) {
@@ -201,5 +176,5 @@ const InitFirebase = (): FirebaseInstance => {
 	};
 };
 
-export { InitFirebase, InitFirebaseUser, FirebaseUser, NotLoggedIn, GetFirebaseUIError, FirebaseInstance }
+export { InitFirebase, InitFirebaseUser, GetFirebaseUIError }
 

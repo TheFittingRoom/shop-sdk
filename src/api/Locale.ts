@@ -1,4 +1,3 @@
-import { ErrorType } from '../types';
 import { createUIError } from './UIError';
 
 var L = {
@@ -46,7 +45,7 @@ var L = {
     FailedToLoadLocale: "Something went wrong when fetching another language.",
 };
 
-function findMissingLocales(defaultLocale: any, newLocale: any): { default: any; new: any } {
+function findMissingLocales(defaultLocale: any, newLocale: any): { default: any; new: any; } {
     let missingLocales = { default: {}, new: {} };
     for (const key in defaultLocale) {
         if (newLocale[key] === undefined) {
@@ -94,17 +93,16 @@ async function SetLocale(locale: string): Promise<void> {
 
 const InitLocale = (): Promise<string> => {
     return new Promise((resolve, reject) => {
-    const searchParams = new URL(window.location.href).searchParams;
-    const language = searchParams.get("language") || "en";
+        const searchParams = new URL(window.location.href).searchParams;
+        const language = searchParams.get("language") || "en";
 
-    SetLocale(language).then(() => {
-        resolve(language)
-    }).catch((error) => {
-        reject(error)
+        SetLocale(language).then(() => {
+            resolve(language);
+        }).catch((error) => {
+            reject(error);
+        });
     });
-
-    });
-}
+};
 
 //TODO: add OverrideLocale function that rewrites all non-empty keys in the new locale over the old locale
 

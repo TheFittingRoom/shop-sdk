@@ -5,9 +5,10 @@ import { TryOnFrames, FirebaseStyles } from "../types";
 import { Fetcher } from "./Fetcher";
 import { SizeRecommendation } from "../api/responses";
 import { collection, query, where, getDocs, documentId, onSnapshot } from "firebase/firestore";
-import { FirebaseUser, GetFirebaseUIError } from "../auth/Firebase";
+import {GetFirebaseUIError } from "../auth/Firebase";
 import { L } from "./Locale";
 import { createUIError } from "./UIError";
+import * as types from "../types";
 
 
 function TestImage(url: string): Promise<void> {
@@ -20,26 +21,15 @@ function TestImage(url: string): Promise<void> {
 	});
 }
 
-interface Shop {
-	LookupColorwayIDBySKU: (colorwaySKU: string, styles: FirebaseStyles) => number | undefined;
-	User: () => FirebaseUser;
-	AwaitAvatarCreated: () => Promise<void>;
-	AwaitColorwayFrames: (colorwaySKU: string) => Promise<TryOnFrames>;
-	GetColorwayFrames: (colorwaySKU: string) => Promise<TryOnFrames>;
-	TryOn: (colorwaySKU: string) => Promise<TryOnFrames>;
-	GetRecommendedSizes(BrandStyleID: string): Promise<SizeRecommendation | ErrorResponse>;
 
-	GetStyles: () => Promise<FirebaseStyles>;
-	RequestColorwayFrames(colorwayID: number): Promise<void>;
-}
 
 const NoFramesFound = new Error('No frames found for this colorway');
 
-const InitShop = (u: FirebaseUser, id: number): Shop => {
+const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 	let firebaseUser = u;
 	let brandID = id;
 
-	const User = (): FirebaseUser => {
+	const User = (): types.FirebaseUser => {
 		firebaseUser.EnsureLogin();
 		return firebaseUser;
 	};
@@ -239,5 +229,5 @@ const InitShop = (u: FirebaseUser, id: number): Shop => {
 	};
 };
 
-export { InitShop, TestImage, Shop };
+export { InitShop, TestImage };
 

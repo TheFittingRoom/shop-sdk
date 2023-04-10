@@ -13,7 +13,7 @@ const ScanCodeModal = (props: ScanCodeModalProps): ModalContent => {
     }
     const Body = () => {
         return `
-        <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-c-dark tfr-w-85-p tfr-m-h-auto tfr-mt-30">${L.CreateAvatarSc}</div>
+        <div tfr-element="true" class="tfr-title-font tfr-light-22-300 tfr-c-dark tfr-w-85-p tfr-m-h-auto tfr-mt-30">${L.CreateAvatarSc}</div>
 
         <div class="tfr-w-150 tfr-h-150 tfr-mt-30 tfr-mb-20 tfr-m-h-auto">
             <object data="qr-code-logo.svg" type="image/svg+xml">
