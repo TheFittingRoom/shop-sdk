@@ -201,5 +201,5 @@ const InitFirebase = (): FirebaseInstance => {
 	};
 };
 
-export { InitFirebase, InitFirebaseUser, FirebaseUser, NotLoggedIn, GetFirebaseUIError }
+export { InitFirebase, InitFirebaseUser, FirebaseUser, NotLoggedIn, GetFirebaseUIError, FirebaseInstance }
 

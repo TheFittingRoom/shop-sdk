@@ -1,244 +1,253 @@
 // import { InitFirebase, ModalManager, Shop, SignInModal, ForgotPasswordModal, ScanCodeModal, NoAvatarModal, LoadingAvatarModal, LoggedOutModal, ErrorModal, types, L } from "@thefittingroom/ui";
-import { InitFirebase, FirebaseUser, NotLoggedIn } from "./auth/Firebase";
-import { ModalManager, SignInModal, ForgotPasswordModal, ScanCodeModal, NoAvatarModal, LoadingAvatarModal, LoggedOutModal, ErrorModal, SizeErrorModal } from "./components";
+import { InitFirebase, FirebaseUser, NotLoggedIn, FirebaseInstance } from "./auth/Firebase";
+import { ModalManager, SignInModal, ForgotPasswordModal, ScanCodeModal, NoAvatarModal, LoadingAvatarModal, LoggedOutModal, ErrorModal, SizeErrorModal, InitModalManager } from "./components";
 import { InitShop, Shop } from "./api/Shop";
-import { L, InitLocale} from "./api/Locale";
+import { L, InitLocale } from "./api/Locale";
 import * as types from "./types";
 import ResetLinkModal from "./components/Modals/ResetLinkModal";
+import { UIError } from "./api/UIError";
 
+interface FittingRoom {
+	user: FirebaseUser | undefined;
+	shop: Shop | undefined;
+	firebase: FirebaseInstance;
+	manager: ModalManager;
+	onLogout(colorwaySKU: string): () => void;
+	onClose(): void;
+	onNavBack(): void;
+	onTryOn(colorwaySKU: string): void;
+	afterSignIn(user: FirebaseUser, colorwaySKU: string): void;
+	onSignIn(colorwaySKU: string): (username: string, password: string) => void;
+	onNavSignIn(colorwaySKU: string): (email: string) => void;
+	onPasswordReset(colorwaySKU: string): (email: string) => void;
+	onNavForgotPassword(colorwaySKU: string): (email: string) => void;
+	onNavScanCode(): void;
+	TryOn(colorwaySKU: string, framesCallback: (frames: types.TryOnFrames) => void): void;
+}
 
-export const TheFittingRoom = (shopID: number, modalDivID: string) => {
+const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 	InitLocale().catch((error) => {
 		console.error(error);
 	});
 
-	let user: FirebaseUser;
-	let shop: Shop;
-	let firebase = InitFirebase();
-	let manager = ModalManager(modalDivID);
-	let framesCallback: (frames: types.TryOnFrames) => void;
+	let fittingRoom: FittingRoom = {
+		user: undefined,
+		shop: undefined,
+		firebase: InitFirebase(),
+		manager: InitModalManager(modalDivID),
 
-	let onLogout = (colorwaySKU: string) => {
-		return () => {
-			manager.Open(LoggedOutModal({
-				onNavSignIn: onNavSignIn(colorwaySKU),
-				onClose
-			}));
-		};
-	};
+		onLogout(colorwaySKU: string) {
+			return () => {
+				this.manager.Open(LoggedOutModal({
+					onNavSignIn: this.onNavSignIn(colorwaySKU),
+					onClose: this.onClose
+				}));
+			};
+		},
 
-	let onClose = () => {
-		manager.Close();
-	};
+		onClose() {
+			this.manager.Close();
+		},
 
-	let onNavBack = () => {
-		window.history.back();
-	};
+		onNavBack() {
+			window.history.back();
+		},
 
-	let onTryOn = (colorwaySKU) => {
-		manager.Open(LoadingAvatarModal({}));
-		shop.TryOn(colorwaySKU).then((frames) => {
-			manager.Close();
-			framesCallback(frames);
-		}).catch((error) => {
-			if (error.recommended_size_id) {
-				shop.GetStyles().then((styles: types.FirebaseStyles) => {
-					let recommendedSize: string
-					let availableSizes: string[] = [];
-					for (const style of styles.values()) {
-						for (let size of style.sizes.values()) {
-							if (size.id === error.recommended_size_id) {
-								recommendedSize = size.size
-							}
-							if (error.available_size_ids.includes(size.id) && !availableSizes.includes(size.size) && size.size != recommendedSize) {
-								availableSizes.push(size.size)
+		onTryOn(colorwaySKU) {
+			this.manager.Open(LoadingAvatarModal({}));
+			this.shop.TryOn(colorwaySKU).then((frames) => {
+				this.manager.Close();
+				this.framesCallback(frames);
+			}).catch((error) => {
+				if (error.recommended_size_id) {
+					this.shop.GetStyles().then((styles: types.FirebaseStyles) => {
+						let recommendedSize: string;
+						let availableSizes: string[] = [];
+						for (const style of styles.values()) {
+							for (let size of style.sizes.values()) {
+								if (size.id === error.recommended_size_id) {
+									recommendedSize = size.size;
+								}
+								if (error.available_size_ids.includes(size.id) && !availableSizes.includes(size.size) && size.size != recommendedSize) {
+									availableSizes.push(size.size);
+								}
 							}
 						}
-					}
-					manager.Open(SizeErrorModal({
-						sizes: {
-							recommended: recommendedSize,
-							avaliable: availableSizes
-						},
-						onClose,
-						onNavBack
-					}));
-				}).catch((error) => {
-					console.error(error);
-					manager.Open(ErrorModal({
-						error: L.SomethingWentWrong,
-						onClose,
-						onNavBack
-					}));
-				})
-			} else {
-				manager.Open(ErrorModal({
-					error: error.message,
-					onClose,
-					onNavBack
-				}));
-			}
-		});
-	};
-
-	let afterSignIn = (user, colorwaySKU) => {
-		shop = InitShop(user, shopID);
-		user.GetUserProfile().then((profile) => {
-			switch (profile.avatar_status) {
-				case types.AvatarState.NOT_CREATED:
-					console.log("avatar not created");
-					manager.Open(NoAvatarModal({
-						onClose,
-						onNavBack
-					}));
-					break;
-				case types.AvatarState.PENDING:
-					console.log("avatar pending");
-					manager.Open(LoadingAvatarModal({}));
-					shop.AwaitAvatarCreated().then(() => {
-						onTryOn(colorwaySKU);
-					}).catch((UIError) => {
-						console.error(UIError.error);
-						manager.Open(ErrorModal({
-							error: UIError.message,
-							onClose,
-							onNavBack
+						this.manager.Open(SizeErrorModal({
+							sizes: {
+								recommended: recommendedSize,
+								avaliable: availableSizes
+							},
+							onClose: this.onClose,
+							onNavBack: this.onNavBack
+						}));
+					}).catch((error) => {
+						console.error(error);
+						this.manager.Open(ErrorModal({
+							error: L.SomethingWentWrong,
+							onClose: this.onClose,
+							onNavBack: this.onNavBack
 						}));
 					});
-					break;
-				case types.AvatarState.CREATED:
-					console.log("avatar created");
-					onTryOn(colorwaySKU);
-					break;
-				default:
-					console.error("profile.avatar_status is invalid", profile);
-					manager.Open(ErrorModal({
-						error: "todo: something went wrong",
-						onClose,
-						onNavBack
+				} else {
+					this.manager.Open(ErrorModal({
+						error: error.message,
+						onClose: this.onClose,
+						onNavBack: this.onNavBack
 					}));
-			}
-		}).catch((UIError) => {
-			console.error(UIError);
-			manager.Open(ErrorModal({
-				error: UIError.message,
-				onClose,
-				onNavBack
-			}));
-		});
-	};
-
-	let onSignIn = (colorwaySKU) => {
-		return (username, password) => {
-			firebase.Login(username, password, onLogout(colorwaySKU)).then((u) => {
-				user = u;
-				afterSignIn(user, colorwaySKU);
-			}).catch((UIError) => {
-				console.log(UIError);
-				manager.Open(ErrorModal({
-					error: UIError.message,
-					onClose,
-					onNavBack
-				}));
+				}
 			});
-		};
-	};
+		},
 
-	let onNavSignIn = (colorwaySKU: string) => {
-		return (email: string) => {
-			manager.Open(SignInModal({
-				email,
-				onSignIn: onSignIn(colorwaySKU),
-				onNavForgotPassword: onNavForgotPassword(colorwaySKU),
-				onNavScanCode
-			}));
-		};
-	};
-
-	let onPasswordReset = (colorwaySKU: string) => {
-		return (email: string) => {
-			firebase.SendPasswordResetEmail(email).then(() => {
-				manager.Open(ResetLinkModal({
-					onNavSignIn: onNavSignIn(colorwaySKU),
-				}));
+		afterSignIn(user, colorwaySKU) {
+			this.shop = InitShop(user, shopID);
+			user.GetUserProfile().then((profile) => {
+				switch (profile.avatar_status) {
+					case types.AvatarState.NOT_CREATED:
+						console.log("avatar not created");
+						this.manager.Open(NoAvatarModal({
+							onClose: this.onClose,
+							onNavBack: this.onNavBack,
+						}));
+						break;
+					case types.AvatarState.PENDING:
+						console.log("avatar pending");
+						this.manager.Open(LoadingAvatarModal({}));
+						this.shop.AwaitAvatarCreated().then(() => {
+							onTryOn: this.onTryOn(colorwaySKU);
+						}).catch((error: UIError) => {
+							this.manager.Open(ErrorModal({
+								error: error.message,
+								onClose: this.onClose,
+								onNavBack: this.onNavBack
+							}));
+						});
+						break;
+					case types.AvatarState.CREATED:
+						console.log("avatar created");
+						onTryOn: this.onTryOn(colorwaySKU);
+						break;
+					default:
+						console.error("profile.avatar_status is invalid", profile);
+						this.manager.Open(ErrorModal({
+							error: "todo: something went wrong",
+							onClose: this.onClose,
+							onNavBack: this.onNavBack
+						}));
+				}
 			}).catch((UIError) => {
 				console.error(UIError);
-				manager.Open(ErrorModal({
+				this.manager.Open(ErrorModal({
 					error: UIError.message,
-					onClose,
-					onNavBack
+					onClose: this.onClose,
+					onNavBack: this.onNavBack
 				}));
 			});
-		};
-	};
+		},
 
-	let onNavForgotPassword = (colorwaySKU: string) => {
-		return (email: string) => {
-			manager.Open(ForgotPasswordModal({
-				email,
-				onNavSignIn: onNavSignIn(colorwaySKU),
-				onPasswordReset: onPasswordReset(colorwaySKU)
-			}));
-		};
-	};
+		onSignIn(colorwaySKU) {
+			return (username, password) => {
+				this.firebase.Login(username, password, this.onLogout(colorwaySKU)).then((u) => {
+					this.user = u;
+					this.afterSignIn(this.user, colorwaySKU);
+				}).catch((UIError) => {
+					console.log(UIError);
+					this.manager.Open(ErrorModal({
+						error: UIError.message,
+						onClose: this.onClose,
+						onNavBack: this.onNavBack
+					}));
+				});
+			};
+		},
 
-	let onNavScanCode = () => {
-		manager.Open(ScanCodeModal({}));
-	};
+		onNavSignIn(colorwaySKU: string) {
+			return (email: string) => {
+				this.manager.Open(SignInModal({
+					email,
+					onSignIn: this.onSignIn(colorwaySKU),
+					onNavForgotPassword: this.onNavForgotPassword(colorwaySKU),
+					onNavScanCode: this.onNavScanCode()
+				}));
+			};
+		},
 
-	return {
-		onLogout,
-		onClose,
-		onNavBack,
-		tryOn: onTryOn,
-		afterSignIn,
-		onSignIn,
-		onNavSignIn,
-		onPasswordReset,
-		onNavForgotPassword,
-		onNavScanCode,
-		TryOn: (colorwaySKU: string, callback: (frames: types.TryOnFrames) => void) => {
-			framesCallback = callback;
+		onPasswordReset(colorwaySKU: string) {
+			return (email: string) => {
+				this.firebase.SendPasswordResetEmail(email).then(() => {
+					this.manager.Open(ResetLinkModal({
+						onNavSignIn: this.onNavSignIn(colorwaySKU),
+					}));
+				}).catch((UIError) => {
+					console.error(UIError);
+					this.manager.Open(ErrorModal({
+						error: UIError.message,
+						onClose: this.onClose,
+						onNavBack: this.onNavBack
+					}));
+				});
+			};
+		},
+
+		onNavForgotPassword(colorwaySKU: string): (email: string) => void {
+			return (email: string) => {
+				this.manager.Open(ForgotPasswordModal({
+					email,
+					onNavSignIn: this.onNavSignIn(colorwaySKU),
+					onPasswordReset: this.onPasswordReset(colorwaySKU)
+				}));
+			};
+		},
+
+		onNavScanCode() {
+			this.manager.Open(ScanCodeModal({}));
+		},
+
+		TryOn(colorwaySKU: string, callback: (frames: types.TryOnFrames) => void) {
+			this.framesCallback = callback;
 			try {
-				firebase.User(onLogout(colorwaySKU)).then((u) => {
-					user = u;
-					shop = InitShop(user, shopID);
-					afterSignIn(user, colorwaySKU);
+				this.firebase.User(this.onLogout(colorwaySKU)).then((u) => {
+					this.user = u;
+					this.shop = InitShop(this.user, shopID);
+					this.afterSignIn(this.user, colorwaySKU);
 				}).catch((error) => {
 					if (error == NotLoggedIn) {
 						console.info("user not logged in");
-						manager.Open(SignInModal({
+						this.manager.Open(SignInModal({
 							email: "",
-							onSignIn: onSignIn(colorwaySKU),
-							onNavForgotPassword: onNavForgotPassword(colorwaySKU),
-							onNavScanCode
+							onSignIn: this.onSignIn(colorwaySKU),
+							onNavForgotPassword: this.onNavForgotPassword(colorwaySKU),
+							onNavScanCode: this.onNavScanCode()
 						}));
 					} else {
 						console.error(error);
-						manager.Open(ErrorModal({
+						this.manager.Open(ErrorModal({
 							error: L.SomethingWentWrong,
-							onClose,
-							onNavBack
+							onClose: this.onClose,
+							onNavBack: this.onNavBack
 						}));
 					}
 				});
 			} catch (e) {
 				if (e.message == NotLoggedIn) {
-					manager.Open(SignInModal({
+					this.manager.Open(SignInModal({
 						email: "",
-						onSignIn: onSignIn(colorwaySKU),
-						onNavForgotPassword: onNavForgotPassword(colorwaySKU),
-						onNavScanCode
+						onSignIn: this.onSignIn(colorwaySKU),
+						onNavForgotPassword: this.onNavForgotPassword(colorwaySKU),
+						onNavScanCode: this.onNavScanCode()
 					}));
 				} else {
-					manager.Open(ErrorModal({
+					this.manager.Open(ErrorModal({
 						error: L.SomethingWentWrong,
-						onClose,
-						onNavBack
+						onClose: this.onClose,
+						onNavBack: this.onNavBack
 					}));
 				}
 			};
 		}
 	};
+
+	return fittingRoom;
 };
 
+export { FittingRoom, InitFittingRoom };

@@ -5,7 +5,7 @@ import ErrorModal from './Modals/ErrorModal';
 import LoadingAvatarModal from './Modals/LoadingAvatarModal';
 import NoAvatarModal from './Modals/NoAvatarModal';
 import LoggedOutModal from './Modals/LoggedOutModal';
-import ModalManager  from './Modals/ModalManager';
+import {InitModalManager, ModalManager}  from './Modals/ModalManager';
 import SizeErrorModal from './Modals/SizeErrorModal';
 import "../styles";
 
@@ -15,6 +15,7 @@ export {
     ScanCodeModal,
     ErrorModal,
     LoadingAvatarModal,
+    InitModalManager,
     ModalManager,
     NoAvatarModal,
     LoggedOutModal,

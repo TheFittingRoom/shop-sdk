@@ -7,7 +7,6 @@ const SignInModal = (props: SignInModalProps): ModalContent =>  {
     const { email } = props;
 
     const onSignIn = () => {
-        console.log("onSignIn")
         let email = (<HTMLInputElement>document.getElementById("email-input")).value;
         let password = (<HTMLInputElement>document.getElementById("password-input")).value;
         props.onSignIn(email, password);

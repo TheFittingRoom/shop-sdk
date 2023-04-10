@@ -1,5 +1,5 @@
 import { UIError } from "../api/UIError";
-import { ModalManager } from "../components/Modals/ModalManager";
+import { InitModalManager } from "../components/Modals/ModalManager";
 
 function GetVarName(variable: Object) { return Object.keys(variable)[0]; }
 

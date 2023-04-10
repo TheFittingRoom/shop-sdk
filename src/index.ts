@@ -5,4 +5,4 @@ export {UIError} from "./api/UIError";
 export * as types from "./types" ;
 export {Fetcher} from "./api/Fetcher";
 export {L} from "./api/Locale";
-export { TheFittingRoom } from "./init";
+export { InitFittingRoom } from "./init";

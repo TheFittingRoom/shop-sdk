@@ -9,8 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Roboto&display=swap" rel="stylesheet" />
 
     <script type="module">
-        import { TheFittingRoom } from 'http://localhost:3000/dist/esm/main.js?language=en';
-        let tfr = TheFittingRoom(1, "thefittingroom-modal")
+        import { InitFittingRoom } from 'http://localhost:3000/dist/esm/main.js?language=en';
+        let tfr = InitFittingRoom(1, "thefittingroom-modal")
+        tfr.afterSignIn = (user, colorwaySKU) => {
+            console.log(`User ${user.ID()} is signed in requesting colorway ${colorwaySKU}`)
+        }
         let callback = (frames) => {
             console.log("frames", frames)
         }

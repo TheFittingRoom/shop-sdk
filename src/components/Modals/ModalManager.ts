@@ -2,7 +2,13 @@ import { TfrLogo } from "../../Modals/svgUrl";
 import { ModalContent } from "../../types";
 import { L } from "../../api/Locale";
 
-const ModalManager = (elementID: string) => {
+interface ModalManager{
+	Open(content: ModalContent): void;
+	Close(): void;
+	Content(): ModalContent;
+}
+
+const InitModalManager = (elementID: string): ModalManager => {
 	const element = document.getElementById(elementID);
 	if (!element) {
 		throw new Error(`element with id ${elementID} not found`);
@@ -70,4 +76,4 @@ const ModalManager = (elementID: string) => {
 }
 
 
-export default ModalManager;
+	export {InitModalManager, ModalManager};
