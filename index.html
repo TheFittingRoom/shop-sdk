@@ -9,19 +9,69 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Roboto&display=swap" rel="stylesheet" />
 
     <script type="module">
-        import { InitFittingRoom } from 'http://localhost:3000/dist/esm/main.js?language=en';
-        let tfr = InitFittingRoom(1, "thefittingroom-modal")
-        tfr.afterSignIn = (user, colorwaySKU) => {
-            console.log(`User ${user.ID()} is signed in requesting colorway ${colorwaySKU}`)
+        import { InitFittingRoom, comps, InitLocale } from 'http://localhost:3000/dist/esm/main.js?language=en';
+        InitLocale();
+        window.mm = comps.InitModalManager("thefittingroom-modal");
+        window.comps = comps;
+        window.onLogout = (colorwaySKU) =>{
+            console.log("logout", colorwaySKU)
         }
+        window.onClose = () => {
+            console.log("close")
+        }
+        window.onNavBack = () => {
+            console.log("back")
+        }
+        window.onTryOn = (colorwaySKU) => {
+            console.log("try on", colorwaySKU)
+        }
+        window.afterSignIn = (user, colorwaySKU) => {
+            console.log("after sign in", user, colorwaySKU)
+        }
+        window.onSignIn = (colorwaySKU) => (username, password, validationError) => {
+            if(username.length == 0 || password.length == 0) {
+                validationError("Username or password is empty")
+            }
+            console.log("sign in", colorwaySKU, username, password)
+        };
+        window.onNavSignIn = (colorwaySKU) => (email) => {
+            console.log("nav sign in", colorwaySKU, email)
+        };
+        window.onPasswordReset = (colorwaySKU) => (email) =>  {
+            console.log("password reset", colorwaySKU, email)
+        };
+        window.onNavForgotPassword = (colorwaySKU) => (email) => {
+            console.log("nav forgot password", colorwaySKU, email)
+        };
+        window.onNavScanCode = () => {
+            console.log("nav scan code")
+        };
+
+
+/*         let tfr = InitFittingRoom(1, "thefittingroom-modal")
         let callback = (frames) => {
             console.log("frames", frames)
         }
-        tfr.TryOn("5003-007-10", callback)
+        tfr.TryOn("5003-007-10", callback) */
     </script>
 </head>
 
 <body>
+    <div class="tfr-home-button-container">
+        <button onclick="window.mm.Open(window.comps.ErrorModal({error: 'custom error message', onNavBack: window.onNavBack, onClose: window.onClose}))">Error Modal</button>
+        <br>
+        <button onclick="window.mm.Open(window.comps.SignInModal({email:'email@mail.com', onSignIn: window.onSignIn('abc'), onNavForgotPassword: window.onNavForgotPassword, onNavScanCode: window.onNavScanCode}))">Sign In Modal</button>
+        <br>
+        <button onclick="window.mm.Open(window.comps.ForgotPasswordModal({email: 'email@mail.com', onNavSignIn: window.onNavSignIn, onPasswordReset: window.onPasswordReset}))">Forgot Password Modal</button>
+        <br>
+        <button onclick="window.mm.Open(window.comps.NoAvatarModal({}))">No Avatar Modal</button>
+        <br>
+        <button onclick="window.mm.Open(window.comps.LoadingAvatarModal({}))">Loading Avatar Modal</button>
+        <br>
+        <button onclick="window.mm.Open(window.comps.SizeErrorModal({onNavBack: window.onNavBack, onClose: window.onClose, sizes: {recommended: 'large', avaliable: ['small', 'medium', 'large']}}))">Size Error Modal</button>
+        <br>
+        <button onclick="window.mm.Open(window.comps.ResetLinkModal({onNavSignIn: window.onNavSignIn}))">Reset Link Modal</button>
+    </div>
     <div id="thefittingroom-modal" />
 </body>
 

@@ -6,17 +6,13 @@
     font-family: 'Roboto', sans-serif;
 }
 
-.tfr-regular-20-default {
-    font-size: 20px;
+.tfr-light-24-300 {
+    font-size: 24px;
+    font-weight: 300;
 }
 
 .tfr-light-22-300 {
     font-size: 22px;
-    font-weight: 300;
-}
-
-.tfr-light-24-300 {
-    font-size: 24px;
     font-weight: 300;
 }
 
@@ -29,14 +25,14 @@
     font-size: 16px;
 }
 
-.tfr-body-font tfr-12-default {
+tfr-12-default {
     font-size: 12px;
 }
 
-.tfr-body-font tfr-14-default {
+tfr-14-default {
     font-size: 14px;
 }
 
-.tfr-body-font tfr-16-default {
+ tfr-16-default {
     font-size: 16px;
 }

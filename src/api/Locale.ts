@@ -43,6 +43,8 @@ var L = {
     Loading: "Loading...",
     SomethingIsWrongWithThisUser: "Something is wrong with this user. Try to re-authenticate again!",
     FailedToLoadLocale: "Something went wrong when fetching another language.",
+    UsernameOrPasswordIncorrect: "Username or password is incorrect.",
+    UsernameOrPasswordEmpty: "Username or password is empty.",
 };
 
 function findMissingLocales(defaultLocale: any, newLocale: any): { default: any; new: any; } {

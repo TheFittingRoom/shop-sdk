@@ -2,22 +2,22 @@ import { TfrLogo } from "../../Modals/svgUrl";
 import { ModalContent } from "../../types";
 import { L } from "../../api/Locale";
 
-interface ModalManager{
+interface ModalManager {
 	Open(content: ModalContent): void;
 	Close(): void;
 	Content(): ModalContent;
 }
 
 const InitModalManager = (elementID: string): ModalManager => {
-	const element = document.getElementById(elementID);
-	if (!element) {
+	const modal = document.getElementById(elementID);
+	if (!modal) {
 		throw new Error(`element with id ${elementID} not found`);
 	}
 	let previousContent: ModalContent;
 
 	const renderBody = (modalBody: string) => {
 		return `
-        <div class="tfr-modal" id="modalContainer">
+        <div class="tfr-modal" id="tfr-modal-background">
             <div class="tfr-modal-content-container tfr-p-20">
                 <div class="tfr-close-container">
                     <span id="tfr-close" class="tfr-close tfr-cursor">&times;</span>
@@ -37,43 +37,60 @@ const InitModalManager = (elementID: string): ModalManager => {
             </div>
         </div>
     `;
-	}
+	};
 
 	const Open = (content: ModalContent) => {
 		if (previousContent) {
 			previousContent.Unhook();
 		}
-		element.innerHTML = renderBody(content.Body());
-		hook()
+		modal.innerHTML = renderBody(content.Body());
+		hook();
 		content.Hook();
-		element.style.display = "block";
-		previousContent = content
-	}
+		modal.style.display = "block";
+		previousContent = content;
+	};
 
 	const Close = () => {
 		unhook();
 		previousContent.Unhook();
-		element.style.display = "none";
+		modal.style.display = "none";
+	};
+
+	const EscClose = (e: KeyboardEvent) => {
+		if (e.key === "Escape") {
+			Close();
+		}
+	};
+
+	const ContainerClose = (e: MouseEvent) => {
+		const background = modal.querySelector("#tfr-modal-background");
+		if (e.target === background) {
+			Close();
+		}
 	};
 
 	const hook = () => {
-		element.querySelector("#tfr-close").addEventListener("click", Close);
+		modal.querySelector("#tfr-close").addEventListener("click", Close);
+		document.addEventListener("keydown", EscClose);
+		document.addEventListener("click", ContainerClose);
 	};
 
 	const unhook = () => {
-		element.querySelector(".tfr-close-container").removeEventListener("click", Close);
+		modal.querySelector(".tfr-close-container").removeEventListener("click", Close);
+		document.removeEventListener("keydown", EscClose);
+		document.removeEventListener("click", ContainerClose);
 	};
 
 	const Content = () => {
 		return previousContent;
-	}
+	};
 
 	return {
 		Open,
 		Close,
 		Content
-	}
-}
+	};
+};
 
 
-	export {InitModalManager, ModalManager};
+export { InitModalManager, ModalManager };

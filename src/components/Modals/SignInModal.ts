@@ -9,7 +9,8 @@ const SignInModal = (props: SignInModalProps): ModalContent =>  {
     const onSignIn = () => {
         let email = (<HTMLInputElement>document.getElementById("email-input")).value;
         let password = (<HTMLInputElement>document.getElementById("password-input")).value;
-        props.onSignIn(email, password);
+        resetValidation();
+        props.onSignIn(email, password, validationError);
     };
 
     const onNavForgotPassword = () => {
@@ -33,6 +34,38 @@ const SignInModal = (props: SignInModalProps): ModalContent =>  {
         document.getElementById("tfr-scan-code").removeEventListener("click", onNavScanCode);
     };
 
+    const resetValidation = () => {
+        const fieldsetElement = document.querySelectorAll('.tfr-fieldset-element');
+        fieldsetElement.forEach(element => {
+            element.classList.remove('tfr-fieldset-err');
+        });
+
+        const labelElement = document.querySelectorAll('.tfr-label-element');
+        labelElement.forEach(element => {
+            element.classList.remove('tfr-c-red');
+        });
+
+        const formError = document.querySelector('#tfr-form-error');
+        formError.classList.remove('tfr-d-block');
+        formError.innerHTML = '';
+    }
+
+    const validationError = (message: string) => {
+        const fieldsetElement = document.querySelectorAll('.tfr-fieldset-element');
+        fieldsetElement.forEach(element => {
+            element.classList.add('tfr-fieldset-err');
+        });
+
+        const labelElement = document.querySelectorAll('.tfr-label-element');
+        labelElement.forEach(element => {
+            element.classList.add('tfr-c-red');
+        });
+
+        const formError = document.querySelector('#tfr-form-error');
+        formError.innerHTML = message;
+        formError.classList.add('tfr-d-block');
+    }
+
     const body = () => {
         return `
             <fieldset class="tfr-fieldset-element tfr-fieldset tfr-mt-20">
@@ -45,7 +78,7 @@ const SignInModal = (props: SignInModalProps): ModalContent =>  {
                 <input tfr-element="true" type="password" id="password-input" />
             </fieldset>
 
-            <div tfr-element="true" class="tfr-body-font tfr-12-default tfr-c-red tfr-mt-10 tfr-d-none" id="error-msg"></div>
+            <div tfr-element="true" class="tfr-body-font tfr-12-default tfr-c-red tfr-mt-10 tfr-d-none" id="tfr-form-error"></div>
 
             <div class="tfr-mt-30">
                 <span id="tfr-forgot-password" tfr-element="true" class="tfr-body-font tfr-12-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mr-15">${L.ForgotPasswordWithSymbol}</span>

@@ -25,7 +25,7 @@ const ErrorModal = (props: ErrorModalProps) => {
     const Body = () => {
         return `
         <div class="tfr-mt-15-p tfr-mb-13-p">
-            <div tfr-element="true" class="tfr-regular-20-default tfr-c-dark">${error}</div>
+            <div tfr-element="true" class="tfr-title-font tfr-light-22-300 tfr-c-dark">${error}</div>
         </div>
 
         <div class="tfr-t-a-center">

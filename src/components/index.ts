@@ -7,6 +7,7 @@ import NoAvatarModal from './Modals/NoAvatarModal';
 import LoggedOutModal from './Modals/LoggedOutModal';
 import {InitModalManager, ModalManager}  from './Modals/ModalManager';
 import SizeErrorModal from './Modals/SizeErrorModal';
+import ResetLinkModal from './Modals/ResetLinkModal';
 import "../styles";
 
 export {
@@ -19,5 +20,6 @@ export {
     ModalManager,
     NoAvatarModal,
     LoggedOutModal,
-    SizeErrorModal
+    SizeErrorModal,
+    ResetLinkModal
 };

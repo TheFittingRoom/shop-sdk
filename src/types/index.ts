@@ -59,7 +59,7 @@ export interface SignInParams {
 }
 export interface SignInModalProps extends ModalProps {
     email: string,
-    onSignIn: (email: string, password: string) => void;
+    onSignIn: (email: string, password: string, validationError: (message: string) => void ) => void;
     onNavForgotPassword: (email?: string) => void;
     onNavScanCode: () => void;
 }

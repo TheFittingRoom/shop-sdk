@@ -1,23 +1,23 @@
 // import { InitFirebase, ModalManager, Shop, SignInModal, ForgotPasswordModal, ScanCodeModal, NoAvatarModal, LoadingAvatarModal, LoggedOutModal, ErrorModal, types, L } from "@thefittingroom/ui";
-import { InitFirebase, FirebaseUser, NotLoggedIn, FirebaseInstance } from "./auth/Firebase";
+import { InitFirebase } from "./auth/Firebase";
 import { ModalManager, SignInModal, ForgotPasswordModal, ScanCodeModal, NoAvatarModal, LoadingAvatarModal, LoggedOutModal, ErrorModal, SizeErrorModal, InitModalManager } from "./components";
-import { InitShop, Shop } from "./api/Shop";
+import { InitShop } from "./api/Shop";
 import { L, InitLocale } from "./api/Locale";
 import * as types from "./types";
 import ResetLinkModal from "./components/Modals/ResetLinkModal";
 import { UIError } from "./api/UIError";
 
 interface FittingRoom {
-	user: FirebaseUser | undefined;
-	shop: Shop | undefined;
-	firebase: FirebaseInstance;
+	user: types.FirebaseUser | undefined;
+	shop: types.Shop | undefined;
+	firebase: types.FirebaseInstance;
 	manager: ModalManager;
 	onLogout(colorwaySKU: string): () => void;
 	onClose(): void;
 	onNavBack(): void;
 	onTryOn(colorwaySKU: string): void;
-	afterSignIn(user: FirebaseUser, colorwaySKU: string): void;
-	onSignIn(colorwaySKU: string): (username: string, password: string) => void;
+	afterSignIn(user: types.FirebaseUser, colorwaySKU: string): void;
+	onSignIn(colorwaySKU: string): (username: string, password: string, validation: (message: string) => void) => void;
 	onNavSignIn(colorwaySKU: string): (email: string) => void;
 	onPasswordReset(colorwaySKU: string): (email: string) => void;
 	onNavForgotPassword(colorwaySKU: string): (email: string) => void;
@@ -146,17 +146,16 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 		},
 
 		onSignIn(colorwaySKU) {
-			return (username, password) => {
+			return (username, password, validationError: (message: string) => void) => {
+				if(username.length == 0 || password.length == 0) {
+					validationError(L.UsernameOrPasswordEmpty);
+					return;
+				}
 				this.firebase.Login(username, password, this.onLogout(colorwaySKU)).then((u) => {
 					this.user = u;
 					this.afterSignIn(this.user, colorwaySKU);
 				}).catch((UIError) => {
-					console.log(UIError);
-					this.manager.Open(ErrorModal({
-						error: UIError.message,
-						onClose: this.onClose,
-						onNavBack: this.onNavBack
-					}));
+					validationError(UIError.message);
 				});
 			};
 		},
@@ -211,7 +210,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 					this.shop = InitShop(this.user, shopID);
 					this.afterSignIn(this.user, colorwaySKU);
 				}).catch((error) => {
-					if (error == NotLoggedIn) {
+					if (error == types.NotLoggedIn) {
 						console.info("user not logged in");
 						this.manager.Open(SignInModal({
 							email: "",
@@ -229,7 +228,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 					}
 				});
 			} catch (e) {
-				if (e.message == NotLoggedIn) {
+				if (e.message == types.NotLoggedIn) {
 					this.manager.Open(SignInModal({
 						email: "",
 						onSignIn: this.onSignIn(colorwaySKU),

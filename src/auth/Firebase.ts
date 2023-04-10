@@ -153,17 +153,14 @@ const InitFirebase = (): types.FirebaseInstance => {
 	const Login = (username, password: string, onLogout: () => void): Promise<types.FirebaseUser> => {
 		return new Promise((resolve, reject) => {
 			let auth = firebaseAuth.getAuth(App);
-			if (auth.currentUser) {
-				resolve(InitFirebaseUser(instance, auth.currentUser, onLogout));
-				return;
-			} else {
+			auth.signOut().finally(() => {
 				firebaseAuth.signInWithEmailAndPassword(Auth, username, password)
 					.then((userCredential) => {
 						resolve(InitFirebaseUser(instance, userCredential.user, onLogout));
 					}).catch((error) => {
 						reject(GetFirebaseUIError(error));
 					});
-			}
+			});
 		});
 	};
 

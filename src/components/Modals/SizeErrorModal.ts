@@ -24,7 +24,7 @@ const SizeErrorModal = (props: SizeErrorModalProps): ModalContent => {
 		console.log("body", L);
 		return `
         <div class="tfr-mt-15-p tfr-mb-13-p">
-            <div tfr-element="true" class="tfr-regular-20-default tfr-c-dark">
+            <div tfr-element="true" class="tfr-title-font tfr-light-22-300 tfr-c-dark">
 							${L.NoSizeAvailable} ${L.TrySize} ${props.sizes?.recommended} ${L.OrSize} ${props.sizes?.avaliable?.join(" or ")}
 						</div>
         </div>
