@@ -5,7 +5,7 @@ import { TryOnFrames, FirebaseStyles } from "../types";
 import { Fetcher } from "./Fetcher";
 import { SizeRecommendation } from "../api/responses";
 import { collection, query, where, getDocs, documentId, onSnapshot } from "firebase/firestore";
-import {GetFirebaseUIError } from "../auth/Firebase";
+import { GetFirebaseUIError } from "../auth/Firebase";
 import { L } from "./Locale";
 import { createUIError } from "./UIError";
 import * as types from "../types";
@@ -23,7 +23,6 @@ function TestImage(url: string): Promise<void> {
 
 
 
-const NoFramesFound = new Error('No frames found for this colorway');
 
 const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 	let firebaseUser = u;
@@ -68,7 +67,7 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 					unsubscribe();
 					resolve(frames);
 				}).catch((error) => {
-					if (error === NoFramesFound) {
+					if (error === types.NoFramesFound) {
 						// we caught an event that was not a vto event
 						return;
 					} else {
@@ -85,7 +84,7 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 			for (const size of style.sizes.values()) {
 				for (const colorway_size_asset of size.colorways_size_assets) {
 					if (colorway_size_asset.sku === colorwaySKU) {
-						console.log(size)
+						console.log(size);
 						return colorway_size_asset.id;
 					}
 				}
@@ -143,7 +142,7 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 				if (frames.length > 0 && TestImage(frames[0])) {
 					resolve(frames as TryOnFrames);
 				} else {
-					reject(NoFramesFound);
+					reject(types.NoFramesFound);
 				}
 			}).catch((error: UIError) => {
 				reject(error);
@@ -153,7 +152,7 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 
 
 	const RequestColorwayFrames = async (colorwaySizeAssetID: number): Promise<void> => {
-		console.info("requesting colorway frames", colorwaySizeAssetID)
+		console.info("requesting colorway frames", colorwaySizeAssetID);
 		return new Promise((resolve, reject) => {
 			Fetcher.Post(User(), `/colorway-size-assets/${colorwaySizeAssetID}/frames`, null).then(() => {
 				resolve();
@@ -183,35 +182,27 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 
 	const TryOn = async (ColorwaySKU: string): Promise<TryOnFrames> => {
 		return new Promise((resolve, reject) => {
-			GetColorwayFrames(ColorwaySKU).then((frames) => {
-				resolve(frames)
-			}).catch((error) => {
-				if (error == NoFramesFound) {
-					GetStyles().then((styles) => {
-						const colorwaySizeAssetID = LookupColorwayIDBySKU(ColorwaySKU, styles);
-						if (colorwaySizeAssetID) {
-							console.info("requesting new colorway frames");
-							RequestColorwayFrames(colorwaySizeAssetID).then(() => {
-								// listen for changes in firebase
-								console.info("waiting for rendered colorway frames");
-								AwaitColorwayFrames(ColorwaySKU).then((frames) => {
-									resolve(frames);
-								}).catch((error: UIError | Error) => {
-									reject(error);
-								});
-							}).catch((error: UIError) => {
-								console.error("error requesting colorway frames", error);
-								reject(error);
-							});
-						} else {
-							reject(createUIError(L.SomethingWentWrong, new Error("No colorway found")));
-						}
+			GetStyles().then((styles) => {
+				const colorwaySizeAssetID = LookupColorwayIDBySKU(ColorwaySKU, styles);
+				if (colorwaySizeAssetID) {
+					console.info("requesting new colorway frames");
+					RequestColorwayFrames(colorwaySizeAssetID).then(() => {
+						// listen for changes in firebase
+						console.info("waiting for rendered colorway frames");
+						AwaitColorwayFrames(ColorwaySKU).then((frames) => {
+							resolve(frames);
+						}).catch((error: UIError | Error) => {
+							reject(error);
+						});
 					}).catch((error: UIError) => {
+						console.error("error requesting colorway frames", error);
 						reject(error);
 					});
 				} else {
-					reject(createUIError(L.SomethingWentWrong, new Error(error)));
+					reject(createUIError(L.SomethingWentWrong, new Error("No colorway found")));
 				}
+			}).catch((error: UIError) => {
+				reject(error);
 			});
 		});
 	};

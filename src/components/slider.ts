@@ -7,8 +7,11 @@ const InitImageSlider = (sliderID: string, onChange: (slider: HTMLInputElement, 
 
 	return {
 		Load(imageURLs: string[]) {
+			if (!imageURLs || !imageURLs.length) {
+				throw new Error("No images to load")
+			}
 			imageURLs.forEach(function (path) { new Image().src = path; });
-			const defaultScrollValue = Math.ceil(imageURLs?.length / 2) + 1;
+			const defaultScrollValue = imageURLs?.length-2;
 			slider.value = defaultScrollValue.toString();
 			slider.max = (imageURLs.length - 1).toString();
 			const handleSliderChange = () => {

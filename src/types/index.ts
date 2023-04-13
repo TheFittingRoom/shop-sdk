@@ -1,11 +1,13 @@
 import * as firebase from "firebase/app";
 import * as firebaseAuth from "firebase/auth";
-import {DocumentData } from "firebase/firestore";
+import { DocumentData } from "firebase/firestore";
 import { Firestore } from "firebase/firestore";
 import * as responses from "../api/responses";
 import * as errors from "../api/errors";
 
 export const NotLoggedIn = new Error('user not logged in');
+export const NoFramesFound = new Error('No frames found for this colorway');
+
 
 export interface Firebase {
     App: firebase.FirebaseApp;
@@ -59,7 +61,7 @@ export interface SignInParams {
 }
 export interface SignInModalProps extends ModalProps {
     email: string,
-    onSignIn: (email: string, password: string, validationError: (message: string) => void ) => void;
+    onSignIn: (email: string, password: string, validationError: (message: string) => void) => void;
     onNavForgotPassword: (email?: string) => void;
     onNavScanCode: () => void;
 }

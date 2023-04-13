@@ -63,16 +63,17 @@
         }
 
         checkLogin()
-        const TryOnFramesCallback = (frames) => {
+        const TryOnFramesCallback = (framesOrError) => {
             checkLogin()
-            if (frames instanceof Error){
+            console.log("tryOnFramesCallback", framesOrError)
+            if (framesOrError.message){
               Hide(tryOnContainer)
               Hide(tfrLoader)
               Show(tfrOriginal)
               // hide everything on page
               return
             }
-            let close = slider.Load(frames)
+            let close = slider.Load(framesOrError)
             Hide(tfrOriginal)
             Hide(tfrLoader)
             Show(tryOnContainer)
@@ -80,7 +81,6 @@
         tfrTryOn.addEventListener('click', (e) => {
             let sku = getSku();
             tfr.TryOn(sku, TryOnFramesCallback)
-            Hide(tfrOriginal)
             Show(tfrLoader)
         })
 

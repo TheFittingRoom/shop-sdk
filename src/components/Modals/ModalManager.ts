@@ -51,8 +51,10 @@ const InitModalManager = (elementID: string): ModalManager => {
 	};
 
 	const Close = () => {
-		unhook();
-		previousContent.Unhook();
+		if (previousContent) {
+			unhook();
+			previousContent.Unhook();
+		}
 		modal.style.display = "none";
 	};
 
@@ -76,7 +78,7 @@ const InitModalManager = (elementID: string): ModalManager => {
 	};
 
 	const unhook = () => {
-		modal.querySelector(".tfr-close-container").removeEventListener("click", Close);
+		modal.querySelector("#tfr-close-container").removeEventListener("click", Close);
 		document.removeEventListener("keydown", EscClose);
 		document.removeEventListener("click", ContainerClose);
 	};
