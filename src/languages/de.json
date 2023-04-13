@@ -39,5 +39,7 @@
     "ReturnToCatalogPage": "Return to Catalog Page (de)",
     "ReturnToProductPage": "Return to Product Page (de)",
     "Loading": "Loading... (de)",
-    "SomethingIsWrongWithThisUser": "Something is wrong with this user. Try to re-authenticate again! (de)"
+    "SomethingIsWrongWithThisUser": "Something is wrong with this user. Try to re-authenticate again! (de)",
+    "UsernameOrPasswordIncorrect": "Username or password is incorrect.",
+    "UsernameOrPasswordEmpty": "Username or password is empty."
 }

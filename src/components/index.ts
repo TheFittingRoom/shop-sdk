@@ -8,6 +8,7 @@ import LoggedOutModal from './Modals/LoggedOutModal';
 import {InitModalManager, ModalManager}  from './Modals/ModalManager';
 import SizeErrorModal from './Modals/SizeErrorModal';
 import ResetLinkModal from './Modals/ResetLinkModal';
+import InitImageSlider from './slider';
 import "../styles";
 
 export {
@@ -21,5 +22,6 @@ export {
     NoAvatarModal,
     LoggedOutModal,
     SizeErrorModal,
-    ResetLinkModal
+    ResetLinkModal,
+    InitImageSlider,
 };

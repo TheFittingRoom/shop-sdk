@@ -20,7 +20,7 @@ const InitModalManager = (elementID: string): ModalManager => {
         <div class="tfr-modal" id="tfr-modal-background">
             <div class="tfr-modal-content-container tfr-p-20">
                 <div class="tfr-close-container">
-                    <span id="tfr-close" class="tfr-close tfr-cursor">&times;</span>
+                    <span id="tfr-close-container" class="tfr-close tfr-cursor">&times;</span>
                 </div>
 
                 <div class="tfr-modal-content tfr-pt-20 tfr-pb-50">
@@ -70,7 +70,7 @@ const InitModalManager = (elementID: string): ModalManager => {
 	};
 
 	const hook = () => {
-		modal.querySelector("#tfr-close").addEventListener("click", Close);
+		modal.querySelector("#tfr-close-container").addEventListener("click", Close);
 		document.addEventListener("keydown", EscClose);
 		document.addEventListener("click", ContainerClose);
 	};

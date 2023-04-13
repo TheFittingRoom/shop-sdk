@@ -6,15 +6,18 @@
 
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Roboto&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Roboto&display=swap"
+        rel="stylesheet" />
 
     <script type="module">
-        import { InitFittingRoom, comps, InitLocale } from 'http://localhost:3000/dist/esm/main.js?language=en';
-        InitLocale();
+        import { InitFittingRoom, comps, InitLocale, InitImageSlider } from 'http://localhost:3000/dist/esm/main.js?language=en';
+
+
+        /*         InitLocale();
         window.mm = comps.InitModalManager("thefittingroom-modal");
         window.comps = comps;
-        window.onLogout = (colorwaySKU) =>{
-            console.log("logout", colorwaySKU)
+        window.onSignout = (colorwaySKU) =>{
+            console.log("signout", colorwaySKU)
         }
         window.onClose = () => {
             console.log("close")
@@ -46,33 +49,51 @@
         window.onNavScanCode = () => {
             console.log("nav scan code")
         };
-
-
-/*         let tfr = InitFittingRoom(1, "thefittingroom-modal")
-        let callback = (frames) => {
-            console.log("frames", frames)
-        }
-        tfr.TryOn("5003-007-10", callback) */
+        */
+        window.addEventListener('load', (e) => {
+            let tryOnImage = document.getElementById("tfr-tryon-image")
+            let onChange = (slider, imageUrl) => {
+                console.log("slider change", slider, imageUrl)
+                tryOnImage.src = imageUrl
+            }
+            let slider = InitImageSlider("tfr-slider", onChange)
+            let tfr = InitFittingRoom(1, "thefittingroom-modal")
+            let callback = (frames) => {
+                let close = slider.Load(frames)
+            }
+            tfr.TryOn("5003-007-10", callback)
+        })
     </script>
 </head>
 
 <body>
-    <div class="tfr-home-button-container">
-        <button onclick="window.mm.Open(window.comps.ErrorModal({error: 'custom error message', onNavBack: window.onNavBack, onClose: window.onClose}))">Error Modal</button>
+<!--     <div class="tfr-home-button-container">
+        <button
+            onclick="window.mm.Open(window.comps.ErrorModal({error: 'custom error message', onNavBack: window.onNavBack, onClose: window.onClose}))">Error
+            Modal</button>
         <br>
-        <button onclick="window.mm.Open(window.comps.SignInModal({email:'email@mail.com', onSignIn: window.onSignIn('abc'), onNavForgotPassword: window.onNavForgotPassword, onNavScanCode: window.onNavScanCode}))">Sign In Modal</button>
+        <button
+            onclick="window.mm.Open(window.comps.SignInModal({email:'email@mail.com', onSignIn: window.onSignIn('abc'), onNavForgotPassword: window.onNavForgotPassword('123'), onNavScanCode: window.onNavScanCode}))">Sign
+            In Modal</button>
         <br>
-        <button onclick="window.mm.Open(window.comps.ForgotPasswordModal({email: 'email@mail.com', onNavSignIn: window.onNavSignIn, onPasswordReset: window.onPasswordReset}))">Forgot Password Modal</button>
+        <button
+            onclick="window.mm.Open(window.comps.ForgotPasswordModal({email: 'email@mail.com', onNavSignIn: window.onNavSignIn('123'), onPasswordReset: window.onPasswordReset('123')}))">Forgot
+            Password Modal</button>
         <br>
         <button onclick="window.mm.Open(window.comps.NoAvatarModal({}))">No Avatar Modal</button>
         <br>
         <button onclick="window.mm.Open(window.comps.LoadingAvatarModal({}))">Loading Avatar Modal</button>
         <br>
-        <button onclick="window.mm.Open(window.comps.SizeErrorModal({onNavBack: window.onNavBack, onClose: window.onClose, sizes: {recommended: 'large', avaliable: ['small', 'medium', 'large']}}))">Size Error Modal</button>
+        <button
+            onclick="window.mm.Open(window.comps.SizeErrorModal({onNavBack: window.onNavBack, onClose: window.onClose, sizes: {recommended: 'large', avaliable: ['small', 'medium', 'large']}}))">Size
+            Error Modal</button>
         <br>
-        <button onclick="window.mm.Open(window.comps.ResetLinkModal({onNavSignIn: window.onNavSignIn}))">Reset Link Modal</button>
-    </div>
-    <div id="thefittingroom-modal" />
+        <button onclick="window.mm.Open(window.comps.ResetLinkModal({onNavSignIn: window.onNavSignIn('abc')}))">Reset
+            Link Modal</button>
+    </div> -->
+    <div id="thefittingroom-modal"> </div>
+    <input type="range" id="tfr-slider" />
+    <img id="tfr-tryon-image" src="" />
 </body>
 
 </html>

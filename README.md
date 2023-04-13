@@ -88,7 +88,7 @@ window.thefittingroom.virtualTryOnFrames({sku: '...'}) -> here you should pass t
 # tryOnWithTheFittingRoom
 
 window.thefittingroom.tryOnWithTheFittingRoom({sku: '...'}) -> this is the starter function, so this function should be called when user press "Try on with The Fitting Room" button, so first it will check if user is not logged in it will open the sign in modal, if user it's already logged in it will post frames
-
+  
 # CSS classes
 
 All our css class start with tfr-...

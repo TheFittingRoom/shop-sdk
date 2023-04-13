@@ -25,7 +25,7 @@ function GetFirebaseUIError(e: FirebaseError): UIError {
 }
 
 
-const InitFirebaseUser = (firebase: types.Firebase, user: firebaseAuth.User, onLogout: () => void): types.FirebaseUser => {
+const InitFirebaseUser = (firebase: types.Firebase, user: firebaseAuth.User, onSignout: () => void): types.FirebaseUser => {
 	let FirebaseInstance = firebase;
 	let User = user;
 
@@ -72,7 +72,7 @@ const InitFirebaseUser = (firebase: types.Firebase, user: firebaseAuth.User, onL
 			firebaseAuth.signOut(firebase.Auth)
 				.then(async () => {
 					User = null;
-					onLogout();
+					onSignout();
 					resolve();
 				})
 				.catch((error) => {
@@ -136,12 +136,12 @@ const InitFirebase = (): types.FirebaseInstance => {
 		});
 	};
 
-	const User = (onLogout: () => void): Promise<types.FirebaseUser> => {
+	const User = (onSignout: () => void): Promise<types.FirebaseUser> => {
 		return new Promise((resolve, reject) => {
 			let unsubscribe = firebaseAuth.onAuthStateChanged(Auth, async (user) => {
 				if (user) {
 					unsubscribe();
-					resolve(InitFirebaseUser(instance, user, onLogout));
+					resolve(InitFirebaseUser(instance, user, onSignout));
 				} else {
 					unsubscribe();
 					reject(types.NotLoggedIn);
@@ -150,13 +150,13 @@ const InitFirebase = (): types.FirebaseInstance => {
 		});
 	};
 
-	const Login = (username, password: string, onLogout: () => void): Promise<types.FirebaseUser> => {
+	const Login = (username, password: string, onSignout: () => void): Promise<types.FirebaseUser> => {
 		return new Promise((resolve, reject) => {
 			let auth = firebaseAuth.getAuth(App);
 			auth.signOut().finally(() => {
 				firebaseAuth.signInWithEmailAndPassword(Auth, username, password)
 					.then((userCredential) => {
-						resolve(InitFirebaseUser(instance, userCredential.user, onLogout));
+						resolve(InitFirebaseUser(instance, userCredential.user, onSignout));
 					}).catch((error) => {
 						reject(GetFirebaseUIError(error));
 					});

@@ -17,8 +17,8 @@ export interface FirebaseInstance {
     Firebase: Firebase,
     SendPasswordResetEmail(email: string): Promise<void>;
     ConfirmPasswordReset(code: string, newPassword: string): Promise<void>;
-    Login(email: string, password: string, onLogout: () => void): Promise<FirebaseUser>;
-    User(onLogout: () => void): Promise<FirebaseUser>;
+    Login(email: string, password: string, onSignout: () => void): Promise<FirebaseUser>;
+    User(onSignout: () => void): Promise<FirebaseUser>;
 }
 
 export interface FirebaseUser {
