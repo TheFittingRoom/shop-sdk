@@ -1,8 +1,8 @@
-import { FirebaseUser } from "../auth/Firebase";
 import { ErrorResponse } from "./errors";
+import * as types from "../types";
 
 const Fetcher = {
-    Fetch: async (user: FirebaseUser, endpointPath: string, method: string, body: object | null): Promise<Response> => {
+    Fetch: async (user: types.FirebaseUser, endpointPath: string, method: string, body: object | null): Promise<Response> => {
         return new Promise(async (resolve, reject) => {
             user.Token().then((token) => {
                 let config: RequestInit = {
@@ -43,23 +43,23 @@ const Fetcher = {
         });
     },
 
-    Get: async (user: FirebaseUser, endpointPath: string, body: any): Promise<object> => {
+    Get: async (user: types.FirebaseUser, endpointPath: string, body: any): Promise<object> => {
         return Fetcher.Fetch(user, endpointPath, "GET", body);
     },
 
-    Post: async (user: FirebaseUser, endpointPath: string, body: object): Promise<object> => {
+    Post: async (user: types.FirebaseUser, endpointPath: string, body: object): Promise<object> => {
         return Fetcher.Fetch(user, endpointPath, "POST", body);
     },
 
-    Put: async (user: FirebaseUser, endpointPath: string, body: object): Promise<object> => {
+    Put: async (user: types.FirebaseUser, endpointPath: string, body: object): Promise<object> => {
         return Fetcher.Fetch(user, endpointPath, "PUT", body);
     },
 
-    Patch: async (user: FirebaseUser, endpointPath: string, body: object): Promise<object> => {
+    Patch: async (user: types.FirebaseUser, endpointPath: string, body: object): Promise<object> => {
         return Fetcher.Fetch(user, endpointPath, "PATCH", body);
     },
 
-    Delete: async (user: FirebaseUser, endpointPath: string, body: object): Promise<object> => {
+    Delete: async (user: types.FirebaseUser, endpointPath: string, body: object): Promise<object> => {
         return Fetcher.Fetch(user, endpointPath, "DELETE", body);
     }
 };
