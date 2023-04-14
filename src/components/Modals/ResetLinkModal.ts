@@ -1,37 +1,33 @@
-import { Locale } from "../../classes/Locale";
-import { TfrLogo } from "../../lib/svgUrl";
-import { ResetLinkModalProps } from "../../types";
+import { L } from "../../api/Locale";
+import { ModalContent, ResetLinkModalProps } from "../../types";
 
-const ResetLinkModal = ({override}: ResetLinkModalProps) => {
-    const { Strings } = override || Locale.getLocale();
-    const { title, backToSignIn, associatedEmail } = Strings;
+const ResetLinkModal = (props: ResetLinkModalProps): ModalContent => {
 
-    return `
-        <div class="tfr-modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
-            <div class="tfr-modal-content-container tfr-pb-7-p tfr-pt-20 tfr-pr-20 tfr-pl-20">
-                <div class="tfr-close-container" onclick="window.theFittingRoom.closeModal()">
-                    <span class="tfr-close tfr-cursor">&times;</span>
-                </div>
+    let onNavSignIn = () => {
+        props.onNavSignIn("");
+    };
 
-                <div class="tfr-modal-content">
-                    <div class="tfr-modal-title-logo-container">
-                        <div tfr-element="true" class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
-                        <div>
-                            <object data="tfr-logo.svg" type="image/svg+xml">
-                                <img src="${TfrLogo}" />
-                            </object>
-                        </div>
-                    </div>
+    const Hook = () => {
+        document.getElementById("tfr-back-to-signin").addEventListener("click", onNavSignIn);
+    };
 
-                    <div tfr-element="true" class="tfr-poppins-regular-20-default tfr-c-dark tfr-mt-15-p tfr-mb-13-p tfr-w-80-p tfr-m-h-auto">${associatedEmail}</div>
-                </div>
+    const Unhook = () => {
+        document.getElementById("tfr-back-to-signin").removeEventListener("click", onNavSignIn);
+    };
 
-                <div class="tfr-t-a-center">
-                    <span tfr-element="true" class="tfr-roboto-16-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mr-20" onclick="window.theFittingRoom.renderSignInModal()">${backToSignIn}</span>
-                </div>
-            </div>
-        </div>
+    const Body = () => {
+        return `
+    <div tfr-element="true" class="tfr-title-font tfr-light-22-300 tfr-c-dark tfr-mt-15-p tfr-mb-13-p tfr-w-80-p tfr-m-h-auto">${L.AssociatedEmail}</div>
+    <div class="tfr-t-a-center">
+        <span id="tfr-back-to-signin" tfr-element="true" class="tfr-body-font tfr-16-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mr-20">${L.BackToSignIn}</span>
+    </div>
     `;
-}
+    };
 
+    return {
+        Hook,
+        Unhook,
+        Body,
+    };
+};
 export default ResetLinkModal;

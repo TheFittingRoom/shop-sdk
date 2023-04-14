@@ -1,34 +1,27 @@
-import { Locale } from "../../classes/Locale";
-import { TfrLogo } from "../../lib/svgUrl";
+import { L } from "../../api/Locale";
+import { ModalContent } from "../../types";
 import { LoadingAvatarModalProps } from "../../types";
 
-const LoadingAvatarModal = ({ override }: LoadingAvatarModalProps) => {
+const LoadingAvatarModal = (props:LoadingAvatarModalProps): ModalContent => {
+    const Hook = () => {
 
-    const { Strings } = override || Locale.getLocale();
-    const { title, loadingAvatar } = Strings;
+    }
 
-    return `
-        <div class="tfr-modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
-            <div class="tfr-modal-content-container tfr-p-20">
-                <div class="tfr-close-container" onclick="window.theFittingRoom.closeModal()">
-                    <span class="tfr-close tfr-cursor">&times;</span>
-                </div>
+    const Unhook = () => {
 
-                <div class="tfr-modal-content tfr-pt-20 tfr-pb-50">
-                    <div class="tfr-modal-title-logo-container">
-                        <div tfr-element="true" class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
-                        <div>
-                            <object data="tfr-logo.svg" type="image/svg+xml">
-                                <img src="${TfrLogo}" />
-                            </object>
-                        </div>
-                    </div>
+    }
 
-                    <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-c-dark tfr-mt-60">${loadingAvatar}</div>
-                </div>
-            </div>
-        </div>
-    `;
+    const Body = () => {
+        return `
+        <div tfr-element="true" class="tfr-title-font tfr-light-22-300 tfr-c-dark tfr-mt-60" > ${L.LoadingAvatar} </div>
+        `;
+    }
+
+    return {
+        Hook,
+        Unhook,
+        Body
+    }
 }
 
 export default LoadingAvatarModal;

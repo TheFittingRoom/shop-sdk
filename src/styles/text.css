@@ -1,46 +1,38 @@
-.tfr-poppins-regular-20-default {
+.tfr-title-font{
     font-family: 'Poppins', sans-serif;
-    font-size: 20px;
 }
 
-.tfr-poppins-light-22-300 {
-    font-family: 'Poppins', sans-serif;
-    /* font-family: "Poppins-Light"; */
-    font-size: 22px;
-    font-weight: 300;
+.tfr-body-font {
+    font-family: 'Roboto', sans-serif;
 }
 
-.tfr-poppins-light-24-300 {
-    font-family: 'Poppins', sans-serif;
-    /* font-family: "Poppins-Light"; */
+.tfr-light-24-300 {
     font-size: 24px;
     font-weight: 300;
 }
 
-.tfr-poppins-light-16-300 {
-    font-family: 'Poppins', sans-serif;
-    /* font-family: "Poppins-Light"; */
+.tfr-light-22-300 {
+    font-size: 22px;
+    font-weight: 300;
+}
+
+.tfr-light-16-300 {
     font-size: 16px;
     font-weight: 300;
 }
 
-.tfr-poppins-medium-16-default {
-    font-family: 'Poppins', sans-serif;
-    /* font-family: "Poppins-Medium"; */
+.tfr-medium-16-default {
     font-size: 16px;
 }
 
-.tfr-roboto-12-default {
-    font-family: 'Roboto', sans-serif;
+tfr-12-default {
     font-size: 12px;
 }
 
-.tfr-roboto-14-default {
-    font-family: 'Roboto', sans-serif;
+tfr-14-default {
     font-size: 14px;
 }
 
-.tfr-roboto-16-default {
-    font-family: 'Roboto', sans-serif;
+ tfr-16-default {
     font-size: 16px;
 }

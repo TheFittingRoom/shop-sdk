@@ -1,17 +1,19 @@
 .tfr-home-button-container {
-    display:flex;
+    display: flex;
     flex-wrap: wrap;
     margin: 20px;
 }
+
 .tfr-home-button-container>button {
-    height:60px;
-    width:200px;
+    height: 60px;
+    width: 200px;
     margin: 20px;
-    border:0;
-    cursor:pointer;
+    border: 0;
+    cursor: pointer;
 }
+
 .tfr-home-button-container>button:hover {
-    background-color: rgb(230,230,230);
+    background-color: rgb(230, 230, 230);
 }
 
 *[data-tfr=hidden] {

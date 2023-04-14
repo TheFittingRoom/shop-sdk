@@ -1,34 +1,20 @@
-import { Locale } from "../../classes/Locale";
-import { TfrLogo } from "../../lib/svgUrl";
-import { NoAvatarModalProps } from "../../types";
+import { L } from "../../api/Locale";
+import { ModalContent, NoAvatarModalProps } from "../../types";
 
-const NoAvatarModal = ({override}: NoAvatarModalProps) => {
-    const { Strings } = override || Locale.getLocale();
-    const { title, dontHaveAvatar, returnToTfr } = Strings;
+const NoAvatarModal = (props: NoAvatarModalProps): ModalContent => {
+    const Hook = () => {};
+    const Unhook = () => {};
+    const Body = () =>  {
+        return `
+        <div tfr-element="true" class="tfr-title-font tfr-light-22-300 tfr-c-dark tfr-mt-60">${L.DontHaveAvatar}</div>
+        <div tfr-element="true" class="tfr-title-font tfr-light-22-300 tfr-c-dark tfr-mb-60">${L.ReturnToTfr}</div>
+    `};
 
-    return `
-        <div class="tfr-modal" id="modalContainer" onclick="window.theFittingRoom.closeModal(true)">
-            <div class="tfr-modal-content-container tfr-p-20">
-                <div class="tfr-close-container" onclick="window.theFittingRoom.closeModal()">
-                    <span class="tfr-close tfr-cursor">&times;</span>
-                </div>
-
-                <div class="tfr-modal-content tfr-pt-20 tfr-pb-50">
-                    <div class="tfr-modal-title-logo-container">
-                        <div tfr-element="true" class="tfr-poppins-light-24-300 tfr-c-dark tfr-mr-10">${title}</div>
-                        <div>
-                            <object data="tfr-logo.svg" type="image/svg+xml">
-                                <img src="${TfrLogo}" />
-                            </object>
-                        </div>
-                    </div>
-
-                    <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-c-dark tfr-mt-60">${dontHaveAvatar}</div>
-                    <div tfr-element="true" class="tfr-poppins-light-22-300 tfr-c-dark tfr-mb-60">${returnToTfr}</div>
-                </div>
-            </div>
-        </div>
-    `;
+    return {
+        Body,
+        Hook,
+        Unhook
+    }
 }
 
 export default NoAvatarModal;
