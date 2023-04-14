@@ -53,7 +53,7 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 		});
 	};
 
-	const AwaitColorwayFrames = async (colorwaySKU: string): Promise<TryOnFrames> => {
+	const AwaitColorwaySizeAssetFrames = async (colorwaySizeAssetSKU: string): Promise<TryOnFrames> => {
 		return new Promise((resolve, reject) => {
 			window.setTimeout(() => {
 				unsubscribe();
@@ -63,7 +63,7 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 			const unsubscribe = onSnapshot(q, (snapshot) => {
 				console.log("snapshot retrieved", snapshot);
 				//TODO: make this more effecient by using the snapshot response
-				GetColorwayFrames(colorwaySKU).then((frames) => {
+				GetColorwaySizeAssetFrames(colorwaySizeAssetSKU).then((frames) => {
 					unsubscribe();
 					resolve(frames);
 				}).catch((error) => {
@@ -79,11 +79,11 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 		});
 	};
 
-	const LookupColorwayIDBySKU = (colorwaySKU: string, styles: FirebaseStyles): number | undefined => {
+	const LookupColorwaySizeAssetIDBySKU = (colorwaySizeAssetSKU: string, styles: FirebaseStyles): number | undefined => {
 		for (const style of styles.values()) {
 			for (const size of style.sizes.values()) {
 				for (const colorway_size_asset of size.colorways_size_assets) {
-					if (colorway_size_asset.sku === colorwaySKU) {
+					if (colorway_size_asset.sku === colorwaySizeAssetSKU) {
 						console.log(size);
 						return colorway_size_asset.id;
 					}
@@ -135,10 +135,10 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 		});
 	};
 
-	const GetColorwayFrames = async (colorwaySKU: string): Promise<TryOnFrames> => {
+	const GetColorwaySizeAssetFrames = async (colorwaySizeAssetSKU: string): Promise<TryOnFrames> => {
 		return new Promise((resolve, reject) => {
 			User().GetUserProfile().then((profile: UserProfile) => {
-				const frames = profile?.vto?.[brandID]?.[colorwaySKU]?.frames || [];
+				const frames = profile?.vto?.[brandID]?.[colorwaySizeAssetSKU]?.frames || [];
 				if (frames.length > 0 && TestImage(frames[0])) {
 					resolve(frames as TryOnFrames);
 				} else {
@@ -151,7 +151,7 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 	};
 
 
-	const RequestColorwayFrames = async (colorwaySizeAssetID: number): Promise<void> => {
+	const RequestColorwaySizeAssetFrames = async (colorwaySizeAssetID: number): Promise<void> => {
 		console.info("requesting colorway frames", colorwaySizeAssetID);
 		return new Promise((resolve, reject) => {
 			Fetcher.Post(User(), `/colorway-size-assets/${colorwaySizeAssetID}/frames`, null).then(() => {
@@ -180,16 +180,16 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 		});
 	};
 
-	const TryOn = async (ColorwaySKU: string): Promise<TryOnFrames> => {
+	const TryOn = async (ColorwaySizeAssetSKU: string): Promise<TryOnFrames> => {
 		return new Promise((resolve, reject) => {
 			GetStyles().then((styles) => {
-				const colorwaySizeAssetID = LookupColorwayIDBySKU(ColorwaySKU, styles);
+				const colorwaySizeAssetID = LookupColorwaySizeAssetIDBySKU(ColorwaySizeAssetSKU, styles);
 				if (colorwaySizeAssetID) {
 					console.info("requesting new colorway frames");
-					RequestColorwayFrames(colorwaySizeAssetID).then(() => {
+					RequestColorwaySizeAssetFrames(colorwaySizeAssetID).then(() => {
 						// listen for changes in firebase
 						console.info("waiting for rendered colorway frames");
-						AwaitColorwayFrames(ColorwaySKU).then((frames) => {
+						AwaitColorwaySizeAssetFrames(ColorwaySizeAssetSKU).then((frames) => {
 							resolve(frames);
 						}).catch((error: UIError | Error) => {
 							reject(error);
@@ -211,12 +211,12 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 		User,
 		AwaitAvatarCreated,
 		GetStyles,
-		AwaitColorwayFrames,
-		LookupColorwayIDBySKU: LookupColorwayIDBySKU,
-		GetColorwayFrames,
+		AwaitColorwayFrames: AwaitColorwaySizeAssetFrames,
+		LookupColorwayIDBySKU: LookupColorwaySizeAssetIDBySKU,
+		GetColorwayFrames: GetColorwaySizeAssetFrames,
 		TryOn,
 		GetRecommendedSizes,
-		RequestColorwayFrames,
+		RequestColorwayFrames: RequestColorwaySizeAssetFrames,
 	};
 };
 

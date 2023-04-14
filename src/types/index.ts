@@ -34,12 +34,12 @@ export interface FirebaseUser {
 }
 
 export interface Shop {
-    LookupColorwayIDBySKU: (colorwaySKU: string, styles: FirebaseStyles) => number | undefined;
+    LookupColorwayIDBySKU: (colorwaySizeAssetSKU: string, styles: FirebaseStyles) => number | undefined;
     User: () => FirebaseUser;
     AwaitAvatarCreated: () => Promise<void>;
-    AwaitColorwayFrames: (colorwaySKU: string) => Promise<TryOnFrames>;
-    GetColorwayFrames: (colorwaySKU: string) => Promise<TryOnFrames>;
-    TryOn: (colorwaySKU: string) => Promise<TryOnFrames>;
+    AwaitColorwayFrames: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames>;
+    GetColorwayFrames: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames>;
+    TryOn: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames>;
     GetRecommendedSizes(BrandStyleID: string): Promise<responses.SizeRecommendation | errors.ErrorResponse>;
 
     GetStyles: () => Promise<FirebaseStyles>;
