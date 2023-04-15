@@ -35,7 +35,7 @@ jobs:
           envsubst < .env.prod > .env.prod
           NODE_ENV=prod npm run build:rollup
         env:
-          GITHUB_REF: ${{  github.ref_name }}
+          GITHUB_REF: ${{ github.ref_name }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -45,11 +45,11 @@ jobs:
 
       - name: Upload js to S3
         run: |
-          aws s3 cp ./dist/cjs/main.min.js s3://tfr-assets-prod/shop-sdk/${{  github.ref_name }}/main.min.js
-          aws s3 cp ./dist/cjs/main.js s3://tfr-assets-prod/shop-sdk/${{  github.ref_name }}/main.js
+          aws s3 cp ./dist/cjs/main.min.js s3://tfr-assets-prod/shop-sdk/${{ github.ref_name }}/main.min.js
+          aws s3 cp ./dist/cjs/main.js s3://tfr-assets-prod/shop-sdk/${{ github.ref_name }}/main.js
 
       - name: Upload css to S3
-        run: aws s3 cp --recursive src/styles/ s3://tfr-assets-prod/shop-sdk/${{  github.ref_name }}/styles/
+        run: aws s3 cp --recursive src/styles/ s3://tfr-assets-prod/shop-sdk/${{ github.ref_name }}/styles/
 
       - name: Upload languages to S3
-        run: aws s3 cp --recursive src/languages/ s3://tfr-assets-prod/shop-sdk/${{  github.ref_name }}/languages/
+        run: aws s3 cp --recursive src/languages/ s3://tfr-assets-prod/shop-sdk/${{ github.ref_name }}/languages/
