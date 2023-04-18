@@ -21,9 +21,6 @@ function TestImage(url: string): Promise<void> {
 	});
 }
 
-
-
-
 const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 	let firebaseUser = u;
 	let brandID = id;
@@ -84,7 +81,6 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 			for (const size of style.sizes.values()) {
 				for (const colorway_size_asset of size.colorways_size_assets) {
 					if (colorway_size_asset.sku === colorwaySizeAssetSKU) {
-						console.log(size);
 						return colorway_size_asset.id;
 					}
 				}
@@ -192,9 +188,10 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 						AwaitColorwaySizeAssetFrames(ColorwaySizeAssetSKU).then((frames) => {
 							resolve(frames);
 						}).catch((error: UIError | Error) => {
+							console.error("error awaiting colorway frames", error)
 							reject(error);
 						});
-					}).catch((error: UIError) => {
+					}).catch((error: Error) => {
 						console.error("error requesting colorway frames", error);
 						reject(error);
 					});
@@ -202,6 +199,7 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 					reject(createUIError(L.SomethingWentWrong, new Error("No colorway found")));
 				}
 			}).catch((error: UIError) => {
+				console.error("error getting styles", error)
 				reject(error);
 			});
 		});
@@ -211,12 +209,12 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 		User,
 		AwaitAvatarCreated,
 		GetStyles,
-		AwaitColorwayFrames: AwaitColorwaySizeAssetFrames,
-		LookupColorwayIDBySKU: LookupColorwaySizeAssetIDBySKU,
-		GetColorwayFrames: GetColorwaySizeAssetFrames,
+		AwaitColorwaySizeAssetFrames,
+		LookupColorwaySizeAssetIDBySKU,
+		GetColorwaySizeAssetFrames,
 		TryOn,
 		GetRecommendedSizes,
-		RequestColorwayFrames: RequestColorwaySizeAssetFrames,
+		RequestColorwaySizeAssetFrames,
 	};
 };
 

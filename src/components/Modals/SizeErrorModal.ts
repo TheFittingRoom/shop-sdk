@@ -21,7 +21,7 @@ const SizeErrorModal = (props: SizeErrorModalProps): ModalContent => {
 	};
 
 	const Body = () => {
-		console.log("body", L);
+		console.log("rendering size error modal", props)
 		return `
         <div class="tfr-mt-15-p tfr-mb-13-p">
             <div tfr-element="true" class="tfr-title-font tfr-light-22-300 tfr-c-dark">

@@ -34,10 +34,11 @@ jobs:
 
       - name: Build
         run: |
-          envsubst < .env.dev > .env.dev
+          export GITHUB_SHA_7=${GITHUB_SHA::7}
+          echo $GITHUB_SHA_7
+          envsubst < .env.dev > .env.dev.tmp
+          mv .env.dev.tmp .env.dev
           NODE_ENV=dev npm run build:rollup
-        env:
-          GITHUB_SHA: ${ GITHUB_SHA::7 }
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -47,7 +48,7 @@ jobs:
 
       - name: Upload js to S3
         run: |
-          aws s3 cp ./dist/cjs/main.js s3://tfr-assets-dev/shop-sdk/${GITHUB_SHA::7}/main.js
+          aws s3 cp ./dist/esm/main.js s3://tfr-assets-dev/shop-sdk/${GITHUB_SHA::7}/main.js
 
       - name: Upload css to S3
         run: aws s3 cp --recursive src/styles/ s3://tfr-assets-dev/shop-sdk/${GITHUB_SHA::7}/styles/

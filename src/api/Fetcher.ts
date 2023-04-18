@@ -1,4 +1,3 @@
-import { ErrorResponse } from "./errors";
 import * as types from "../types";
 
 const Fetcher = {
@@ -26,7 +25,7 @@ const Fetcher = {
                             reject(new Error(r.statusText));
                         } else {
                             r.json().then((json) => {
-                                reject(json as ErrorResponse);
+                                reject(json);
                             }).catch((error: SyntaxError) => {
                                 reject(error);
                             });
