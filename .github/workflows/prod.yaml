@@ -32,8 +32,8 @@ jobs:
 
       - name: Build
         run: |
-          envsubst < .env.prod > .env.prod
-          echo `cat .env.prod`
+          envsubst < .env.prod > .env.prod.tmp
+          mv .env.prod.tmp .env.prod
           NODE_ENV=prod npm run build:rollup
         env:
           GITHUB_REF: ${{ github.ref_name }}
