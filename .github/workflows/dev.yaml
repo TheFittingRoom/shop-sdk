@@ -35,7 +35,7 @@ jobs:
       - name: Build
         run: |
           envsubst < .env.dev > .env.dev
-          cat .env.dev
+          echo `cat .env.dev`
           NODE_ENV=dev npm run build:rollup
 
       - name: Configure AWS credentials
