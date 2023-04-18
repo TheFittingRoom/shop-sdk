@@ -34,11 +34,9 @@ jobs:
 
       - name: Build
         run: |
-          echo $GITHUB_SHA
+          export GITHUB_SHA=${ GITHUB_SHA::7 }
           envsubst < .env.dev > .env.dev
           NODE_ENV=dev npm run build:rollup
-        env:
-          GITHUB_SHA: ${ GITHUB_SHA::7 }
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
