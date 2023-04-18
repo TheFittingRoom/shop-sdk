@@ -10,7 +10,7 @@
         rel="stylesheet" />
 
     <script type="module">
-        import { InitFittingRoom, comps, InitLocale, InitImageSlider } from 'http://localhost:3000/dist/esm/main.js?language=en';
+        import { InitFittingRoom, comps, InitLocale } from 'http://localhost:3000/dist/esm/main.js?language=en';
 
 
         /*         InitLocale();
@@ -56,12 +56,12 @@
                 console.log("slider change", slider, imageUrl)
                 tryOnImage.src = imageUrl
             }
-            let slider = InitImageSlider("tfr-slider", onChange)
+            let slider = comps.InitImageSlider("tfr-slider", onChange)
             let tfr = InitFittingRoom(1, "thefittingroom-modal")
             let callback = (frames) => {
                 let close = slider.Load(frames)
             }
-            tfr.TryOn("5003-007-10", callback)
+            tfr.TryOn("5003-008-14", callback)
         })
     </script>
 </head>

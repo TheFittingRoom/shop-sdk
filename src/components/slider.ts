@@ -8,20 +8,24 @@ const InitImageSlider = (sliderID: string, onChange: (slider: HTMLInputElement, 
 	return {
 		Load(imageURLs: string[]) {
 			if (!imageURLs || !imageURLs.length) {
-				throw new Error("No images to load")
+				console.error("slider has no images to load")
+				return new Error("slider has no images to load")
 			}
 			imageURLs.forEach(function (path) { new Image().src = path; });
 			const defaultScrollValue = imageURLs?.length-2;
 			slider.value = defaultScrollValue.toString();
 			slider.max = (imageURLs.length - 1).toString();
+
 			const handleSliderChange = () => {
 				let currentValue = parseInt((<HTMLInputElement>slider).value);
 				onChange(slider, imageURLs[currentValue])
 			}
+
 			onChange(slider, imageURLs[defaultScrollValue])
 			slider.style.display = 'block';
 			slider.removeEventListener('input', handleSliderChange);
 			slider.addEventListener('input', handleSliderChange);
+
 			return ()=> {
 				slider.removeEventListener('input', handleSliderChange);
 				slider.style.display = 'none';

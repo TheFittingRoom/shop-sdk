@@ -8,7 +8,8 @@
     "moduleResolution": "node",
     "module": "ESNext",
     "declaration": true,
-    "sourceMap": true,
+    "sourceMap": false,
+    "inlineSourceMap": false,
     "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
     "resolveJsonModule": true /* Include modules imported with .json extension. */,
 
@@ -43,6 +44,6 @@
     "typeRoots": ["node_modules/@types", "src/types"]
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules/**"],
+  "exclude": ["node_modules/**", "**/*.test.ts"],
   "compileOnSave": false
 }

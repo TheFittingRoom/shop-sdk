@@ -10,16 +10,6 @@ const banner = `/*!
 * Copyright 2022-present, TheFittingRoom, Inc. All rights reserved.
 */`;
 
-const browserConfig = {
-    format: "iife",
-    name: "thefittingroom",
-    banner,
-};
-
-
-const tsconfigOverride = {
-    exclude: ["node_modules", "**/*.test.ts"],
-};
 
 export default {
     input: 'src/index.ts',
@@ -27,6 +17,7 @@ export default {
         {
             file: `dist/esm/main.js`,
             format: "esm",
+            sourceMap: true,
             banner,
         },
         {
@@ -35,34 +26,13 @@ export default {
             banner,
             plugins: [terser()],
         },
-        {
-            file: `dist/cjs/main.js`,
-            format: "cjs",
-            banner,
-            // plugins: [commonjs()],
-        },
-        {
-            file: `dist/cjs/main.min.js`,
-            format: "cjs",
-            banner,
-            plugins: [terser()],
-        },
-        {
-            file: `dist/iife/main.js`,
-            ...browserConfig,
-        },
-        {
-            file: `dist/iife/main.min.js`,
-            ...browserConfig,
-            plugins: [terser()],
-        },
     ],
-    plugins: [ 
+    plugins: [
         dotenv(),
         styles({
             minimize: true,
         }),
         nodeResolve(),
-        typescript({ ...tsconfigOverride })
+        typescript()
     ]
 };

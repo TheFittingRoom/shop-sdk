@@ -1,12 +1,12 @@
 interface UIError {
-    message: string;
+    userMessage: string;
     error: Error;
 }
 
 
 function createUIError(message: string, error?: Error): UIError {
     return {
-        message,
+        userMessage: message,
         error
     };
 }

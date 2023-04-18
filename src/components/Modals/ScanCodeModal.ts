@@ -1,6 +1,6 @@
 import { L } from "../../api/Locale";
 import { ScanCodeModalProps } from "../../types";
-import { QrCodeLogo, AppStoreLogo, TfrLogo } from "../../Modals/svgUrl";
+import { QrCodeLogo, AppStoreLogo } from "../../Modals/svgUrl";
 import { ModalContent } from "../../types";
 
 

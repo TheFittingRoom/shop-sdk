@@ -34,16 +34,16 @@ export interface FirebaseUser {
 }
 
 export interface Shop {
-    LookupColorwayIDBySKU: (colorwaySizeAssetSKU: string, styles: FirebaseStyles) => number | undefined;
+    LookupColorwaySizeAssetIDBySKU: (colorwaySizeAssetSKU: string, styles: FirebaseStyles) => number | undefined;
     User: () => FirebaseUser;
     AwaitAvatarCreated: () => Promise<void>;
-    AwaitColorwayFrames: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames>;
-    GetColorwayFrames: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames>;
+    AwaitColorwaySizeAssetFrames: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames>;
+    GetColorwaySizeAssetFrames: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames>;
     TryOn: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames>;
     GetRecommendedSizes(BrandStyleID: string): Promise<responses.SizeRecommendation | errors.ErrorResponse>;
 
     GetStyles: () => Promise<FirebaseStyles>;
-    RequestColorwayFrames(colorwayID: number): Promise<void>;
+    RequestColorwaySizeAssetFrames(colorwayID: number): Promise<void>;
 }
 
 export interface ModalContent {

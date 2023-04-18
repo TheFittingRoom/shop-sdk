@@ -1,5 +1,5 @@
 // import { InitFirebase, ModalManager, Shop, SignInModal, ForgotPasswordModal, ScanCodeModal, NoAvatarModal, LoadingAvatarModal, LoggedOutModal, ErrorModal, types, L } from "@thefittingroom/ui";
-import { InitFirebase, InitFirebaseUser } from "./auth/Firebase";
+import { InitFirebase } from "./auth/Firebase";
 import { ModalManager, SignInModal, ForgotPasswordModal, ScanCodeModal, NoAvatarModal, LoadingAvatarModal, LoggedOutModal, ErrorModal, SizeErrorModal, InitModalManager } from "./components";
 import { InitShop } from "./api/Shop";
 import { L, InitLocale } from "./api/Locale";
@@ -8,8 +8,8 @@ import ResetLinkModal from "./components/Modals/ResetLinkModal";
 import { UIError } from "./api/UIError";
 
 interface FittingRoom {
-	user: types.FirebaseUser | undefined;
-	shop: types.Shop | undefined;
+	user: types.FirebaseUser;
+	shop: types.Shop;
 	firebase: types.FirebaseInstance;
 	manager: ModalManager;
 	onSignout(colorwaySizeAssetSKU: string): () => void;
@@ -55,12 +55,12 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 		},
 
 		onTryOn(colorwaySizeAssetSKU:string) {
-			console.log("try on", colorwaySizeAssetSKU);
+		console.log("try on", colorwaySizeAssetSKU);
 			if (!colorwaySizeAssetSKU) {
 				console.error("No colorway SKU provided, skipping try on");
 				return;
 			}
-			this.shop.GetColorwayFrames(colorwaySizeAssetSKU).then((frames) => {
+			this.shop.GetColorwaySizeAssetFrames(colorwaySizeAssetSKU).then((frames) => {
 				console.log("frames exist", frames);
 				this.manager.Close();
 				this.framesCallback(frames);
@@ -72,6 +72,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 							this.manager.Close();
 							this.framesCallback(frames);
 						}).catch((error) => {
+							console.error("error from shop.TryOn", error);
 							if (error.recommended_size_id) {
 								this.shop.GetStyles().then((styles: types.FirebaseStyles) => {
 									let recommendedSize: string;
@@ -141,10 +142,10 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 						console.log("avatar pending");
 						this.manager.Open(LoadingAvatarModal({}));
 						this.shop.AwaitAvatarCreated().then(() => {
-							onTryOn: this.onTryOn(colorwaySizeAssetSKU);
+							this.onTryOn(colorwaySizeAssetSKU);
 						}).catch((error: UIError) => {
 							this.manager.Open(ErrorModal({
-								error: error.message,
+								error: error.userMessage,
 								onClose: this.onClose.bind(this),
 								onNavBack: this.onNavBack
 							}));
@@ -152,7 +153,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 						break;
 					case types.AvatarState.CREATED:
 						console.log("avatar created");
-						onTryOn: this.onTryOn(colorwaySizeAssetSKU);
+						this.onTryOn(colorwaySizeAssetSKU);
 						break;
 					default:
 						console.error("profile.avatar_status is invalid", profile);
@@ -165,7 +166,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 			}).catch((error: UIError) => {
 				console.error('catch uierror', error);
 				this.manager.Open(ErrorModal({
-					error: error.message,
+					error: error.userMessage,
 					onClose: this.onClose.bind(this),
 					onNavBack: this.onNavBack
 				}));
@@ -182,8 +183,8 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 					this.user = u;
 					this.afterSignIn(this.user, colorwaySizeAssetSKU);
 					this.manager.Close();
-				}).catch((UIError) => {
-					validationError(UIError.message);
+				}).catch((error: UIError) => {
+					validationError(error.userMessage);
 				});
 			};
 		},
@@ -206,10 +207,9 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 					this.manager.Open(ResetLinkModal({
 						onNavSignIn: this.onNavSignIn(colorwaySizeAssetSKU),
 					}));
-				}).catch((UIError) => {
-					console.error(UIError);
+				}).catch((error: UIError) => {
 					this.manager.Open(ErrorModal({
-						error: UIError.message,
+						error: error.userMessage,
 						onClose: this.onClose.bind(this),
 						onNavBack: this.onNavBack
 					}));
@@ -253,7 +253,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 						}));
 						callback(error);
 					} else {
-						console.error(error);
+						console.error("error retrieving firebase user", error);
 						this.manager.Open(ErrorModal({
 							error: L.SomethingWentWrong,
 							onClose: this.onClose.bind(this),
@@ -278,7 +278,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 					}));
 				}
 				callback(e);
-			};
+			}
 		}
 	};
 

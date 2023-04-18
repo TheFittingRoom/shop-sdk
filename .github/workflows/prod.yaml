@@ -33,7 +33,7 @@ jobs:
       - name: Build
         run: |
           envsubst < .env.prod > .env.prod
-          NODE_ENV=prod npm run build:rollup
+          NODE_ENV=production npm run build:rollup
         env:
           GITHUB_REF: ${{ github.ref_name }}
 
