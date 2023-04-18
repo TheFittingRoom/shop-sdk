@@ -80,10 +80,10 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 									for (const style of styles.values()) {
 										for (let size of style.sizes.values()) {
 											if (size.id === error.recommended_size_id) {
-												recommendedSize = size.size;
+												recommendedSize = size.label || size.size;
 											}
 											if (error.available_size_ids.includes(size.id) && !availableSizes.includes(size.size) && size.size != recommendedSize) {
-												availableSizes.push(size.size);
+												availableSizes.push(size.label || size.size);
 											}
 										}
 									}

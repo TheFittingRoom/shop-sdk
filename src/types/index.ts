@@ -119,6 +119,7 @@ export type FirebaseStyles = Map<string, {
     sizes: Map<number, {
         id: number;
         size: string;
+        label: string;
         size_system: string;
         size_value_id: string;
         colorways_size_assets: [{
