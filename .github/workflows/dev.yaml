@@ -34,7 +34,6 @@ jobs:
 
       - name: Build
         run: |
-          echo $GITHUB_SHA
           envsubst < .env.dev > .env.dev
           NODE_ENV=dev npm run build:rollup
 
