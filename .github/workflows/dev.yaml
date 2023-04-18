@@ -34,6 +34,8 @@ jobs:
 
       - name: Build
         run: |
+          echo `cat .env.dev`
+          cat .env.dev
           envsubst < .env.dev > .env.dev
           echo `cat .env.dev`
           NODE_ENV=dev npm run build:rollup
