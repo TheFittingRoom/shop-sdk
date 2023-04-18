@@ -17,7 +17,7 @@ export default {
         {
             file: `dist/esm/main.js`,
             format: "esm",
-            sourceMap: true,
+            sourcemap: true,
             banner,
         },
         {
