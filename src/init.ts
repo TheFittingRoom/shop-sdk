@@ -54,8 +54,8 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 			window.history.back();
 		},
 
-		onTryOn(colorwaySizeAssetSKU:string) {
-		console.log("try on", colorwaySizeAssetSKU);
+		onTryOn(colorwaySizeAssetSKU: string) {
+			console.log("try on", colorwaySizeAssetSKU);
 			if (!colorwaySizeAssetSKU) {
 				console.error("No colorway SKU provided, skipping try on");
 				return;
@@ -77,16 +77,32 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 								this.shop.GetStyles().then((styles: types.FirebaseStyles) => {
 									let recommendedSize: string;
 									let availableSizes: string[] = [];
+
 									for (const style of styles.values()) {
+										if (!style.sizes) {
+											continue;
+										}
 										for (let size of style.sizes.values()) {
 											if (size.id === error.recommended_size_id) {
 												recommendedSize = size.label || size.size;
 											}
-											if (error.available_size_ids.includes(size.id) && !availableSizes.includes(size.size) && size.size != recommendedSize) {
+											if (size.id && size.size && error.available_size_ids.includes(size.id) && !availableSizes.includes(size.size) && size.size != recommendedSize) {
 												availableSizes.push(size.label || size.size);
 											}
 										}
 									}
+
+									if (!recommendedSize || !availableSizes.length) {
+										console.error("No recommended size or available sizes found");
+										this.manager.Open(ErrorModal({
+											error: L.SomethingWentWrong,
+											onClose: this.onClose.bind(this),
+											onNavBack: this.onNavBack
+										}));
+										this.framesCallback(error);
+										return;
+									}
+
 									this.manager.Open(SizeErrorModal({
 										sizes: {
 											recommended: recommendedSize,
