@@ -1,10 +1,9 @@
 import { UserProfile } from "firebase/auth";
 import { UIError } from "./UIError";
 import { AvatarNotCreated, AvatarNotReady, ErrorResponse, SizeIDOutsideRecommendedRange, ErrorOutsideRecommendedSizes } from "./errors";
-import { TryOnFrames, FirebaseStyles } from "../types";
 import { Fetcher } from "./Fetcher";
 import { SizeRecommendation } from "../api/responses";
-import { collection, query, where, getDocs, documentId, onSnapshot } from "firebase/firestore";
+import { collection, query, where, getDocs, documentId, onSnapshot, QueryFieldFilterConstraint } from "firebase/firestore";
 import { GetFirebaseUIError } from "../auth/Firebase";
 import { L } from "./Locale";
 import { createUIError } from "./UIError";
@@ -50,7 +49,7 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 		});
 	};
 
-	const AwaitColorwaySizeAssetFrames = async (colorwaySizeAssetSKU: string): Promise<TryOnFrames> => {
+	const AwaitColorwaySizeAssetFrames = async (colorwaySizeAssetSKU: string): Promise<types.TryOnFrames> => {
 		return new Promise((resolve, reject) => {
 			window.setTimeout(() => {
 				unsubscribe();
@@ -74,19 +73,6 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 				});
 			});
 		});
-	};
-
-	const LookupColorwaySizeAssetIDBySKU = (colorwaySizeAssetSKU: string, styles: FirebaseStyles): number | undefined => {
-		for (const style of styles.values()) {
-			for (const size of style.sizes.values()) {
-				for (const colorway_size_asset of size.colorways_size_assets) {
-					if (colorway_size_asset.sku === colorwaySizeAssetSKU) {
-						return colorway_size_asset.id;
-					}
-				}
-			}
-		}
-		return undefined;
 	};
 
 	const GetRecommendedSizes = async (BrandStyleID: string): Promise<SizeRecommendation | ErrorResponse> => {
@@ -116,14 +102,20 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 		});
 	};
 
-	const GetStyles = async (): Promise<FirebaseStyles> => {
+	const GetStyles = async (ids: number[]): Promise<Map<number, types.FirebaseStyle>> => {
 		return new Promise((resolve, reject) => {
-			const q = query(collection(User().FirebaseInstance.Firestore, "styles"), where("brand_id", "==", brandID));
+			let constraints: QueryFieldFilterConstraint[] = [where("brand_id", "==", brandID)];
+			if (ids?.length > 0) {
+				constraints.push(where("id", "in", ids));
+			}
+			const q = query(collection(User().FirebaseInstance.Firestore, "styles"), ...constraints);
 			getDocs(q).then((querySnapshot) => {
-				const styles: any = [];
+				const styles: Map<number, types.FirebaseStyle> = new Map();
 				querySnapshot.forEach((doc) => {
-					styles.push(doc.data());
+					const firebaseStyle = doc.data() as types.FirebaseStyle
+					styles.set(firebaseStyle.id, firebaseStyle)
 				});
+				console.log("resolving styles", styles)
 				resolve(styles);
 			}).catch((error) => {
 				reject(GetFirebaseUIError(error));
@@ -131,12 +123,35 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 		});
 	};
 
-	const GetColorwaySizeAssetFrames = async (colorwaySizeAssetSKU: string): Promise<TryOnFrames> => {
+	const GetColorwaySizeAssets = async (style_id?: number, skus?: string[]): Promise<Map<number, types.FirebaseColorwaySizeAsset>> => {
+		return new Promise((resolve, reject) => {
+			let constraints: QueryFieldFilterConstraint[] = [where("brand_id", "==", brandID)];
+			if (style_id) {
+				constraints.push(where("style_id", "==", style_id));
+			}
+			if (skus?.length > 0) {
+				constraints.push(where("sku", "in", skus));
+			}
+			const q = query(collection(User().FirebaseInstance.Firestore, "colorway_size_assets"), ...constraints);
+			getDocs(q).then((querySnapshot) => {
+				const colorwaySizeAssets: Map<number, types.FirebaseColorwaySizeAsset> = new Map();
+				querySnapshot.forEach((doc) => {
+					const colorwaySizeAsset = doc.data() as types.FirebaseColorwaySizeAsset;
+					colorwaySizeAssets.set(colorwaySizeAsset.id, colorwaySizeAsset);
+				});
+				resolve(colorwaySizeAssets);
+			}).catch((error) => {
+				reject(GetFirebaseUIError(error));
+			});
+		});
+	};
+
+	const GetColorwaySizeAssetFrames = async (colorwaySizeAssetSKU: string): Promise<types.TryOnFrames> => {
 		return new Promise((resolve, reject) => {
 			User().GetUserProfile().then((profile: UserProfile) => {
 				const frames = profile?.vto?.[brandID]?.[colorwaySizeAssetSKU]?.frames || [];
 				if (frames.length > 0 && TestImage(frames[0])) {
-					resolve(frames as TryOnFrames);
+					resolve(frames as types.TryOnFrames);
 				} else {
 					reject(types.NoFramesFound);
 				}
@@ -148,13 +163,14 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 
 
 	const RequestColorwaySizeAssetFrames = async (colorwaySizeAssetID: number): Promise<void> => {
-		console.info("requesting colorway frames", colorwaySizeAssetID);
+		console.log("requesting colorway frames", colorwaySizeAssetID);
 		return new Promise((resolve, reject) => {
 			Fetcher.Post(User(), `/colorway-size-assets/${colorwaySizeAssetID}/frames`, null).then(() => {
 				resolve();
 			}).catch((error: ErrorResponse | ErrorOutsideRecommendedSizes) => {
 				switch (error.error) {
 					case AvatarNotCreated:
+						console.error("RequestColorwayFrames recieved AvatarNotCreated");
 						reject(createUIError(L.DontHaveAvatar, new Error(error.error)));
 						break;
 					case AvatarNotReady:
@@ -162,13 +178,16 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 						reject(createUIError(L.SomethingWentWrong, new Error(error.error)));
 						break;
 					case SizeIDOutsideRecommendedRange:
+						console.error("RequestColorwayFrames recieved SizeIDOutsideRecommendedRange");
 						reject(error);
 						break;
 					default:
 						if (error instanceof Error) {
+							console.error("RequestColorwayFrames recieved unexpected error", error);
 							reject(createUIError(L.SomethingWentWrong, error));
 						} else {
 							// UIError
+							console.error("RequestColorwayFrames recieved ui error", error);
 							reject(createUIError(L.SomethingWentWrong, new Error(error.error)));
 						}
 				}
@@ -176,31 +195,69 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 		});
 	};
 
-	const TryOn = async (ColorwaySizeAssetSKU: string): Promise<TryOnFrames> => {
+	const TryOn = (colorwaySizeAssetSKU: string): Promise<types.TryOnFrames | Promise<types.TryOnFrames>> => {
+		let styleIDCache: number;
 		return new Promise((resolve, reject) => {
-			GetStyles().then((styles) => {
-				const colorwaySizeAssetID = LookupColorwaySizeAssetIDBySKU(ColorwaySizeAssetSKU, styles);
-				if (colorwaySizeAssetID) {
-					console.info("requesting new colorway frames");
-					RequestColorwaySizeAssetFrames(colorwaySizeAssetID).then(() => {
-						// listen for changes in firebase
-						console.info("waiting for rendered colorway frames");
-						AwaitColorwaySizeAssetFrames(ColorwaySizeAssetSKU).then((frames) => {
-							resolve(frames);
-						}).catch((error: UIError | Error) => {
-							console.error("error awaiting colorway frames", error)
-							reject(error);
-						});
-					}).catch((error: Error) => {
-						console.error("error requesting colorway frames", error);
-						reject(error);
-					});
-				} else {
-					reject(createUIError(L.SomethingWentWrong, new Error("No colorway found")));
+			GetColorwaySizeAssetFrames(colorwaySizeAssetSKU).then((frames) => {
+				resolve(frames as types.TryOnFrames);
+			}).catch((error: Error) => {
+				if (error != types.NoFramesFound) {
+					console.error("error is not NoFramesFound", error);
+					reject(error);
+					return;
 				}
-			}).catch((error: UIError) => {
-				console.error("error getting styles", error)
-				reject(error);
+				resolve(new Promise((resolve, reject) => {
+					// lookup current sku to get style_id
+					GetColorwaySizeAssets(null, [colorwaySizeAssetSKU])
+						.then((colorwaySizeAssets: Map<number, types.FirebaseColorwaySizeAsset>) => {
+							if (!colorwaySizeAssets?.size) {
+								console.error("no colorway size assets found");
+								return Promise.reject(types.NoColorwaySizeAssetsFound);
+							}
+							const colorwaySizeAsset = colorwaySizeAssets.values().next().value
+							styleIDCache = colorwaySizeAsset.style_id;							// lookup all colorway size assets for style_id
+							return RequestColorwaySizeAssetFrames(colorwaySizeAsset.id);
+						}).then(() => {
+							// listen for changes in firebase
+							return AwaitColorwaySizeAssetFrames(colorwaySizeAssetSKU);
+						}).then((frames) => {
+							resolve(frames);
+						}).catch((error: Error | ErrorOutsideRecommendedSizes) => {
+							console.error("error requesting colorway frames", error);
+							if (!(error as ErrorOutsideRecommendedSizes).recommended_size_id) {
+								reject(error);
+								return;
+							}
+
+							GetStyles([styleIDCache]).then((styles: Map<number, types.FirebaseStyle>) => {
+								let errorOutsideRecommended = error as ErrorOutsideRecommendedSizes;
+								let recommendedSizeResponse: types.RecommendedAvaliableSizes = {
+									error: errorOutsideRecommended.error,
+									recommended_size: null,
+									available_sizes: [],
+								};
+
+								const style = styles.get(styleIDCache)
+
+								if (!style.sizes) {
+									console.error("no style or sizes found");
+									return Promise.reject(types.NoStylesFound);
+								}
+
+								recommendedSizeResponse.recommended_size = style.sizes[errorOutsideRecommended.recommended_size_id]?.label || style.sizes[errorOutsideRecommended.recommended_size_id]?.size;
+								for (const avaliable_size_id of errorOutsideRecommended.available_size_ids) {
+									if (style.sizes[avaliable_size_id]) {
+										recommendedSizeResponse.available_sizes.push(style.sizes[avaliable_size_id].label || style.sizes[avaliable_size_id]?.size);
+									}
+								}
+
+								return Promise.reject(recommendedSizeResponse);
+							}).catch((error: Error | types.RecommendedAvaliableSizes) => {
+								console.error("error requesting colorway frames", error);
+								reject(error);
+							});
+						});
+				}));
 			});
 		});
 	};
@@ -209,8 +266,8 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 		User,
 		AwaitAvatarCreated,
 		GetStyles,
+		GetColorwaySizeAssets,
 		AwaitColorwaySizeAssetFrames,
-		LookupColorwaySizeAssetIDBySKU,
 		GetColorwaySizeAssetFrames,
 		TryOn,
 		GetRecommendedSizes,
