@@ -215,7 +215,7 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 								return Promise.reject(types.NoColorwaySizeAssetsFound);
 							}
 							const colorwaySizeAsset = colorwaySizeAssets.values().next().value
-							styleIDCache = colorwaySizeAsset.style_id;							// lookup all colorway size assets for style_id
+							styleIDCache = colorwaySizeAsset.style_id;
 							return RequestColorwaySizeAssetFrames(colorwaySizeAsset.id);
 						}).then(() => {
 							// listen for changes in firebase
