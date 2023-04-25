@@ -47,8 +47,8 @@ export interface Shop {
     TryOn: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames | Promise<TryOnFrames>>;
     GetRecommendedSizes(BrandStyleID: string): Promise<responses.SizeRecommendation | errors.ErrorResponse>;
 
-    GetStyles: (ids: number[]) => Promise<Map<number, FirebaseStyle>>;
-    GetColorwaySizeAssets: (style_id?: number, skus?: string[]) => Promise<Map<number, FirebaseColorwaySizeAsset>>;
+    GetStyles: (ids: number[]) => Promise<Map<number, FirestoreStyle>>;
+    GetColorwaySizeAssets: (style_id?: number, skus?: string[]) => Promise<Map<number, FirestoreColorwaySizeAsset>>;
     RequestColorwaySizeAssetFrames(colorwayID: number): Promise<void>;
 }
 
@@ -112,7 +112,7 @@ export enum AvatarState {
     PENDING = 'PENDING'
 }
 
-export type FirebaseColorwaySizeAsset = {
+export type FirestoreColorwaySizeAsset = {
     id: number;
     size_id: number;
     style_id: number;
@@ -121,28 +121,28 @@ export type FirebaseColorwaySizeAsset = {
     sku: string;
 };
 
-export type FirebaseGarmentMeasurement = {
+export type FirestoreGarmentMeasurement = {
     id: number;
     garment_measurement_location: string;
     tolerance: number;
     value: number;
 };
 
-export type FirebaseSize = {
+export type FirestoreSize = {
     id: number;
     size: string;
     label: string;
     size_system: string;
     size_value_id: string;
-    garment_measurements: Map<string, FirebaseGarmentMeasurement>;
+    garment_measurements: Map<string, FirestoreGarmentMeasurement>;
 };
 
-export type FirebaseColorway = {
+export type FirestoreColorway = {
     id: number;
     name: string;
 }
 
-export type FirebaseStyle = {
+export type FirestoreStyle = {
     id: number;
     brand_id: number;
     brand_style_id: string;
@@ -151,6 +151,6 @@ export type FirebaseStyle = {
     garment_category: string;
     is_published: boolean;
     sale_type: string;
-    colorways: {[key:number]: FirebaseColorway};
-    sizes: {[key:number]: FirebaseSize};
+    colorways: {[key:number]: FirestoreColorway};
+    sizes: {[key:number]: FirestoreSize};
 }

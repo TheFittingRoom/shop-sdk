@@ -102,7 +102,7 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 		});
 	};
 
-	const GetStyles = async (ids: number[]): Promise<Map<number, types.FirebaseStyle>> => {
+	const GetStyles = async (ids: number[]): Promise<Map<number, types.FirestoreStyle>> => {
 		return new Promise((resolve, reject) => {
 			let constraints: QueryFieldFilterConstraint[] = [where("brand_id", "==", brandID)];
 			if (ids?.length > 0) {
@@ -110,10 +110,10 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 			}
 			const q = query(collection(User().FirebaseInstance.Firestore, "styles"), ...constraints);
 			getDocs(q).then((querySnapshot) => {
-				const styles: Map<number, types.FirebaseStyle> = new Map();
+				const styles: Map<number, types.FirestoreStyle> = new Map();
 				querySnapshot.forEach((doc) => {
-					const firebaseStyle = doc.data() as types.FirebaseStyle
-					styles.set(firebaseStyle.id, firebaseStyle)
+					const FirestoreStyle = doc.data() as types.FirestoreStyle
+					styles.set(FirestoreStyle.id, FirestoreStyle)
 				});
 				console.log("resolving styles", styles)
 				resolve(styles);
@@ -123,7 +123,7 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 		});
 	};
 
-	const GetColorwaySizeAssets = async (style_id?: number, skus?: string[]): Promise<Map<number, types.FirebaseColorwaySizeAsset>> => {
+	const GetColorwaySizeAssets = async (style_id?: number, skus?: string[]): Promise<Map<number, types.FirestoreColorwaySizeAsset>> => {
 		return new Promise((resolve, reject) => {
 			let constraints: QueryFieldFilterConstraint[] = [where("brand_id", "==", brandID)];
 			if (style_id) {
@@ -134,9 +134,9 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 			}
 			const q = query(collection(User().FirebaseInstance.Firestore, "colorway_size_assets"), ...constraints);
 			getDocs(q).then((querySnapshot) => {
-				const colorwaySizeAssets: Map<number, types.FirebaseColorwaySizeAsset> = new Map();
+				const colorwaySizeAssets: Map<number, types.FirestoreColorwaySizeAsset> = new Map();
 				querySnapshot.forEach((doc) => {
-					const colorwaySizeAsset = doc.data() as types.FirebaseColorwaySizeAsset;
+					const colorwaySizeAsset = doc.data() as types.FirestoreColorwaySizeAsset;
 					colorwaySizeAssets.set(colorwaySizeAsset.id, colorwaySizeAsset);
 				});
 				resolve(colorwaySizeAssets);
@@ -209,7 +209,7 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 				resolve(new Promise((resolve, reject) => {
 					// lookup current sku to get style_id
 					GetColorwaySizeAssets(null, [colorwaySizeAssetSKU])
-						.then((colorwaySizeAssets: Map<number, types.FirebaseColorwaySizeAsset>) => {
+						.then((colorwaySizeAssets: Map<number, types.FirestoreColorwaySizeAsset>) => {
 							if (!colorwaySizeAssets?.size) {
 								console.error("no colorway size assets found");
 								return Promise.reject(types.NoColorwaySizeAssetsFound);
@@ -229,7 +229,7 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 								return;
 							}
 
-							GetStyles([styleIDCache]).then((styles: Map<number, types.FirebaseStyle>) => {
+							GetStyles([styleIDCache]).then((styles: Map<number, types.FirestoreStyle>) => {
 								let errorOutsideRecommended = error as ErrorOutsideRecommendedSizes;
 								let recommendedSizeResponse: types.RecommendedAvaliableSizes = {
 									error: errorOutsideRecommended.error,
