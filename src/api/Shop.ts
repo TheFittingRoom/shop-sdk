@@ -246,7 +246,7 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 
 								recommendedSizeResponse.recommended_size = style.sizes[errorOutsideRecommended.recommended_size_id]?.label || style.sizes[errorOutsideRecommended.recommended_size_id]?.size;
 								for (const available_size_id of errorOutsideRecommended.available_size_ids) {
-									if (style.sizes[available_size_id]) {
+									if (style.sizes[available_size_id] && style.sizes[available_size_id].size != recommendedSizeResponse.recommended_size) {
 										recommendedSizeResponse.available_sizes.push(style.sizes[available_size_id].label || style.sizes[available_size_id]?.size);
 									}
 								}
