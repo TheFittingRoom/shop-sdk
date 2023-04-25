@@ -231,7 +231,7 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 
 							GetStyles([styleIDCache]).then((styles: Map<number, types.FirestoreStyle>) => {
 								let errorOutsideRecommended = error as ErrorOutsideRecommendedSizes;
-								let recommendedSizeResponse: types.RecommendedAvaliableSizes = {
+								let recommendedSizeResponse: types.RecommendedAvailableSizes = {
 									error: errorOutsideRecommended.error,
 									recommended_size: null,
 									available_sizes: [],
@@ -245,14 +245,14 @@ const InitShop = (u: types.FirebaseUser, id: number): types.Shop => {
 								}
 
 								recommendedSizeResponse.recommended_size = style.sizes[errorOutsideRecommended.recommended_size_id]?.label || style.sizes[errorOutsideRecommended.recommended_size_id]?.size;
-								for (const avaliable_size_id of errorOutsideRecommended.available_size_ids) {
-									if (style.sizes[avaliable_size_id]) {
-										recommendedSizeResponse.available_sizes.push(style.sizes[avaliable_size_id].label || style.sizes[avaliable_size_id]?.size);
+								for (const available_size_id of errorOutsideRecommended.available_size_ids) {
+									if (style.sizes[available_size_id]) {
+										recommendedSizeResponse.available_sizes.push(style.sizes[available_size_id].label || style.sizes[available_size_id]?.size);
 									}
 								}
 
 								return Promise.reject(recommendedSizeResponse);
-							}).catch((error: Error | types.RecommendedAvaliableSizes) => {
+							}).catch((error: Error | types.RecommendedAvailableSizes) => {
 								console.error("error requesting colorway frames", error);
 								reject(error);
 							});

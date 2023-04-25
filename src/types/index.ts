@@ -10,7 +10,7 @@ export const NoFramesFound = new Error('No frames found for this colorway');
 export const NoColorwaySizeAssetsFound = new Error('No colorway size assets found');
 export const NoStylesFound = new Error('No styles found');
 
-export interface RecommendedAvaliableSizes {
+export interface RecommendedAvailableSizes {
     error: string;
     recommended_size: string;
     available_sizes: string[];
@@ -89,7 +89,7 @@ export interface SizeErrorModalProps {
     onClose: () => void;
     sizes?: {
         recommended: string,
-        avaliable: string[];
+        available: string[];
     };
 }
 

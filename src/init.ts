@@ -74,8 +74,8 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 				}).then((frames: types.TryOnFrames) => {
 					this.manager.Close();
 					this.framesCallback(frames);
-				}).catch((error: Error | types.RecommendedAvaliableSizes) => {
-					const recommendedSizeError = error as types.RecommendedAvaliableSizes;
+				}).catch((error: Error | types.RecommendedAvailableSizes) => {
+					const recommendedSizeError = error as types.RecommendedAvailableSizes;
 					if (!recommendedSizeError.recommended_size ||
 						!recommendedSizeError.available_sizes ||
 						!recommendedSizeError.available_sizes.length) {
@@ -92,7 +92,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 					this.manager.Open(modals.SizeErrorModal({
 						sizes: {
 							recommended: recommendedSizeError.recommended_size,
-							avaliable: recommendedSizeError.available_sizes
+							available: recommendedSizeError.available_sizes
 						},
 						onClose: this.onClose.bind(this),
 						onNavBack: this.onNavBack
