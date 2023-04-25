@@ -7,8 +7,14 @@ import * as errors from "../api/errors";
 
 export const NotLoggedIn = new Error('user not logged in');
 export const NoFramesFound = new Error('No frames found for this colorway');
+export const NoColorwaySizeAssetsFound = new Error('No colorway size assets found');
+export const NoStylesFound = new Error('No styles found');
 
-
+export interface RecommendedAvailableSizes {
+    error: string;
+    recommended_size: string;
+    available_sizes: string[];
+}
 export interface Firebase {
     App: firebase.FirebaseApp;
     Auth: firebaseAuth.Auth;
@@ -34,15 +40,15 @@ export interface FirebaseUser {
 }
 
 export interface Shop {
-    LookupColorwaySizeAssetIDBySKU: (colorwaySizeAssetSKU: string, styles: FirebaseStyles) => number | undefined;
     User: () => FirebaseUser;
     AwaitAvatarCreated: () => Promise<void>;
     AwaitColorwaySizeAssetFrames: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames>;
     GetColorwaySizeAssetFrames: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames>;
-    TryOn: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames>;
+    TryOn: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames | Promise<TryOnFrames>>;
     GetRecommendedSizes(BrandStyleID: string): Promise<responses.SizeRecommendation | errors.ErrorResponse>;
 
-    GetStyles: () => Promise<FirebaseStyles>;
+    GetStyles: (ids: number[]) => Promise<Map<number, FirestoreStyle>>;
+    GetColorwaySizeAssets: (style_id?: number, skus?: string[]) => Promise<Map<number, FirestoreColorwaySizeAsset>>;
     RequestColorwaySizeAssetFrames(colorwayID: number): Promise<void>;
 }
 
@@ -83,7 +89,7 @@ export interface SizeErrorModalProps {
     onClose: () => void;
     sizes?: {
         recommended: string,
-        avaliable: string[];
+        available: string[];
     };
 }
 
@@ -106,7 +112,37 @@ export enum AvatarState {
     PENDING = 'PENDING'
 }
 
-export type FirebaseStyles = Map<string, {
+export type FirestoreColorwaySizeAsset = {
+    id: number;
+    size_id: number;
+    style_id: number;
+    colorway_id: number;
+    colorway_name: string;
+    sku: string;
+};
+
+export type FirestoreGarmentMeasurement = {
+    id: number;
+    garment_measurement_location: string;
+    tolerance: number;
+    value: number;
+};
+
+export type FirestoreSize = {
+    id: number;
+    size: string;
+    label: string;
+    size_system: string;
+    size_value_id: string;
+    garment_measurements: Map<string, FirestoreGarmentMeasurement>;
+};
+
+export type FirestoreColorway = {
+    id: number;
+    name: string;
+}
+
+export type FirestoreStyle = {
     id: number;
     brand_id: number;
     brand_style_id: string;
@@ -115,24 +151,6 @@ export type FirebaseStyles = Map<string, {
     garment_category: string;
     is_published: boolean;
     sale_type: string;
-    colorways: [{ id: number, name: string; }];
-    sizes: Map<number, {
-        id: number;
-        size: string;
-        label: string;
-        size_system: string;
-        size_value_id: string;
-        colorways_size_assets: [{
-            id: number;
-            sku: string;
-            colorway: {
-                id: number;
-                name: string;
-            };
-        }],
-        garment_measurements: Map<string, {
-            tolerance: number;
-            value: number;
-        }>;
-    }>;
-}>;
+    colorways: {[key:number]: FirestoreColorway};
+    sizes: {[key:number]: FirestoreSize};
+}
