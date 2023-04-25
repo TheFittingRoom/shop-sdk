@@ -66,11 +66,14 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 			}
 
 			this.shop.TryOn(colorwaySizeAssetSKU)
-				.then(framesOrPromise => {
-					if (framesOrPromise instanceof Promise) {
+				.then(framesOrFunc => {
+					console.log("frames or promise", framesOrFunc)
+					if (framesOrFunc instanceof Function) {
+						console.log("recieved promise from tryon");
 						this.manager.Open(modals.LoadingAvatarModal({}));
+						return new Promise((res, rej)  => framesOrFunc(res, rej));
 					}
-					return framesOrPromise;
+					return framesOrFunc;
 				}).then((frames: types.TryOnFrames) => {
 					this.manager.Close();
 					this.framesCallback(frames);
