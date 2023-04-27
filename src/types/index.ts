@@ -4,6 +4,7 @@ import { DocumentData } from "firebase/firestore";
 import { Firestore } from "firebase/firestore";
 import * as responses from "../api/responses";
 import * as errors from "../api/errors";
+import { ModalManager } from "../components";
 
 export const NotLoggedIn = new Error('user not logged in');
 export const NoFramesFound = new Error('No frames found for this colorway');
@@ -25,14 +26,13 @@ export interface FirebaseInstance {
     Firebase: Firebase,
     SendPasswordResetEmail(email: string): Promise<void>;
     ConfirmPasswordReset(code: string, newPassword: string): Promise<void>;
-    Login(email: string, password: string, onSignout: () => void): Promise<FirebaseUser>;
-    User(onSignout: () => void): Promise<FirebaseUser>;
+    Login(email: string, password: string): Promise<FirebaseUser>;
+    User(): Promise<FirebaseUser>;
 }
 
 export interface FirebaseUser {
-    User: firebaseAuth.User | null;
     FirebaseInstance: Firebase;
-    EnsureLogin: () => void;
+    notLoggedIn: (reject: any) => boolean;
     ID: () => string;
     Token: () => Promise<string>;
     GetUserProfile: () => Promise<DocumentData | null>;
@@ -40,16 +40,33 @@ export interface FirebaseUser {
 }
 
 export interface Shop {
-    User: () => FirebaseUser;
     AwaitAvatarCreated: () => Promise<void>;
     AwaitColorwaySizeAssetFrames: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames>;
     GetColorwaySizeAssetFrames: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames>;
-    TryOn: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames | Promise<TryOnFrames>>;
+    TryOn: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames | (() => Promise<TryOnFrames>)>;
     GetRecommendedSizes(BrandStyleID: string): Promise<responses.SizeRecommendation | errors.ErrorResponse>;
 
     GetStyles: (ids: number[]) => Promise<Map<number, FirestoreStyle>>;
     GetColorwaySizeAssets: (style_id?: number, skus?: string[]) => Promise<Map<number, FirestoreColorwaySizeAsset>>;
     RequestColorwaySizeAssetFrames(colorwayID: number): Promise<void>;
+}
+
+export interface FittingRoom {
+    user: FirebaseUser;
+    shop: Shop;
+    firebase: FirebaseInstance;
+    manager: ModalManager;
+    onSignout(colorwaySizeAssetSKU: string): () => void;
+    onClose(): void;
+    onNavBack(): void;
+    onTryOn(colorwaySizeAssetSKU: string): void;
+    afterSignIn(user: FirebaseUser, colorwaySizeAssetSKU: string): void;
+    onSignIn(colorwaySizeAssetSKU: string): (username: string, password: string, validation: (message: string) => void) => void;
+    onNavSignIn(colorwaySizeAssetSKU: string): (email: string) => void;
+    onPasswordReset(colorwaySizeAssetSKU: string): (email: string) => void;
+    onNavForgotPassword(colorwaySizeAssetSKU: string): (email: string) => void;
+    onNavScanCode(): void;
+    TryOn(colorwaySizeAssetSKU: string, framesCallback: (frames: TryOnFrames | Error) => void): void;
 }
 
 export interface ModalContent {
@@ -94,6 +111,7 @@ export interface SizeErrorModalProps {
 }
 
 export interface ResetLinkModalProps {
+    email: string;
     onNavSignIn: (email: string) => void;
 };
 export interface ScanCodeModalProps extends ModalProps {
@@ -140,7 +158,7 @@ export type FirestoreSize = {
 export type FirestoreColorway = {
     id: number;
     name: string;
-}
+};
 
 export type FirestoreStyle = {
     id: number;
@@ -151,6 +169,6 @@ export type FirestoreStyle = {
     garment_category: string;
     is_published: boolean;
     sale_type: string;
-    colorways: {[key:number]: FirestoreColorway};
-    sizes: {[key:number]: FirestoreSize};
-}
+    colorways: { [key: number]: FirestoreColorway; };
+    sizes: { [key: number]: FirestoreSize; };
+};

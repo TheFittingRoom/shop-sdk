@@ -11,12 +11,10 @@
 
     <script type="module">
         import { InitFittingRoom, comps, InitLocale } from 'http://localhost:3000/dist/esm/main.js?language=en';
-
-
-        /*         InitLocale();
-        window.mm = comps.InitModalManager("thefittingroom-modal");
+        InitLocale();
+/*         window.mm = comps.InitModalManager("thefittingroom-modal");
         window.comps = comps;
-        window.onSignout = (colorwaySizeAssetSKU) =>{
+        window.onSignout = (colorwaySizeAssetSKU) => {
             console.log("signout", colorwaySizeAssetSKU)
         }
         window.onClose = () => {
@@ -32,15 +30,14 @@
             console.log("after sign in", user, colorwaySizeAssetSKU)
         }
         window.onSignIn = (colorwaySizeAssetSKU) => (username, password, validationError) => {
-            if(username.length == 0 || password.length == 0) {
+            if (username.length == 0 || password.length == 0) {
                 validationError("Username or password is empty")
             }
-            console.log("sign in", colorwaySizeAssetSKU, username, password)
         };
         window.onNavSignIn = (colorwaySizeAssetSKU) => (email) => {
             console.log("nav sign in", colorwaySizeAssetSKU, email)
         };
-        window.onPasswordReset = (colorwaySizeAssetSKU) => (email) =>  {
+        window.onPasswordReset = (colorwaySizeAssetSKU) => (email) => {
             console.log("password reset", colorwaySizeAssetSKU, email)
         };
         window.onNavForgotPassword = (colorwaySizeAssetSKU) => (email) => {
@@ -48,26 +45,35 @@
         };
         window.onNavScanCode = () => {
             console.log("nav scan code")
-        };
-        */
+        }; */
+
         window.addEventListener('load', (e) => {
             let tryOnImage = document.getElementById("tfr-tryon-image")
+            let signout = document.getElementById("signout")
+
             let onChange = (slider, imageUrl) => {
                 console.log("slider change", slider, imageUrl)
                 tryOnImage.src = imageUrl
             }
             let slider = comps.InitImageSlider("tfr-slider", onChange)
             let tfr = InitFittingRoom(1, "thefittingroom-modal")
+            signout.addEventListener("click", (e) => {
+                tfr.user.SignOut()
+            })
             let callback = (frames) => {
-                let close = slider.Load(frames)
+                if (frames instanceof Array && frames.length > 0){
+                    let close = slider.Load(frames)
+                }
             }
-            tfr.TryOn("5003-008-14", callback)
+            document.getElementById("tryon").addEventListener("click", (e) => {
+                tfr.TryOn("5003-007-08", callback)
+            })
         })
     </script>
 </head>
 
 <body>
-<!--     <div class="tfr-home-button-container">
+    <div class="tfr-home-button-container">
         <button
             onclick="window.mm.Open(window.comps.ErrorModal({error: 'custom error message', onNavBack: window.onNavBack, onClose: window.onClose}))">Error
             Modal</button>
@@ -89,8 +95,11 @@
             Error Modal</button>
         <br>
         <button onclick="window.mm.Open(window.comps.ResetLinkModal({onNavSignIn: window.onNavSignIn('abc')}))">Reset
-            Link Modal</button>
-    </div> -->
+            Link Modal
+        </button>
+        <button id="tryon">Try On</button>
+        <button id="signout">Sign Out</button>
+    </div>
     <div id="thefittingroom-modal"> </div>
     <input type="range" id="tfr-slider" />
     <img id="tfr-tryon-image" src="" />

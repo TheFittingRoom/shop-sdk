@@ -52,9 +52,9 @@ const InitModalManager = (elementID: string): ModalManager => {
 
 	const Close = () => {
 		if (previousContent) {
-			unhook();
 			previousContent.Unhook();
 		}
+		unhook();
 		modal.style.display = "none";
 	};
 

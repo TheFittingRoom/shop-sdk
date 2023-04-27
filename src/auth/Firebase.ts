@@ -25,27 +25,25 @@ function GetFirebaseUIError(e: FirebaseError): UIError {
 }
 
 
-const InitFirebaseUser = (firebase: types.Firebase, user: firebaseAuth.User, onSignout: () => void): types.FirebaseUser => {
+const InitFirebaseUser = (firebase: types.Firebase, User: firebaseAuth.User): types.FirebaseUser => {
 	let FirebaseInstance = firebase;
-	let User = user;
 
-	let EnsureLogin = () => {
-		if (user === null) {
-			throw types.NotLoggedIn;
+	let notLoggedIn = (reject): boolean => {
+		if (User == null || !User.uid) {
+			console.error("checkLoggedIn failed; rejecting with NotLoggedIn")
+			reject(types.NotLoggedIn);
+			return true;
 		}
+		return false
 	};
 
 	let ID = () => {
-		try {
-			return User.uid;
-		} catch (error) {
-			throw types.NotLoggedIn;
-		}
+		return User?.uid;
 	};
 
 	let Token = (): Promise<string> => {
-		EnsureLogin();
 		return new Promise((resolve, reject) => {
+			if (notLoggedIn(reject)) return;
 			User.getIdToken()
 				.then((token) => {
 					resolve(token);
@@ -56,12 +54,16 @@ const InitFirebaseUser = (firebase: types.Firebase, user: firebaseAuth.User, onS
 	};
 
 	let GetUserProfile = () => {
-		EnsureLogin();
 		return new Promise((resolve, reject) => {
+			if (notLoggedIn(reject)) return;
 			getDoc(doc(firebase.Firestore, 'users', ID()))
 				.then((documentSnapshot: DocumentSnapshot<DocumentData>) => {
 					resolve(documentSnapshot.data());
 				}).catch((error) => {
+					if (error == types.NotLoggedIn) {
+						reject(error);
+						return
+					}
 					reject(GetFirebaseUIError(error));
 				});
 		});
@@ -71,20 +73,20 @@ const InitFirebaseUser = (firebase: types.Firebase, user: firebaseAuth.User, onS
 		return new Promise<void>((resolve, reject) => {
 			firebaseAuth.signOut(firebase.Auth)
 				.then(async () => {
+					console.log("signout successful")
 					User = null;
-					onSignout();
 					resolve();
 				})
 				.catch((error) => {
+					console.error("failed to sign out user", error)
 					reject(error);
 				});
 		});
 	};
 
 	return {
-		User,
 		FirebaseInstance,
-		EnsureLogin,
+		notLoggedIn,
 		ID,
 		Token,
 		GetUserProfile,
@@ -136,12 +138,13 @@ const InitFirebase = (): types.FirebaseInstance => {
 		});
 	};
 
-	const User = (onSignout: () => void): Promise<types.FirebaseUser> => {
+	// Checks if a firestore user exists in local storage
+	const User = (): Promise<types.FirebaseUser> => {
 		return new Promise((resolve, reject) => {
 			let unsubscribe = firebaseAuth.onAuthStateChanged(Auth, async (user) => {
 				if (user) {
 					unsubscribe();
-					resolve(InitFirebaseUser(instance, user, onSignout));
+					resolve(InitFirebaseUser(instance, user));
 				} else {
 					unsubscribe();
 					reject(types.NotLoggedIn);
@@ -150,13 +153,13 @@ const InitFirebase = (): types.FirebaseInstance => {
 		});
 	};
 
-	const Login = (username, password: string, onSignout: () => void): Promise<types.FirebaseUser> => {
+	const Login = (username, password: string): Promise<types.FirebaseUser> => {
 		return new Promise((resolve, reject) => {
 			let auth = firebaseAuth.getAuth(App);
 			auth.signOut().finally(() => {
 				firebaseAuth.signInWithEmailAndPassword(Auth, username, password)
 					.then((userCredential) => {
-						resolve(InitFirebaseUser(instance, userCredential.user, onSignout));
+						resolve(InitFirebaseUser(instance, userCredential.user));
 					}).catch((error) => {
 						reject(GetFirebaseUIError(error));
 					});
