@@ -12,7 +12,7 @@
     <script type="module">
         import { InitFittingRoom, comps, InitLocale } from 'http://localhost:3000/dist/esm/main.js?language=en';
         InitLocale();
-/*         window.mm = comps.InitModalManager("thefittingroom-modal");
+/*          window.mm = comps.InitModalManager("tfr-manual-modal");
         window.comps = comps;
         window.onSignout = (colorwaySizeAssetSKU) => {
             console.log("signout", colorwaySizeAssetSKU)
@@ -56,7 +56,7 @@
                 tryOnImage.src = imageUrl
             }
             let slider = comps.InitImageSlider("tfr-slider", onChange)
-            let tfr = InitFittingRoom(1, "thefittingroom-modal")
+            let tfr = InitFittingRoom(1, "tfr-tryon-modal")
             signout.addEventListener("click", (e) => {
                 tfr.user.SignOut()
             })
@@ -100,7 +100,8 @@
         <button id="tryon">Try On</button>
         <button id="signout">Sign Out</button>
     </div>
-    <div id="thefittingroom-modal"> </div>
+    <div id="tfr-manual-modal"> </div>
+    <div id="tfr-tryon-modal"> </div>
     <input type="range" id="tfr-slider" />
     <img id="tfr-tryon-image" src="" />
 </body>
