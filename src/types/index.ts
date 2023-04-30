@@ -5,6 +5,11 @@ import { Firestore } from "firebase/firestore";
 import * as responses from "../api/responses";
 import * as errors from "../api/errors";
 
+export const TfrLogo = process.env.ASSETS_URL + "/tfr-logo.svg";
+export const AposeLogo = process.env.ASSETS_URL + "/apose-logo.svg";
+export const AppStoreLogo = process.env.ASSETS_URL + "/app-store-logo.svg";
+export const QrCodeLogo = process.env.ASSETS_URL + "/qr-code-logo.svg";
+
 export const NotLoggedIn = new Error('user not logged in');
 export const NoFramesFound = new Error('No frames found for this colorway');
 export const NoColorwaySizeAssetsFound = new Error('No colorway size assets found');

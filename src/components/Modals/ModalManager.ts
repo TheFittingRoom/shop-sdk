@@ -1,5 +1,4 @@
-import { TfrLogo } from "../../Modals/svgUrl";
-import { ModalContent } from "../../types";
+import { ModalContent, TfrLogo } from "../../types";
 import { L } from "../../api/Locale";
 
 interface ModalManager {
