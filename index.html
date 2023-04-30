@@ -57,11 +57,11 @@
             }
             let slider = comps.InitImageSlider("tfr-slider", onChange)
             let tfr = InitFittingRoom(1, "tfr-tryon-modal")
-            signout.addEventListener("click", (e) => {
+            signout.addEventListener("click", () => {
                 tfr.user.SignOut()
             })
             let callback = (frames) => {
-                if (frames instanceof Array && frames.length > 0){
+                if (Array.isArray(frames) && frames.length > 0){
                     let close = slider.Load(frames)
                 }
             }
