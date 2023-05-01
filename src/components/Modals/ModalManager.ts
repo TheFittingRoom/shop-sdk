@@ -12,6 +12,7 @@ const InitModalManager = (elementID: string): ModalManager => {
 	if (!modal) {
 		throw new Error(`element with id ${elementID} not found`);
 	}
+
 	let previousContent: ModalContent;
 
 	const renderBody = (modalBody: string) => {
@@ -39,6 +40,7 @@ const InitModalManager = (elementID: string): ModalManager => {
 	};
 
 	const Open = (content: ModalContent) => {
+		console.log("Open", previousContent)
 		if (previousContent) {
 			previousContent.Unhook();
 		}
@@ -50,10 +52,11 @@ const InitModalManager = (elementID: string): ModalManager => {
 	};
 
 	const Close = () => {
+		console.log("Close", previousContent)
 		if (previousContent) {
-			unhook();
 			previousContent.Unhook();
 		}
+		unhook();
 		modal.style.display = "none";
 	};
 
@@ -66,6 +69,7 @@ const InitModalManager = (elementID: string): ModalManager => {
 	const ContainerClose = (e: MouseEvent) => {
 		const background = modal.querySelector("#tfr-modal-background");
 		if (e.target === background) {
+			console.log("container close")
 			Close();
 		}
 	};

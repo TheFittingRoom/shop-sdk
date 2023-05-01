@@ -4,59 +4,36 @@ import * as modals from "./components";
 import { InitShop } from "./api/Shop";
 import { L, InitLocale } from "./api/Locale";
 import * as types from "./types";
-
 import { UIError } from "./api/UIError";
 
-interface FittingRoom {
-	user: types.FirebaseUser;
-	shop: types.Shop;
-	firebase: types.FirebaseInstance;
-	manager: modals.ModalManager;
-	onSignout(colorwaySizeAssetSKU: string): () => void;
-	onClose(): void;
-	onNavBack(): void;
-	onTryOn(colorwaySizeAssetSKU: string): void;
-	whenAvatarNotCreated(colorwaySizeAssetSKU: string): void;
-	whenAvatarPending(colorwaySizeAssetSKU: string): void;
-	whenAvatarCreated(colorwaySizeAssetSKU: string): void;
-	whenNotSignedIn(colorwaySizeAssetSKU: string): void;
-
-	whenFramesReady(colorwaySizeAssetSKU: string, frames: types.TryOnFrames): void;
-
-	whenFramesFailed(colorwaySizeAssetSKU: string, error: Error): void;
-
-	whenError(colorwaySizeAssetSKU: string, error: UIError): void;
-	whenSignedIn(user: types.FirebaseUser, colorwaySizeAssetSKU: string): void;
-
-	onSignIn(colorwaySizeAssetSKU: string): (username: string, password: string, validation: (message: string) => void) => void;
-	onNavSignIn(colorwaySizeAssetSKU: string): (email: string) => void;
-	onPasswordReset(colorwaySizeAssetSKU: string): (email: string) => void;
-	onNavForgotPassword(colorwaySizeAssetSKU: string): (email: string) => void;
-	onNavScanCode(): void;
-	TryOn(colorwaySizeAssetSKU: string, framesCallback: (frames: types.TryOnFrames | Error) => void): void;
-}
-
-const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
+const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom => {
 	InitLocale().catch((error) => {
 		console.error(error);
 	});
 
-	let fittingRoom: FittingRoom = {
-		user: undefined,
+	let fittingRoom: types.FittingRoom = {
 		shop: undefined,
+		user: undefined,
 		firebase: InitFirebase(),
 		manager: modals.InitModalManager(modalDivID),
 
 		onSignout(colorwaySizeAssetSKU: string) {
-			console.log("onSignout", colorwaySizeAssetSKU);
 			return () => {
-				this.manager.Open(modals.LoggedOutModal({
-					onNavSignIn: this.onNavSignIn(colorwaySizeAssetSKU),
-					onClose: this.onClose.bind(this)
-				}));
+				this.user.SignOut().then(() => {
+					this.manager.Open(modals.LoggedOutModal({
+						onNavSignIn: this.onNavSignIn(colorwaySizeAssetSKU),
+						onClose: this.onClose.bind(this)
+					}));
+				}).catch((error: Error) => {
+					console.error("failed to logout user", error);
+					this.manager.Open(modals.ErrorModal({
+						error: L.SomethingWentWrong,
+						onClose: this.onClose.bind(this),
+						onNavBack: this.onNavBack
+					}));
+				});
 			};
 		},
-
 
 		// requires binding to modal (.bind(this))
 		onClose() {
@@ -80,9 +57,9 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 				.then(framesOrFunc => {
 					console.log("frames or promise", framesOrFunc);
 					if (framesOrFunc instanceof Function) {
-						console.log("recieved promise from tryon");
+						console.log("recieved func wrapped promise from shop tryon");
 						this.manager.Open(modals.LoadingAvatarModal({}));
-						return new Promise((res, rej) => framesOrFunc(res, rej));
+						return framesOrFunc();
 					}
 					return framesOrFunc;
 				}).then((frames: types.TryOnFrames) => {
@@ -115,7 +92,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 				});
 		},
 
-		whenAvatarNotCreated(colorwaySizeAssetSKU: string) {
+				whenAvatarNotCreated(colorwaySizeAssetSKU: string) {
 			this.manager.Open(modals.NoAvatarModal({
 				onClose: this.onClose.bind(this),
 				onNavBack: this.onNavBack,
@@ -195,17 +172,62 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 			});
 		},
 
+
+		afterSignIn(user: types.FirebaseUser, colorwaySizeAssetSKU: string) {
+			console.log('afterSignIn', colorwaySizeAssetSKU);
+			this.user = user;
+			this.shop = InitShop(this.user, shopID);
+			this.user.GetUserProfile().then((profile) => {
+				switch (profile.avatar_status) {
+					case types.AvatarState.NOT_CREATED:
+						console.log("avatar not created");
+						this.manager.Open(modals.NoAvatarModal({
+							onClose: this.onClose.bind(this),
+							onNavBack: this.onNavBack,
+						}));
+						break;
+					case types.AvatarState.PENDING:
+						console.log("avatar pending");
+						this.manager.Open(modals.LoadingAvatarModal({}));
+						this.shop.AwaitAvatarCreated().then(() => {
+							this.onTryOn(colorwaySizeAssetSKU);
+						}).catch((error: UIError) => {
+							this.manager.Open(modals.ErrorModal({
+								error: error.userMessage,
+								onClose: this.onClose.bind(this),
+								onNavBack: this.onNavBack
+							}));
+						});
+						break;
+					case types.AvatarState.CREATED:
+						console.log("avatar created");
+						this.whenAvatarCreated(colorwaySizeAssetSKU);
+						break;
+					default:
+						console.error("profile.avatar_status is invalid", profile);
+						this.manager.Open(modals.ErrorModal({
+							error: L.SomethingWentWrong,
+							onClose: this.onClose,
+							onNavBack: this.onNavBack
+						}));
+				}
+			}).catch((error: UIError) => {
+				console.error('whenSignIn invalid avatar state', error);
+				this.whenError(colorwaySizeAssetSKU, error);
+			});
+		},
+
 		onSignIn(colorwaySizeAssetSKU: string) {
 			return (username, password, validationError: (message: string) => void) => {
 				if (username.length == 0 || password.length == 0) {
 					validationError(L.UsernameOrPasswordEmpty);
 					return;
 				}
-				this.firebase.Login(username, password, this.onSignout(colorwaySizeAssetSKU)).then((u) => {
-					this.user = u;
-					this.whenSignedIn(this.user, colorwaySizeAssetSKU);
+				this.firebase.Login(username, password).then((u: types.FirebaseUser) => {
+					this.whenSignedIn(u, colorwaySizeAssetSKU);
 					this.manager.Close();
 				}).catch((error: UIError) => {
+					console.error("failed to login", error);
 					validationError(error.userMessage);
 				});
 			};
@@ -227,6 +249,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 			return (email: string) => {
 				this.firebase.SendPasswordResetEmail(email).then(() => {
 					this.manager.Open(modals.ResetLinkModal({
+						email: email,
 						onNavSignIn: this.onNavSignIn(colorwaySizeAssetSKU),
 					}));
 				}).catch((error: UIError) => {
@@ -251,15 +274,15 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 		},
 
 		TryOn(colorwaySizeAssetSKU: string) {
-			console.log('TryOn', colorwaySizeAssetSKU);
+			console.log('starting tfr tryon flow', colorwaySizeAssetSKU);
 			try {
-				if (this.user) {
+				if (this?.user?.ID()) {
 					this.whenSignedIn(this.user, colorwaySizeAssetSKU);
 					return;
 				}
-				this.firebase.User(this.onSignout(colorwaySizeAssetSKU)).then((u) => {
-					this.user = u;
-					this.whenSignedIn(this.user, colorwaySizeAssetSKU);
+
+				this.firebase.User().then((u) => {
+					this.whenSignedIn(u, colorwaySizeAssetSKU);
 				}).catch((error) => {
 					if (error == types.NotLoggedIn) {
 						console.info("user not logged in");
@@ -281,15 +304,15 @@ const InitFittingRoom = (shopID: number, modalDivID: string): FittingRoom => {
 		}
 	};
 
-	fittingRoom.firebase.User(fittingRoom.onSignout(null)).then((u) => {
+	fittingRoom.firebase.User().then((u) => {
 		fittingRoom.user = u;
 	}).catch((error) => {
 		if (error == types.NotLoggedIn) {
-			console.info("user not logged in");
+			console.log("user not logged in");
 		}
 	});
 
 	return fittingRoom;
 };
 
-export { FittingRoom, InitFittingRoom };
+export { InitFittingRoom };
