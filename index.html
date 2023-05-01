@@ -48,25 +48,13 @@
         };
 
         window.addEventListener('load', (e) => {
-            let tryOnImage = document.getElementById("tfr-tryon-image")
             let signout = document.getElementById("signout")
-
-            let onChange = (slider, imageUrl) => {
-                console.log("slider change", slider, imageUrl)
-                tryOnImage.src = imageUrl
-            }
-            let slider = comps.InitImageSlider("tfr-slider", onChange)
             let tfr = InitFittingRoom(1, "tfr-tryon-modal")
             signout.addEventListener("click", () => {
                 tfr.user.SignOut()
             })
-            let callback = (frames) => {
-                if (Array.isArray(frames) && frames.length > 0){
-                    let close = slider.Load(frames)
-                }
-            }
             document.getElementById("tryon").addEventListener("click", (e) => {
-                tfr.TryOn("5003-007-08", callback)
+                tfr.TryOn("5003-007-08")
             })
         })
     </script>

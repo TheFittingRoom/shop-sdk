@@ -78,6 +78,7 @@ export interface FittingRoom {
 
     whenError(colorwaySizeAssetSKU: string, error:UIError): void;
     whenSignedIn(user: types.FirebaseUser, colorwaySizeAssetSKU: string): void;
+    whenSignedOut(colorwaySizeAssetSKU: string): void;
 
     afterSignIn(user: FirebaseUser, colorwaySizeAssetSKU: string): void;
     onSignIn(colorwaySizeAssetSKU: string): (username: string, password: string, validation: (message: string) => void) => void;
@@ -85,7 +86,7 @@ export interface FittingRoom {
     onPasswordReset(colorwaySizeAssetSKU: string): (email: string) => void;
     onNavForgotPassword(colorwaySizeAssetSKU: string): (email: string) => void;
     onNavScanCode(): void;
-    TryOn(colorwaySizeAssetSKU: string, framesCallback: (frames: TryOnFrames | Error) => void): void;
+    TryOn(colorwaySizeAssetSKU: string);
 }
 
 export interface ModalContent {
@@ -114,6 +115,14 @@ export interface ForgotPasswordModalProps extends ModalProps {
 };
 export interface NoAvatarModalProps extends ModalProps {};
 export interface LoadingAvatarModalProps extends ModalProps {};
+
+export interface TryOnModalProps extends ModalProps {
+    frames: TryOnFrames;
+    onNavBack: () => void;
+    onClose: () => void;
+};
+
+
 export interface ErrorModalProps extends ModalProps {
     error: string,
     onNavBack: () => void;

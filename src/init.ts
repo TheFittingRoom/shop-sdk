@@ -20,17 +20,9 @@ const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom 
 		onSignout(colorwaySizeAssetSKU: string) {
 			return () => {
 				this.user.SignOut().then(() => {
-					this.manager.Open(modals.LoggedOutModal({
-						onNavSignIn: this.onNavSignIn(colorwaySizeAssetSKU),
-						onClose: this.onClose.bind(this)
-					}));
+					this.whenSignedOut(colorwaySizeAssetSKU);
 				}).catch((error: Error) => {
-					console.error("failed to logout user", error);
-					this.manager.Open(modals.ErrorModal({
-						error: L.SomethingWentWrong,
-						onClose: this.onClose.bind(this),
-						onNavBack: this.onNavBack
-					}));
+					this.whenError(colorwaySizeAssetSKU, error);
 				});
 			};
 		},
@@ -64,7 +56,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom 
 					return framesOrFunc;
 				}).then((frames: types.TryOnFrames) => {
 					this.manager.Close();
-					this.framesCallback(frames);
+					this.whenFramesReady(colorwaySizeAssetSKU, frames);
 				}).catch((error: Error | types.RecommendedAvailableSizes) => {
 					const recommendedSizeError = error as types.RecommendedAvailableSizes;
 					if (!recommendedSizeError.recommended_size ||
@@ -76,7 +68,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom 
 							onClose: this.onClose.bind(this),
 							onNavBack: this.onNavBack
 						}));
-						this.framesCallback(error);
+						this.whenFramesReady(colorwaySizeAssetSKU, frames);
 						return;
 					}
 
@@ -88,11 +80,11 @@ const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom 
 						onClose: this.onClose.bind(this),
 						onNavBack: this.onNavBack
 					}));
-					this.framesCallback(error);
+					this.whenFramesReady(colorwaySizeAssetSKU, frames);
 				});
 		},
 
-				whenAvatarNotCreated(colorwaySizeAssetSKU: string) {
+		whenAvatarNotCreated(colorwaySizeAssetSKU: string) {
 			this.manager.Open(modals.NoAvatarModal({
 				onClose: this.onClose.bind(this),
 				onNavBack: this.onNavBack,
@@ -104,11 +96,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom 
 			this.shop.AwaitAvatarCreated().then(() => {
 				this.onTryOn(colorwaySizeAssetSKU);
 			}).catch((error: UIError) => {
-				this.manager.Open(modals.ErrorModal({
-					error: error.userMessage,
-					onClose: this.onClose.bind(this),
-					onNavBack: this.onNavBack
-				}));
+				this.whenError(colorwaySizeAssetSKU, error);
 			});
 		},
 
@@ -126,16 +114,21 @@ const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom 
 		},
 
 		whenFramesReady(colorwaySizeAssetSKU: string, frames: types.TryOnFrames) {
-			console.warn("whenFramesReady not implemented");
+			this.manager.Open(modals.TryOnModal({
+				frames: frames,
+				onClose: this.onClose.bind(this),
+				onNavBack: this.onNavBack
+			}));
 		},
 
 		whenFramesFailed(colorwaySizeAssetSKU: string, error: Error) {
 			console.warn("whenFramesFailed not implemented");
+			this.whenError(colorwaySizeAssetSKU, error);
 		},
 
 		whenError(colorwaySizeAssetSKU: string, error: UIError) {
 			this.manager.Open(modals.ErrorModal({
-				error: error.userMessage,
+				error: error?.userMessage,
 				onClose: this.onClose.bind(this),
 				onNavBack: this.onNavBack
 			}));
@@ -172,6 +165,12 @@ const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom 
 			});
 		},
 
+		whenSignedOut(colorwaySizeAssetSKU: string) {
+			this.manager.Open(modals.LoggedOutModal({
+				onNavSignIn: this.onNavSignIn(colorwaySizeAssetSKU),
+				onClose: this.onClose.bind(this)
+			}));
+		},
 
 		afterSignIn(user: types.FirebaseUser, colorwaySizeAssetSKU: string) {
 			console.log('afterSignIn', colorwaySizeAssetSKU);
@@ -205,11 +204,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom 
 						break;
 					default:
 						console.error("profile.avatar_status is invalid", profile);
-						this.manager.Open(modals.ErrorModal({
-							error: L.SomethingWentWrong,
-							onClose: this.onClose,
-							onNavBack: this.onNavBack
-						}));
+						this.whenError(colorwaySizeAssetSKU, L.SomethingWentWrong);
 				}
 			}).catch((error: UIError) => {
 				console.error('whenSignIn invalid avatar state', error);
