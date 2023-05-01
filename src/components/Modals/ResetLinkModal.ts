@@ -3,8 +3,10 @@ import { ModalContent, ResetLinkModalProps } from "../../types";
 
 const ResetLinkModal = (props: ResetLinkModalProps): ModalContent => {
 
+    const { email } = props;
+
     let onNavSignIn = () => {
-        props.onNavSignIn("");
+        props.onNavSignIn(email || "");
     };
 
     const Hook = () => {

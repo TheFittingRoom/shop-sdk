@@ -62,7 +62,7 @@ const SignInModal = (props: SignInModalProps): ModalContent =>  {
         });
 
         const formError = document.querySelector('#tfr-form-error');
-        formError.innerHTML = message;
+        formError.innerHTML = message || "Something went wrong";
         formError.classList.add('tfr-d-block');
     }
 
