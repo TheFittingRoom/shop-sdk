@@ -48,8 +48,17 @@
         };
 
         window.addEventListener('load', (e) => {
+            let tryOnImage = document.getElementById("tfr-tryon-image")
             let signout = document.getElementById("signout")
+            let onChange = (slider, imageUrl) => {
+                tryOnImage.src = imageUrl
+            }
+            let slider = comps.InitImageSlider("tfr-slider", onChange)
             let tfr = InitFittingRoom(1, "tfr-tryon-modal")
+            tfr.whenFramesReady = (sku, frames) => {
+                console.log("frames ready", sku, frames)
+                slider.Load(frames)
+            }
             signout.addEventListener("click", () => {
                 tfr.user.SignOut()
             })

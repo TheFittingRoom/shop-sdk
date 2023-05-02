@@ -286,7 +286,6 @@ const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom 
 						console.error("error retrieving firebase user", error);
 						this.whenError(colorwaySizeAssetSKU, error);
 					}
-					this.whenFramesFailed(colorwaySizeAssetSKU, error);
 				});
 			} catch (e) {
 				if (e.message == types.NotLoggedIn) {
@@ -294,7 +293,6 @@ const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom 
 				} else {
 					this.whenError(colorwaySizeAssetSKU, e);
 				}
-				this.whenFramesFailed(colorwaySizeAssetSKU, e);
 			}
 		}
 	};

@@ -155,3 +155,7 @@
 .tfr-try-on-content {
     margin-left: 60px;
 }
+
+#tfr-tryon-image {
+    max-width: 30vw;
+}

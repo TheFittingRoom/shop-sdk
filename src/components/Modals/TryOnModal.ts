@@ -5,6 +5,15 @@ import { TryOnModalProps } from "../../types";
 
 const TryOnModal = (props: TryOnModalProps): ModalContent => {
 	let close = () => {};
+
+	const onNavBack = () => {
+		props.onNavBack();
+	};
+
+	const onClose = () => {
+		props.onClose();
+	};
+
 	const Hook = () => {
 		let tryOnImage = <HTMLImageElement>document.getElementById("tfr-tryon-image")
 		const onChange = (slider, imageUrl) => {
@@ -20,19 +29,23 @@ const TryOnModal = (props: TryOnModalProps): ModalContent => {
 			}
 			close = e as () => void;
 		}
+		document.getElementById("tfr-back").addEventListener("click", onNavBack);
+		document.getElementById("tfr-close").addEventListener("click", onClose);
 	};
 
 	const Unhook = () => {
 		close();
+		document.getElementById("tfr-back").removeEventListener("click", onNavBack);
+		document.getElementById("tfr-close").removeEventListener("click", onClose);
 	};
 
 
 
 	const Body = () => {
 		return `
-        <div tfr-element="true" class="tfr-title-font tfr-light-22-300 tfr-c-dark tfr-mt-60" >
-				    <input type="range" id="tfr-slider" />
-    				<img id="tfr-tryon-image" src="" />
+        <div class="tfr-slider-wrapper">
+				<img id="tfr-tryon-image" src="" />
+				<input type="range" id="tfr-slider" />
 				</div>
 				<div class="tfr-t-a-center">
             <span id="tfr-back" tfr-element="true" class="tfr-body-font tfr-16-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mr-20">${L.ReturnToCatalogPage || "Return to Catalog Page"}</span>
