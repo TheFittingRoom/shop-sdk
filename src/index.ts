@@ -6,3 +6,5 @@ export * as types from "./types";
 export { Fetcher } from "./api/Fetcher";
 export { L, InitLocale, SetLocale } from "./api/Locale";
 export { InitFittingRoom } from "./init";
+export const VTOTimeoutMS = process.env.VTO_TIMEOUT_MS;
+export const AvatarTimeoutMS = process.env.AVATAR_TIMEOUT_MS;

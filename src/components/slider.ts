@@ -7,8 +7,8 @@ const InitImageSlider = (sliderID: string, onChange: (slider: HTMLInputElement, 
 
 	return {
 		Load(imageURLs: string[]) {
-			if (!imageURLs || !imageURLs.length) {
-				console.error("slider has no images to load")
+			if (!Array.isArray(imageURLs) || !imageURLs.length) {
+				console.log("slider has no images to load")
 				return new Error("slider has no images to load")
 			}
 			imageURLs.forEach(function (path) { new Image().src = path; });

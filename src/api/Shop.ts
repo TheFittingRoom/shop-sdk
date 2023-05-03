@@ -175,26 +175,16 @@ const InitShop = (user: types.FirebaseUser, id: number): types.Shop => {
 			}).catch((error: ErrorResponse | ErrorOutsideRecommendedSizes) => {
 				switch (error.error) {
 					case AvatarNotCreated:
-						console.error("RequestColorwayFrames recieved AvatarNotCreated");
 						reject(createUIError(L.DontHaveAvatar, new Error(error.error)));
 						break;
 					case AvatarNotReady:
-						console.error("RequestColorwayFrames recieved AvatarNotReady");
-						reject(createUIError(L.SomethingWentWrong, new Error(error.error)));
+						reject(new Error(error.error));
 						break;
 					case SizeIDOutsideRecommendedRange:
-						console.error("RequestColorwayFrames recieved SizeIDOutsideRecommendedRange");
 						reject(error);
 						break;
 					default:
-						if (error instanceof Error) {
-							console.error("RequestColorwayFrames recieved unexpected error", error);
-							reject(createUIError(L.SomethingWentWrong, error));
-						} else {
-							// UIError
-							console.error("RequestColorwayFrames recieved ui error", error);
-							reject(createUIError(L.SomethingWentWrong, new Error(error.error)));
-						}
+						reject(error);
 				}
 			});
 		});

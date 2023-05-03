@@ -13,7 +13,8 @@
   {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
 
   <script type="module">
-    import { InitFittingRoom, comps, InitLocale, InitImageSlider } from 'http://localhost:3000/dist/esm/main.js';
+    // import { InitFittingRoom, comps, InitLocale, VTOTimeoutMS } from 'https://assets.dev.thefittingroom.xyz/shop-sdk/74b61a0/main.js';
+    import { InitFittingRoom, comps, InitLocale, VTOTimeoutMS } from 'http://localhost:3000/dist/esm/main.js';
     const getSku = () => {
       const color = document.getElementsByName("options[{{product.options[0]}}]")?.[0]?.value;
       const size = document.getElementsByName("options[{{product.options[1]}}]")?.[0]?.value;
@@ -25,6 +26,24 @@
       return variant?.sku;
     };
 
+    function startProgressBar(milliseconds, progressBar) {
+        let percentCount = 0;
+        let millisecondStep = milliseconds / 200;
+        progressBar.style.width = percentCount + "%";
+        const id = setInterval(() => {
+            if (percentCount >= 100) {
+                clearInterval(id);
+            }
+            else {
+                percentCount+=0.5;
+                progressBar.style.width = percentCount + "%";
+            }
+        }, millisecondStep);
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+
+    });
+
     const Hide = (element) => element.style.display = "none"
     const Show = (element) => element.style.display = "block"
 
@@ -34,24 +53,15 @@
         const tryOnImage = document.getElementById("tfr-tryon-image")
         const tryOnContainer = document.getElementById("tfr-tryon-container")
         const tfrOriginal = document.getElementById("tfr-original")
-        const tfrLoader = document.getElementById("tfr-loader")
         const tfrSliderImageContainer = document.getElementById("tfr-slider-img-container")
         const mediaGallery = document.getElementById("MediaGallery-{{ section.id }}")
         const changeSlider = (slider, imageUrl) => {
             tryOnImage.src = imageUrl
         }
-        const slider = InitImageSlider("tfr-tryon-slider", changeSlider)
+        const slider = comps.InitImageSlider("tfr-tryon-slider", changeSlider)
         const tfr = InitFittingRoom(1, "thefittingroom-modal")
-
-        const onSignOut = () => {
-                  tfr.user.SignOut()
-                  .then(() => {
-                    console.log("signed out")
-                    Hide(tfrSignOut)
-                  })
-                  .catch((e) => {console.error(e)})
-        }
-        tfrSignOut.addEventListener('click', onSignOut)
+        let progressBar = document.querySelector(".progress-bar");
+        let progress = document.querySelector(".progress-bar-fill");
 
         const checkLogin = () =>{
           tfr.firebase.User(() =>{}).then((u) => {
@@ -62,28 +72,57 @@
           })
         }
 
-        checkLogin()
-        const TryOnFramesCallback = (framesOrError) => {
-            checkLogin()
-            console.log("tryOnFramesCallback", framesOrError)
-            if (framesOrError.message){
-              Hide(tryOnContainer)
-              Hide(tfrLoader)
-              Show(tfrOriginal)
-              // hide everything on page
-              return
-            }
-            let close = slider.Load(framesOrError)
-            Hide(tfrOriginal)
-            Hide(tfrLoader)
-            Show(tryOnContainer)
+        const showLoader = () => {
+          console.log("show loader")
+          tfrOriginal.classList.add("tfr-loader")
+          Show(progressBar)
+          startProgressBar(VTOTimeoutMS, progress)
         }
-        tfrTryOn.addEventListener('click', (e) => {
-            let sku = getSku();
-            tfr.TryOn(sku, TryOnFramesCallback)
-            Show(tfrLoader)
+
+        const hideLoader = () => {
+          console.log("hideLoader")
+          tfrOriginal.classList.remove("tfr-loader")
+        }
+
+        tfrSignOut.addEventListener('click', () => {
+          console.log("onSignout")
+          tfr.onSignout("")().then(() => {
+              Hide(tfrSignOut)
+          }).catch((error) => {
+              Show(tfrSignOut)
+              console.error(error)
+          })
         })
 
+        tfr.whenTryOnLoading = (sku) => {
+            showLoader()
+        }
+
+        tfr.whenTryOnReady = (sku, frames) => {
+            console.log("frames ready", sku, frames)
+            Hide(tfrOriginal)
+            hideLoader()
+            Show(tryOnContainer)
+            slider.Load(frames)
+        }
+
+        tfr.whenTryOnFailed = (sku, error) => {
+            Hide(tryOnContainer)
+            showLoader()
+            Show(tfrOriginal)
+            this.whenError(colorwaySizeAssetSKU, error);
+        }
+
+      tfrTryOn.addEventListener('click', (e) => {
+          let sku = getSku();
+          Hide(tryOnContainer)
+          showLoader()
+          Show(tfrOriginal)
+          tfr.TryOn(sku)
+      })
+
+      showLoader()
+      checkLogin()
     })
   </script>
 
@@ -127,9 +166,6 @@
 
   <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.gallery_layout }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
     <div id="tfr-tryon-container" style="display:none">
-      <div id="tfr-loader" id="loader-container-element" style="display:none">
-        <h2>Loading...</h2>
-      </div>
       <div class="drag-slider-container" id="tfr-slider-img-container">
         <div class="img-style-container">
           <img
@@ -401,6 +437,9 @@
           </slider-component>
         {%- endif -%}
       </media-gallery>
+      <div class="progress-bar" style="display:none">
+        <span class="progress-bar-fill"></span>
+      </div>
     </div>
     <div class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}">
       <div

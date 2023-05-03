@@ -56,6 +56,8 @@ export interface Shop {
     GetStyles: (ids: number[]) => Promise<Map<number, FirestoreStyle>>;
     GetColorwaySizeAssets: (style_id?: number, skus?: string[]) => Promise<Map<number, FirestoreColorwaySizeAsset>>;
     RequestColorwaySizeAssetFrames(colorwayID: number): Promise<void>;
+
+    User(): FirebaseUser;
 }
 
 export interface FittingRoom {
@@ -63,7 +65,7 @@ export interface FittingRoom {
     shop: Shop;
     firebase: FirebaseInstance;
     manager: ModalManager;
-    onSignout(colorwaySizeAssetSKU: string): () => void;
+    onSignout(colorwaySizeAssetSKU: string): () => Promise<void>;
     onClose(): void;
     onNavBack(): void;
     onTryOn(colorwaySizeAssetSKU: string): void;
@@ -72,15 +74,16 @@ export interface FittingRoom {
     whenAvatarCreated(colorwaySizeAssetSKU: string): void;
     whenNotSignedIn(colorwaySizeAssetSKU: string): void;
 
-    whenFramesReady(colorwaySizeAssetSKU: string, frames: types.TryOnFrames): void;
+    whenTryOnReady(colorwaySizeAssetSKU: string, frames: types.TryOnFrames): void;
 
-    whenFramesFailed(colorwaySizeAssetSKU: string, error: Error): void;
+    whenTryOnLoading(colorwaySizeAssetSKU: string): void;
+
+    whenTryOnFailed(colorwaySizeAssetSKU: string, error: Error): void;
 
     whenError(colorwaySizeAssetSKU: string, error:UIError): void;
     whenSignedIn(user: types.FirebaseUser, colorwaySizeAssetSKU: string): void;
     whenSignedOut(colorwaySizeAssetSKU: string): void;
 
-    afterSignIn(user: FirebaseUser, colorwaySizeAssetSKU: string): void;
     onSignIn(colorwaySizeAssetSKU: string): (username: string, password: string, validation: (message: string) => void) => void;
     onNavSignIn(colorwaySizeAssetSKU: string): (email: string) => void;
     onPasswordReset(colorwaySizeAssetSKU: string): (email: string) => void;
