@@ -3,7 +3,6 @@ const InitImageSlider = (sliderID: string, onChange: (slider: HTMLInputElement, 
 	if (!slider) {
 		throw new Error(`Slider with id ${sliderID} not found`);
 	}
-	slider.style.display = 'none';
 
 	return {
 		Load(imageURLs: string[]) {
@@ -22,13 +21,11 @@ const InitImageSlider = (sliderID: string, onChange: (slider: HTMLInputElement, 
 			}
 
 			onChange(slider, imageURLs[defaultScrollValue])
-			slider.style.display = 'block';
 			slider.removeEventListener('input', handleSliderChange);
 			slider.addEventListener('input', handleSliderChange);
 
 			return ()=> {
 				slider.removeEventListener('input', handleSliderChange);
-				slider.style.display = 'none';
 			}
 		},
 	}

@@ -26,19 +26,22 @@
       return variant?.sku;
     };
 
+    let percentCount = 0;
     function startProgressBar(milliseconds, progressBar) {
+        if (percentCount > 0 && percentCount < 100) {
+          percentCount = 0;
+          return;
+        }
         console.debug("progress bar runs for", milliseconds/1000, "seconds")
-        let percentCount = 0;
         let millisecondStep = milliseconds / 100;
         progressBar.style.width = percentCount + "%";
         const id = setInterval(() => {
             if (percentCount >= 100) {
                 clearInterval(id);
+                return
             }
-            else {
-                percentCount+=1;
-                progressBar.style.width = percentCount + "%";
-            }
+            percentCount+=1;
+            progressBar.style.width = percentCount + "%";
         }, millisecondStep);
     }
 
@@ -176,7 +179,7 @@
             src="https://cdn.shopify.com/s/files/1/0551/2180/5443/products/5003007_garment.jpg?v=1678320763&width=1100"
           >
         </div>
-        <div id="tfr-slider-container">
+        <div id="tfr-slider-container" style="display:none">
           <input type="range" min="0" value="0" class="slider" id="tfr-tryon-slider">
           Drag slider for a 360° view
         </div>
