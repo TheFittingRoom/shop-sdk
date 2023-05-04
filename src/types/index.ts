@@ -117,7 +117,9 @@ export interface ForgotPasswordModalProps extends ModalProps {
     onPasswordReset: (email: string) => void;
 };
 export interface NoAvatarModalProps extends ModalProps {};
-export interface LoadingAvatarModalProps extends ModalProps {};
+export interface LoadingAvatarModalProps extends ModalProps {
+    timeoutMS: number;
+};
 
 export interface TryOnModalProps extends ModalProps {
     frames: TryOnFrames;

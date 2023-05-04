@@ -93,7 +93,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom 
 		},
 
 		whenAvatarPending(colorwaySizeAssetSKU: string) {
-			this.manager.Open(modals.LoadingAvatarModal({}));
+			this.manager.Open(modals.LoadingAvatarModal({timeoutMS: parseInt(process.env.VTO_TIMEOUT_MS)}));
 			this.shop.AwaitAvatarCreated().then(() => {
 				this.onTryOn(colorwaySizeAssetSKU);
 			}).catch((error: UIError) => {
@@ -128,7 +128,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom 
 		},
 
 		whenTryOnLoading(colorwaySizeAssetSKU: string) {
-			this.manager.Open(modals.LoadingAvatarModal({}));
+			this.manager.Open(modals.LoadingAvatarModal({ timeoutMS: parseInt(process.env.VTO_TIMEOUT_MS) }));
 		},
 
 		whenError(colorwaySizeAssetSKU: string, error: UIError) {

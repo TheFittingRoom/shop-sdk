@@ -12,34 +12,6 @@
 	cursor: pointer;
 }
 
-.tfr-loader {
-	opacity: 75%;
-}
-
-.tfr-loader::before {
-	content: "Loading...";
-	top: 57%;
-	left: 45%;
-	z-index: 101;
-	opacity: 100%;
-	position: relative;
-	font-size: 16px;
-	float: left;
-	margin-bottom: -30%;
-	color: white;
-}
-
-.tfr-loader::after {
-	content: url("https://assets.dev.thefittingroom.xyz/shop-sdk/assets/tfr-door-loading.svg");
-	bottom: 30%;
-	left: 45%;
-	z-index: 100;
-	opacity: 100%;
-	position: relative;
-	margin-top: -45%;
-	float: left;
-}
-
 #tfr-slider-img-container {
 	width: 100%;
 	display: flex;
@@ -148,6 +120,34 @@
 	font-family: inherit;
 }
 
+.tfr-loader {
+	opacity: 75%;
+}
+
+.tfr-loader::before {
+	content: "Loading...";
+	top: 57%;
+	left: 43%;
+	z-index: 101;
+	opacity: 100%;
+	position: relative;
+	font-size: 16px;
+	float: left;
+	margin-bottom: -30%;
+	color: white;
+}
+
+.tfr-loader::after {
+	content: url("https://assets.dev.thefittingroom.xyz/shop-sdk/assets/tfr-door-loading.svg");
+	bottom: 30%;
+	left: 43%;
+	z-index: 100;
+	opacity: 100%;
+	position: relative;
+	margin-top: -45%;
+	float: left;
+}
+
 .progress-bar {
 	height: 10px;
 	width: 55%;
@@ -155,16 +155,15 @@
 	border: 1px solid rgb(189, 189, 189);
 	position: relative;
 	bottom: 38%;
-	left: 23%;
+	margin: 0 auto;
 }
 
 .progress-bar-fill {
 	display: block;
 	height: 100%;
 	background-color: #209da7;
-	animation-name: progress;
-	animation-duration: 120s;
 	text-align: center;
 	font-size: 16px;
 	color: white;
+	transition: width 600ms linear;
 }

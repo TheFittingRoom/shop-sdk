@@ -27,25 +27,24 @@
     };
 
     function startProgressBar(milliseconds, progressBar) {
+        console.debug("progress bar runs for", milliseconds/1000, "seconds")
         let percentCount = 0;
-        let millisecondStep = milliseconds / 200;
+        let millisecondStep = milliseconds / 100;
         progressBar.style.width = percentCount + "%";
         const id = setInterval(() => {
             if (percentCount >= 100) {
                 clearInterval(id);
             }
             else {
-                percentCount+=0.5;
+                percentCount+=1;
                 progressBar.style.width = percentCount + "%";
             }
         }, millisecondStep);
     }
-    document.addEventListener("DOMContentLoaded", () => {
 
-    });
-
-    const Hide = (element) => element.style.display = "none"
-    const Show = (element) => element.style.display = "block"
+    const None = (element) => element.style.display = "none"
+    const Block = (element) => element.style.display = "block"
+    const Flex = (element) => element.style.display = "flex"
 
     window.addEventListener('load', (e) => {
         const tfrTryOn = document.getElementById('tfr-tryon-button');
@@ -54,6 +53,7 @@
         const tryOnContainer = document.getElementById("tfr-tryon-container")
         const tfrOriginal = document.getElementById("tfr-original")
         const tfrSliderImageContainer = document.getElementById("tfr-slider-img-container")
+        const tfrSliderContainer = document.getElementById("tfr-slider-container")
         const mediaGallery = document.getElementById("MediaGallery-{{ section.id }}")
         const changeSlider = (slider, imageUrl) => {
             tryOnImage.src = imageUrl
@@ -65,17 +65,17 @@
 
         const checkLogin = () =>{
           tfr.firebase.User(() =>{}).then((u) => {
-            Show(tfrSignOut)
+            Block(tfrSignOut)
           }).catch((e) => {
             // user is not logged in
-            Hide(tfrSignOut)
+            None(tfrSignOut)
           })
         }
 
         const showLoader = () => {
           console.log("show loader")
           tfrOriginal.classList.add("tfr-loader")
-          Show(progressBar)
+          Block(progressBar)
           startProgressBar(VTOTimeoutMS, progress)
         }
 
@@ -87,9 +87,9 @@
         tfrSignOut.addEventListener('click', () => {
           console.log("onSignout")
           tfr.onSignout("")().then(() => {
-              Hide(tfrSignOut)
+              None(tfrSignOut)
           }).catch((error) => {
-              Show(tfrSignOut)
+              Block(tfrSignOut)
               console.error(error)
           })
         })
@@ -100,28 +100,31 @@
 
         tfr.whenTryOnReady = (sku, frames) => {
             console.log("frames ready", sku, frames)
-            Hide(tfrOriginal)
+            None(tfrOriginal)
             hideLoader()
-            Show(tryOnContainer)
+            Block(tryOnContainer)
+            Flex(tfrSliderContainer)
             slider.Load(frames)
         }
 
         tfr.whenTryOnFailed = (sku, error) => {
-            Hide(tryOnContainer)
+            None(tfrSliderContainer)
+            None(tryOnContainer)
             showLoader()
-            Show(tfrOriginal)
+            Block(tfrOriginal)
             this.whenError(colorwaySizeAssetSKU, error);
         }
 
       tfrTryOn.addEventListener('click', (e) => {
           let sku = getSku();
-          Hide(tryOnContainer)
+          None(tfrSliderContainer)
+          None(tryOnContainer)
           showLoader()
-          Show(tfrOriginal)
+          Block(tfrOriginal)
           tfr.TryOn(sku)
       })
 
-      showLoader()
+      None(tfrSliderContainer)
       checkLogin()
     })
   </script>
