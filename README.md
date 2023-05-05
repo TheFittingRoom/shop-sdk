@@ -43,9 +43,13 @@ You can access the development builds by using a commit sha on main like this:
 
 The sdk works out of the box with modals and does not require any overriding.
 All methods on the `tfr` object are overridable.
-We recommend copying and pasting the original function and only modifying what is needed.
+View the [FittingRoom](https://github.com/TheFittingRoom/shop-sdk/blob/96d59558bdbec6cc1e899cac297838a4810de5d4/src/types/index.ts#L63) interface to see all of the overridable function signatures.
+The main implementation can be found in `init.ts`
 
 ```javascript
+    // use the language code in the get url (ex. ?lang=en)
+    InitLocale()
+
     // define a modal div in the html to attach the fitting room to
     let tfr = InitFittingRoom(1, "tfr-tryon-modal")
 
@@ -66,4 +70,18 @@ We recommend copying and pasting the original function and only modifying what i
     document.getElementById("tryon").addEventListener("click", (e) => {
         tfr.TryOn("5003-007-08")
     })
+```
+
+## Localization
+You can call `SetLocale` to change the language of the sdk without using url searchParams.
+
+```javascript
+    SetLocale("en").then(() => {
+        // do something after setting the locale
+    }).catch((err) => {
+        // handle error
+    })
+```
+
+Warnings will be generated in the console for any missing locale definitions.
 
