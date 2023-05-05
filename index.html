@@ -55,13 +55,18 @@
             }
             let slider = comps.InitImageSlider("tfr-slider", onChange)
             let tfr = InitFittingRoom(1, "tfr-tryon-modal")
+
             tfr.whenFramesReady = (sku, frames) => {
                 console.log("frames ready", sku, frames)
                 slider.Load(frames)
             }
+
             signout.addEventListener("click", () => {
-                tfr.user.SignOut()
+                tfr.onSignout("")().then(() => {
+                    console.log("signout")
+                })
             })
+
             document.getElementById("tryon").addEventListener("click", (e) => {
                 tfr.TryOn("5003-007-08")
             })
