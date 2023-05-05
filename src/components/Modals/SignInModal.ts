@@ -1,6 +1,5 @@
 import { L } from "../../api/Locale";
-import { ModalContent, SignInModalProps } from "../../types";
-import { QrCodeLogo, AppStoreLogo, AposeLogo } from "../../Modals/svgUrl";
+import { ModalContent, SignInModalProps, QrCodeLogo, AppStoreLogo, AposeLogo } from "../../types";
 
 
 const SignInModal = (props: SignInModalProps): ModalContent =>  {

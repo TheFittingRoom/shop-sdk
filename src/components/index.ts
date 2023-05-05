@@ -8,6 +8,7 @@ import LoggedOutModal from './Modals/LoggedOutModal';
 import {InitModalManager, ModalManager}  from './Modals/ModalManager';
 import SizeErrorModal from './Modals/SizeErrorModal';
 import ResetLinkModal from './Modals/ResetLinkModal';
+import TryOnModal from './Modals/TryOnModal';
 import InitImageSlider from './slider';
 import "../styles";
 
@@ -24,4 +25,5 @@ export {
     SizeErrorModal,
     ResetLinkModal,
     InitImageSlider,
+    TryOnModal
 };

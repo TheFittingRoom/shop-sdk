@@ -3,12 +3,11 @@ const InitImageSlider = (sliderID: string, onChange: (slider: HTMLInputElement, 
 	if (!slider) {
 		throw new Error(`Slider with id ${sliderID} not found`);
 	}
-	slider.style.display = 'none';
 
 	return {
 		Load(imageURLs: string[]) {
-			if (!imageURLs || !imageURLs.length) {
-				console.error("slider has no images to load")
+			if (!Array.isArray(imageURLs) || !imageURLs.length) {
+				console.log("slider has no images to load")
 				return new Error("slider has no images to load")
 			}
 			imageURLs.forEach(function (path) { new Image().src = path; });
@@ -22,13 +21,11 @@ const InitImageSlider = (sliderID: string, onChange: (slider: HTMLInputElement, 
 			}
 
 			onChange(slider, imageURLs[defaultScrollValue])
-			slider.style.display = 'block';
 			slider.removeEventListener('input', handleSliderChange);
 			slider.addEventListener('input', handleSliderChange);
 
 			return ()=> {
 				slider.removeEventListener('input', handleSliderChange);
-				slider.style.display = 'none';
 			}
 		},
 	}

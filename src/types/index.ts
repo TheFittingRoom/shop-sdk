@@ -5,6 +5,13 @@ import { Firestore } from "firebase/firestore";
 import * as responses from "../api/responses";
 import * as errors from "../api/errors";
 import { ModalManager } from "../components";
+import * as types from "../types";
+import { UIError } from "../api/UIError";
+
+export const TfrLogo = process.env.ASSETS_URL + "/tfr-logo.svg";
+export const AposeLogo = process.env.ASSETS_URL + "/apose-logo.svg";
+export const AppStoreLogo = process.env.ASSETS_URL + "/app-store-logo.svg";
+export const QrCodeLogo = process.env.ASSETS_URL + "/qr-code-logo.svg";
 
 export const NotLoggedIn = new Error('user not logged in');
 export const NoFramesFound = new Error('No frames found for this colorway');
@@ -49,6 +56,8 @@ export interface Shop {
     GetStyles: (ids: number[]) => Promise<Map<number, FirestoreStyle>>;
     GetColorwaySizeAssets: (style_id?: number, skus?: string[]) => Promise<Map<number, FirestoreColorwaySizeAsset>>;
     RequestColorwaySizeAssetFrames(colorwayID: number): Promise<void>;
+
+    User(): FirebaseUser;
 }
 
 export interface FittingRoom {
@@ -56,17 +65,31 @@ export interface FittingRoom {
     shop: Shop;
     firebase: FirebaseInstance;
     manager: ModalManager;
-    onSignout(colorwaySizeAssetSKU: string): () => void;
+    onSignout(colorwaySizeAssetSKU: string): () => Promise<void>;
     onClose(): void;
     onNavBack(): void;
     onTryOn(colorwaySizeAssetSKU: string): void;
-    afterSignIn(user: FirebaseUser, colorwaySizeAssetSKU: string): void;
+    whenAvatarNotCreated(colorwaySizeAssetSKU: string): void;
+    whenAvatarPending(colorwaySizeAssetSKU: string): void;
+    whenAvatarCreated(colorwaySizeAssetSKU: string): void;
+    whenNotSignedIn(colorwaySizeAssetSKU: string): void;
+
+    whenTryOnReady(colorwaySizeAssetSKU: string, frames: types.TryOnFrames): void;
+
+    whenTryOnLoading(colorwaySizeAssetSKU: string): void;
+
+    whenTryOnFailed(colorwaySizeAssetSKU: string, error: Error): void;
+
+    whenError(colorwaySizeAssetSKU: string, error:UIError): void;
+    whenSignedIn(user: types.FirebaseUser, colorwaySizeAssetSKU: string): void;
+    whenSignedOut(colorwaySizeAssetSKU: string): void;
+
     onSignIn(colorwaySizeAssetSKU: string): (username: string, password: string, validation: (message: string) => void) => void;
     onNavSignIn(colorwaySizeAssetSKU: string): (email: string) => void;
     onPasswordReset(colorwaySizeAssetSKU: string): (email: string) => void;
     onNavForgotPassword(colorwaySizeAssetSKU: string): (email: string) => void;
     onNavScanCode(): void;
-    TryOn(colorwaySizeAssetSKU: string, framesCallback: (frames: TryOnFrames | Error) => void): void;
+    TryOn(colorwaySizeAssetSKU: string);
 }
 
 export interface ModalContent {
@@ -94,7 +117,17 @@ export interface ForgotPasswordModalProps extends ModalProps {
     onPasswordReset: (email: string) => void;
 };
 export interface NoAvatarModalProps extends ModalProps {};
-export interface LoadingAvatarModalProps extends ModalProps {};
+export interface LoadingAvatarModalProps extends ModalProps {
+    timeoutMS: number;
+};
+
+export interface TryOnModalProps extends ModalProps {
+    frames: TryOnFrames;
+    onNavBack: () => void;
+    onClose: () => void;
+};
+
+
 export interface ErrorModalProps extends ModalProps {
     error: string,
     onNavBack: () => void;

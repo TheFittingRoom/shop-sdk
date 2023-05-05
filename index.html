@@ -26,7 +26,7 @@
         window.onTryOn = (colorwaySizeAssetSKU) => {
             console.log("try on", colorwaySizeAssetSKU)
         }
-        window.afterSignIn = (user, colorwaySizeAssetSKU) => {
+        window.whenSignedIn = (user, colorwaySizeAssetSKU) => {
             console.log("after sign in", user, colorwaySizeAssetSKU)
         }
         window.onSignIn = (colorwaySizeAssetSKU) => (username, password, validationError) => {
@@ -50,23 +50,20 @@
         window.addEventListener('load', (e) => {
             let tryOnImage = document.getElementById("tfr-tryon-image")
             let signout = document.getElementById("signout")
-
             let onChange = (slider, imageUrl) => {
-                console.log("slider change", slider, imageUrl)
                 tryOnImage.src = imageUrl
             }
             let slider = comps.InitImageSlider("tfr-slider", onChange)
             let tfr = InitFittingRoom(1, "tfr-tryon-modal")
+            tfr.whenFramesReady = (sku, frames) => {
+                console.log("frames ready", sku, frames)
+                slider.Load(frames)
+            }
             signout.addEventListener("click", () => {
                 tfr.user.SignOut()
             })
-            let callback = (frames) => {
-                if (Array.isArray(frames) && frames.length > 0){
-                    let close = slider.Load(frames)
-                }
-            }
             document.getElementById("tryon").addEventListener("click", (e) => {
-                tfr.TryOn("5003-007-08", callback)
+                tfr.TryOn("5003-007-08")
             })
         })
     </script>
@@ -88,7 +85,7 @@
         <br>
         <button onclick="window.mm.Open(window.comps.NoAvatarModal({}))">No Avatar Modal</button>
         <br>
-        <button onclick="window.mm.Open(window.comps.LoadingAvatarModal({}))">Loading Avatar Modal</button>
+        <button onclick="window.mm.Open(window.comps.LoadingAvatarModal({timeoutMS: 12000}))">Loading Avatar Modal</button>
         <br>
         <button
             onclick="window.mm.Open(window.comps.SizeErrorModal({onNavBack: window.onNavBack, onClose: window.onClose, sizes: {recommended: 'large', avaliable: ['small', 'medium', 'large']}}))">Size

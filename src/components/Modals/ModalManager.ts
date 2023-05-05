@@ -1,5 +1,4 @@
-import { TfrLogo } from "../../Modals/svgUrl";
-import { ModalContent } from "../../types";
+import { ModalContent, TfrLogo } from "../../types";
 import { L } from "../../api/Locale";
 
 interface ModalManager {
@@ -41,7 +40,6 @@ const InitModalManager = (elementID: string): ModalManager => {
 	};
 
 	const Open = (content: ModalContent) => {
-		console.log("Open", previousContent)
 		if (previousContent) {
 			previousContent.Unhook();
 		}
@@ -53,11 +51,10 @@ const InitModalManager = (elementID: string): ModalManager => {
 	};
 
 	const Close = () => {
-		console.log("Close", previousContent)
 		if (previousContent) {
 			previousContent.Unhook();
+			unhook();
 		}
-		unhook();
 		modal.style.display = "none";
 	};
 
@@ -82,7 +79,13 @@ const InitModalManager = (elementID: string): ModalManager => {
 	};
 
 	const unhook = () => {
-		modal.querySelector("#tfr-close-container").removeEventListener("click", Close);
+		let closeLink = modal.querySelector("#tfr-close-container")
+		if (closeLink) {
+			closeLink.removeEventListener("click", Close);
+		} else {
+			console.error("#tfr-close-container not found on unhook")
+			console.debug(document.getElementById(elementID)?.innerHTML)
+		}
 		document.removeEventListener("keydown", EscClose);
 		document.removeEventListener("click", ContainerClose);
 	};
