@@ -5,7 +5,7 @@ const ResetLinkModal = (props: ResetLinkModalProps): ModalContent => {
 
     const { email } = props;
 
-    let onNavSignIn = () => {
+    const onNavSignIn = () => {
         props.onNavSignIn(email || "");
     };
 

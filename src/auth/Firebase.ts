@@ -26,9 +26,9 @@ function GetFirebaseUIError(e: FirebaseError): UIError {
 
 
 const InitFirebaseUser = (firebase: types.Firebase, User: firebaseAuth.User): types.FirebaseUser => {
-	let FirebaseInstance = firebase;
+	const FirebaseInstance = firebase;
 
-	let notLoggedIn = (reject): boolean => {
+	const notLoggedIn = (reject): boolean => {
 		if (User == null || !User.uid) {
 			console.error("checkLoggedIn failed; rejecting with NotLoggedIn")
 			reject(types.NotLoggedIn);
@@ -37,11 +37,11 @@ const InitFirebaseUser = (firebase: types.Firebase, User: firebaseAuth.User): ty
 		return false
 	};
 
-	let ID = () => {
+	const ID = () => {
 		return User?.uid;
 	};
 
-	let Token = (): Promise<string> => {
+	const Token = (): Promise<string> => {
 		return new Promise((resolve, reject) => {
 			if (notLoggedIn(reject)) return;
 			User.getIdToken()
@@ -53,7 +53,7 @@ const InitFirebaseUser = (firebase: types.Firebase, User: firebaseAuth.User): ty
 		});
 	};
 
-	let GetUserProfile = () => {
+	const GetUserProfile = () => {
 		return new Promise((resolve, reject) => {
 			if (notLoggedIn(reject)) return;
 			getDoc(doc(firebase.Firestore, 'users', ID()))
@@ -69,7 +69,7 @@ const InitFirebaseUser = (firebase: types.Firebase, User: firebaseAuth.User): ty
 		});
 	};
 
-	let SignOut = () => {
+	const SignOut = () => {
 		return new Promise<void>((resolve, reject) => {
 			firebaseAuth.signOut(firebase.Auth)
 				.then(async () => {
@@ -95,7 +95,7 @@ const InitFirebaseUser = (firebase: types.Firebase, User: firebaseAuth.User): ty
 };
 
 const InitFirebase = (): types.FirebaseInstance => {
-	let App = firebase.initializeApp({
+	const App = firebase.initializeApp({
 		apiKey: process.env.FIREBASE_API_KEY,
 		authDomain: process.env.FIREBASE_AUTH_DOMAIN,
 		projectId: process.env.FIREBASE_PROJECT_ID,
@@ -104,11 +104,11 @@ const InitFirebase = (): types.FirebaseInstance => {
 		appId: process.env.FIREBASE_APP_ID,
 	});
 
-	let Auth = firebaseAuth.getAuth(App);
+	const Auth = firebaseAuth.getAuth(App);
 	Auth.setPersistence(firebaseAuth.browserLocalPersistence);
-	let Firestore = getFirestore(App);
+	const Firestore = getFirestore(App);
 
-	let instance = {
+	const instance = {
 		App,
 		Auth,
 		Firestore,
@@ -141,7 +141,7 @@ const InitFirebase = (): types.FirebaseInstance => {
 	// Checks if a firestore user exists in local storage
 	const User = (): Promise<types.FirebaseUser> => {
 		return new Promise((resolve, reject) => {
-			let unsubscribe = firebaseAuth.onAuthStateChanged(Auth, async (user) => {
+			const unsubscribe = firebaseAuth.onAuthStateChanged(Auth, async (user) => {
 				if (user) {
 					unsubscribe();
 					resolve(InitFirebaseUser(instance, user));
@@ -155,7 +155,7 @@ const InitFirebase = (): types.FirebaseInstance => {
 
 	const Login = (username, password: string): Promise<types.FirebaseUser> => {
 		return new Promise((resolve, reject) => {
-			let auth = firebaseAuth.getAuth(App);
+			const auth = firebaseAuth.getAuth(App);
 			auth.signOut().finally(() => {
 				firebaseAuth.signInWithEmailAndPassword(Auth, username, password)
 					.then((userCredential) => {

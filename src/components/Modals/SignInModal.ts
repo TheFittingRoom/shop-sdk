@@ -6,14 +6,14 @@ const SignInModal = (props: SignInModalProps): ModalContent =>  {
     const { email } = props;
 
     const onSignIn = () => {
-        let email = (<HTMLInputElement>document.getElementById("email-input")).value;
-        let password = (<HTMLInputElement>document.getElementById("password-input")).value;
+        const email = (<HTMLInputElement>document.getElementById("email-input")).value;
+        const password = (<HTMLInputElement>document.getElementById("password-input")).value;
         resetValidation();
         props.onSignIn(email, password, validationError);
     };
 
     const onNavForgotPassword = () => {
-        let email = (<HTMLInputElement>document.getElementById("email-input")).value;
+        const email = (<HTMLInputElement>document.getElementById("email-input")).value;
         props.onNavForgotPassword(email);
     }
 

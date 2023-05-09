@@ -4,7 +4,7 @@ import { TryOnModalProps } from "../../types";
 	import InitImageSlider from "../../components/slider";
 
 const TryOnModal = (props: TryOnModalProps): ModalContent => {
-	let close = () => {};
+	let close = () => void 0;
 
 	const onNavBack = () => {
 		props.onNavBack();
@@ -15,14 +15,14 @@ const TryOnModal = (props: TryOnModalProps): ModalContent => {
 	};
 
 	const Hook = () => {
-		let tryOnImage = <HTMLImageElement>document.getElementById("tfr-tryon-image")
+		const tryOnImage = <HTMLImageElement>document.getElementById("tfr-tryon-image")
 		const onChange = (slider, imageUrl) => {
 			console.log("slider change", slider, imageUrl);
 			tryOnImage.src = imageUrl;
 		}
-		let slider = InitImageSlider("tfr-slider", onChange)
+		const slider = InitImageSlider("tfr-slider", onChange)
 		if (Array.isArray(props.frames) && props.frames.length > 0) {
-			let e = slider.Load(props.frames);
+			const e = slider.Load(props.frames);
 			if (e instanceof Error) {
 				console.error(e);
 				return

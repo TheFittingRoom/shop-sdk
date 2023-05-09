@@ -11,7 +11,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom 
 		console.error(error);
 	});
 
-	let fittingRoom: types.FittingRoom = {
+	const fittingRoom: types.FittingRoom = {
 		shop: undefined,
 		user: undefined,
 		firebase: InitFirebase(),
@@ -20,6 +20,11 @@ const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom 
 		onSignout(colorwaySizeAssetSKU: string) {
 			return () => {
 				return new Promise((resolve, reject) => {
+					if (!this.user) {
+						this.whenSignedOut(colorwaySizeAssetSKU);
+						resolve(void 0);
+						return;
+					}
 					this.user.SignOut().then(() => {
 						this.whenSignedOut(colorwaySizeAssetSKU);
 						resolve(void 0);

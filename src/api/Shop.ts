@@ -106,7 +106,7 @@ const InitShop = (user: types.FirebaseUser, id: number): types.Shop => {
 	const GetStyles = async (ids: number[]): Promise<Map<number, types.FirestoreStyle>> => {
 		return new Promise((resolve, reject) => {
 			if (user.notLoggedIn(reject)) return;
-			let constraints: QueryFieldFilterConstraint[] = [where("brand_id", "==", brandID)];
+			const constraints: QueryFieldFilterConstraint[] = [where("brand_id", "==", brandID)];
 			if (ids?.length > 0) {
 				constraints.push(where("id", "in", ids));
 			}
@@ -128,7 +128,7 @@ const InitShop = (user: types.FirebaseUser, id: number): types.Shop => {
 	const GetColorwaySizeAssets = async (style_id?: number, skus?: string[]): Promise<Map<number, types.FirestoreColorwaySizeAsset>> => {
 		return new Promise((resolve, reject) => {
 			if (user.notLoggedIn(reject)) return;
-			let constraints: QueryFieldFilterConstraint[] = [where("brand_id", "==", brandID)];
+			const constraints: QueryFieldFilterConstraint[] = [where("brand_id", "==", brandID)];
 			if (style_id) {
 				constraints.push(where("style_id", "==", style_id));
 			}
@@ -229,8 +229,8 @@ const InitShop = (user: types.FirebaseUser, id: number): types.Shop => {
 							}
 
 							GetStyles([styleIDCache]).then((styles: Map<number, types.FirestoreStyle>) => {
-								let errorOutsideRecommended = error as ErrorOutsideRecommendedSizes;
-								let recommendedSizeResponse: types.RecommendedAvailableSizes = {
+								const errorOutsideRecommended = error as ErrorOutsideRecommendedSizes;
+								const recommendedSizeResponse: types.RecommendedAvailableSizes = {
 									error: errorOutsideRecommended.error,
 									recommended_size: null,
 									available_sizes: [],

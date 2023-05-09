@@ -5,13 +5,13 @@ import { ModalContent } from "../../types";
 const ForgotPasswordModal = (props: ForgotPasswordModalProps): ModalContent => {
     const { email } = props;
 
-    let onNavSignIn = () => {
-        let email = (<HTMLInputElement>document.getElementById("tfr-email")).value;
+    const onNavSignIn = () => {
+        const email = (<HTMLInputElement>document.getElementById("tfr-email")).value;
         props.onNavSignIn(email);
     }
 
-    let onPasswordReset = () => {
-        let email = (<HTMLInputElement>document.getElementById("tfr-email")).value;
+    const onPasswordReset = () => {
+        const email = (<HTMLInputElement>document.getElementById("tfr-email")).value;
         props.onPasswordReset(email);
     }
 

@@ -48,7 +48,7 @@ var L = {
 };
 
 function findMissingLocales(defaultLocale: any, newLocale: any): { default: any; new: any; } {
-    let missingLocales = { default: {}, new: {} };
+    const missingLocales = { default: {}, new: {} };
     for (const key in defaultLocale) {
         if (newLocale[key] === undefined) {
             missingLocales.default[key] = defaultLocale[key];
@@ -68,7 +68,7 @@ async function SetLocale(locale: string): Promise<void> {
             .then((response) => {
                 if (response.ok) {
                     response.json().then((data) => {
-                        let missingLocales = findMissingLocales(L, data);
+                        const missingLocales = findMissingLocales(L, data);
                         if (Object.keys(missingLocales.default).length > 0) {
                             console.warn(`The following locales are missing from the new locale: ${JSON.stringify(missingLocales.default)}`);
                         }

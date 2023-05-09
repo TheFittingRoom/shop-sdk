@@ -2,9 +2,9 @@ import * as types from "../types";
 
 const Fetcher = {
     Fetch: async (user: types.FirebaseUser, endpointPath: string, method: string, body: object | null): Promise<Response> => {
-        return new Promise(async (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             user.Token().then((token) => {
-                let config: RequestInit = {
+                const config: RequestInit = {
                     method: method,
                     headers: {
                         "Content-Type": "application/json",
@@ -15,7 +15,7 @@ const Fetcher = {
                 if (body) {
                     config.body = JSON.stringify(body);
                 }
-                let url = process.env.API_ENDPOINT + endpointPath;
+                const url = process.env.API_ENDPOINT + endpointPath;
                 fetch(url, config).then((r) => {
                     if (r.ok) {
                         resolve(r);

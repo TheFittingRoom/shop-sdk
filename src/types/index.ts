@@ -115,24 +115,24 @@ export interface ForgotPasswordModalProps extends ModalProps {
     email: string;
     onNavSignIn: (email: string) => void;
     onPasswordReset: (email: string) => void;
-};
-export interface NoAvatarModalProps extends ModalProps {};
+}
+export type NoAvatarModalProps = ModalProps
 export interface LoadingAvatarModalProps extends ModalProps {
     timeoutMS: number;
-};
+}
 
 export interface TryOnModalProps extends ModalProps {
     frames: TryOnFrames;
     onNavBack: () => void;
     onClose: () => void;
-};
+}
 
 
 export interface ErrorModalProps extends ModalProps {
     error: string,
     onNavBack: () => void;
     onClose: () => void;
-};
+}
 
 export interface SizeErrorModalProps {
     onNavBack: () => void;
@@ -146,14 +146,12 @@ export interface SizeErrorModalProps {
 export interface ResetLinkModalProps {
     email: string;
     onNavSignIn: (email: string) => void;
-};
-export interface ScanCodeModalProps extends ModalProps {
-    //
-};
+}
+export type ScanCodeModalProps = ModalProps
 export interface LoggedOutModalProps {
     onClose: () => void;
     onNavSignIn: (email: string) => void;
-};
+}
 
 export type TryOnFrames = string[];
 
@@ -170,14 +168,14 @@ export type FirestoreColorwaySizeAsset = {
     colorway_id: number;
     colorway_name: string;
     sku: string;
-};
+}
 
 export type FirestoreGarmentMeasurement = {
     id: number;
     garment_measurement_location: string;
     tolerance: number;
     value: number;
-};
+}
 
 export type FirestoreSize = {
     id: number;
@@ -186,12 +184,12 @@ export type FirestoreSize = {
     size_system: string;
     size_value_id: string;
     garment_measurements: Map<string, FirestoreGarmentMeasurement>;
-};
+}
 
 export type FirestoreColorway = {
     id: number;
     name: string;
-};
+}
 
 export type FirestoreStyle = {
     id: number;
@@ -204,4 +202,4 @@ export type FirestoreStyle = {
     sale_type: string;
     colorways: { [key: number]: FirestoreColorway; };
     sizes: { [key: number]: FirestoreSize; };
-};
+}

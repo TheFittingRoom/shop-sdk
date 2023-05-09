@@ -4,12 +4,8 @@ import { ModalContent } from "../../types";
 
 
 const ScanCodeModal = (props: ScanCodeModalProps): ModalContent => {
-    const Hook = () => {
-
-    }
-    const Unhook= () => {
-
-    }
+    const Hook = () => void 0;
+    const Unhook= () => void 0;
     const Body = () => {
         return `
         <div tfr-element="true" class="tfr-title-font tfr-light-22-300 tfr-c-dark tfr-w-85-p tfr-m-h-auto tfr-mt-30">${L.CreateAvatarSc}</div>
