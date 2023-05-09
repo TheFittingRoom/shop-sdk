@@ -2,11 +2,11 @@ import { L } from "../../api/Locale";
 import { ModalContent } from "../../types";
 import { LoadingAvatarModalProps } from "../../types";
 
-const LoadingAvatarModal = (props:LoadingAvatarModalProps): ModalContent => {
+const LoadingAvatarModal = (props: LoadingAvatarModalProps): ModalContent => {
 
     function startProgressBar(milliseconds, progressBar) {
         let percentCount = 0;
-        let millisecondStep = milliseconds / 200;
+        const millisecondStep = milliseconds / 200;
         progressBar.style.width = percentCount + "%";
         const id = setInterval(() => {
             if (percentCount >= 100) {
@@ -20,13 +20,12 @@ const LoadingAvatarModal = (props:LoadingAvatarModalProps): ModalContent => {
     }
 
     const Hook = () => {
-        let progressBar = document.querySelector(".progress-bar-fill");
+        const progressBar = document.querySelector(".progress-bar-fill");
         startProgressBar(props.timeoutMS, progressBar);
-    }
+    };
 
-    const Unhook = () => {
+    const Unhook = () => void 0;
 
-    }
 
     const Body = () => {
         return `
@@ -35,13 +34,13 @@ const LoadingAvatarModal = (props:LoadingAvatarModalProps): ModalContent => {
             <span class="progress-bar-fill"></span>
         </div>
         `;
-    }
+    };
 
     return {
         Hook,
         Unhook,
         Body
-    }
-}
+    };
+};
 
 export default LoadingAvatarModal;

@@ -16,7 +16,7 @@ const InitImageSlider = (sliderID: string, onChange: (slider: HTMLInputElement, 
 			slider.max = (imageURLs.length - 1).toString();
 
 			const handleSliderChange = () => {
-				let currentValue = parseInt((<HTMLInputElement>slider).value);
+				const currentValue = parseInt((<HTMLInputElement>slider).value);
 				onChange(slider, imageURLs[currentValue])
 			}
 

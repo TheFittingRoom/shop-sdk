@@ -79,7 +79,7 @@ const InitModalManager = (elementID: string): ModalManager => {
 	};
 
 	const unhook = () => {
-		let closeLink = modal.querySelector("#tfr-close-container")
+		const closeLink = modal.querySelector("#tfr-close-container")
 		if (closeLink) {
 			closeLink.removeEventListener("click", Close);
 		} else {
