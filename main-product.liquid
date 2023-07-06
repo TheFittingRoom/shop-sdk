@@ -12,9 +12,13 @@
   {{ 'component-loading-overlay.css' | asset_url | stylesheet_tag }}
   {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
 
-  <script type="module">
-    // import { InitFittingRoom, comps, InitLocale, VTOTimeoutMS } from 'https://assets.dev.thefittingroom.xyz/shop-sdk/74b61a0/main.js';
-    import { InitFittingRoom, comps, InitLocale, VTOTimeoutMS } from 'http://localhost:3000/dist/esm/main.js';
+  <script type='module'>
+
+    {% comment %} import { InitFittingRoom, comps, InitLocale, VTOTimeoutMS, InitShop, L } from 'https://assets.dev.thefittingroom.xyz/shop-sdk/6411e41/main.js'; {% endcomment %}
+    import { InitFittingRoom, comps, InitLocale, VTOTimeoutMS, InitShop, L } from 'http://localhost:3000/dist/esm/main.js';
+
+    const brandID = 1;
+
     const getSku = () => {
       const color = document.getElementsByName("options[{{product.options[0]}}]")?.[0]?.value;
       const size = document.getElementsByName("options[{{product.options[1]}}]")?.[0]?.value;
@@ -45,6 +49,40 @@
         }, millisecondStep);
     }
 
+    function setRecommendedSizes(tfr){
+        let sizeRecommendationDiv = document.getElementById("tfr-size-recommendations")
+        const sku = getSku();
+        tfr.shop.GetColorwaySizeAssets(null, [sku]).then((colorwaySizeAssets) => {
+          // Map<number, types.FirestoreColorwaySizeAsset>
+          if (!colorwaySizeAssets?.size) {
+            console.error("no colorway size assets found");
+            return
+          }
+          const colorwaySizeAsset = colorwaySizeAssets.values().next().value;
+          const styleID = colorwaySizeAsset.style_id;
+          tfr.shop.GetRecommendedSizes(styleID).then((sizeRecommendation) => {
+            let recommendedSizeLabel = sizeRecommendation.recommended_sizes.label || sizeRecommendation.recommended_sizes.size_value.size;
+            let availableSizeLabels = [];
+            for (const availableSize of sizeRecommendation.available_sizes) {
+              availableSizeLabels.push(availableSize.label || availableSize.size_value.size);
+            }
+
+            let builder = ""
+            if (availableSizeLabels.length > 1) {
+              builder = `${L.TrySize} ${availableSizeLabels.slice(0,-1).join(", ")}`
+              if (availableSizeLabels.length > 1) {
+                builder += ` ${L.OrSize} ${availableSizeLabels.slice(-1)}.`
+              }
+            }
+            builder += ` ${L.WeRecommendSize} ${recommendedSizeLabel}.`
+            sizeRecommendationDiv.innerHTML = builder
+
+          }).catch((e) => {
+            console.error(e)
+          })
+        })
+    }
+
     const None = (element) => element.style.display = "none"
     const Block = (element) => element.style.display = "block"
     const Flex = (element) => element.style.display = "flex"
@@ -62,14 +100,18 @@
             tryOnImage.src = imageUrl
         }
         const slider = comps.InitImageSlider("tfr-tryon-slider", changeSlider)
-        const tfr = InitFittingRoom(1, "thefittingroom-modal")
+        const tfr = InitFittingRoom(brandID, "thefittingroom-modal")
         let progressBar = document.querySelector(".progress-bar");
         let progress = document.querySelector(".progress-bar-fill");
 
         const checkLogin = () =>{
           tfr.firebase.User(() =>{}).then((u) => {
             Block(tfrSignOut)
+            // setup shop for size recommender
+            tfr.shop = InitShop(u, brandID);
+            setRecommendedSizes(tfr)
           }).catch((e) => {
+            console.error(e)
             // user is not logged in
             None(tfrSignOut)
           })

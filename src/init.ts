@@ -1,7 +1,6 @@
 // import { InitFirebase, ModalManager, Shop, SignInModal, ForgotPasswordModal, ScanCodeModal, NoAvatarModal, LoadingAvatarModal, LoggedOutModal, ErrorModal, types, L } from "@thefittingroom/ui";
 import { InitFirebase } from "./auth/Firebase";
 import * as modals from "./components";
-import { InitShop } from "./api/Shop";
 import { L, InitLocale } from "./api/Locale";
 import * as types from "./types";
 import { UIError } from "./api/UIError";
@@ -146,7 +145,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom 
 
 		whenSignedIn(user: types.FirebaseUser, colorwaySizeAssetSKU: string) {
 			console.log('whenSignedIn', colorwaySizeAssetSKU);
-			this.shop = InitShop(user, shopID);
+
 			user.GetUserProfile().then((profile) => {
 				switch (profile.avatar_status) {
 					case types.AvatarState.NOT_CREATED:
