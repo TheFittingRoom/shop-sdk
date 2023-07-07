@@ -1,6 +1,6 @@
 export { InitFirebase, InitFirebaseUser } from "./auth/Firebase";
 export * as comps from "./components";
-export { InitShop as Shop } from "./api/Shop";
+export { InitShop } from "./api/Shop";
 export { UIError, createUIError } from "./api/UIError";
 export * as types from "./types";
 export { Fetcher } from "./api/Fetcher";
