@@ -67,7 +67,7 @@ const InitModalManager = (elementID: string): ModalManager => {
 	const ContainerClose = (e: MouseEvent) => {
 		const background = modal.querySelector("#tfr-modal-background");
 		if (e.target === background) {
-			console.log("container close")
+			console.debug("container close")
 			Close();
 		}
 	};

@@ -14,7 +14,7 @@
 
   <script type='module'>
 
-    // import { InitFittingRoom, comps, InitLocale, VTOTimeoutMS, InitShop, L } from 'https://assets.dev.thefittingroom.xyz/shop-sdk/6411e41/main.js';
+    // import { InitFittingRoom, comps, InitLocale, VTOTimeoutMS, InitShop, L } from 'https://assets.dev.thefittingroom.xyz/shop-sdk/8c507db/main.js';
     import { InitFittingRoom, comps, InitLocale, VTOTimeoutMS, InitShop, L } from 'http://localhost:3000/dist/esm/main.js';
 
     const brandID = 1;
@@ -60,7 +60,7 @@
           }
           const colorwaySizeAsset = colorwaySizeAssets.values().next().value;
           const styleID = colorwaySizeAsset.style_id;
-          tfr.shop.GetRecommendedSizes(styleID).then((sizeRecommendation) => {
+          tfr.shop.GetRecommendedSizes(tfr.user, styleID).then((sizeRecommendation) => {
             let recommendedSizeLabel = sizeRecommendation.recommended_sizes.label || sizeRecommendation.recommended_sizes.size_value.size;
             let availableSizeLabels = [];
             for (const availableSize of sizeRecommendation.available_sizes) {
@@ -108,9 +108,8 @@
 
         const checkLogin = () =>{
           tfr.firebase.User(() =>{}).then((u) => {
+            tfr.user = u
             Block(tfrSignOut)
-            // setup shop for size recommender
-            tfr.shop = InitShop(u, brandID);
             setRecommendedSizes(tfr)
           }).catch((e) => {
             console.error(e)

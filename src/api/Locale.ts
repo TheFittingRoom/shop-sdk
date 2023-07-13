@@ -28,6 +28,7 @@ var L = {
     ReturnToSite: "Return to site",
     ModalTitle: "Enter your email address to be notified when The Fitting Room try on is offered on Google Play:",
     EnterEmailAddress: "Enter your email address, we will send you a link to reset your password.",
+    StyleNotReadyForVTO: "This style is not ready for virtual try on yet. Please check back later.",
     NoSizeAvailable: "Unfortunately, that size is not available for try on.",
     TrySize: "You can try on a size",
     OrSize: "or",

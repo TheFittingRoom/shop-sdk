@@ -17,7 +17,7 @@ const TryOnModal = (props: TryOnModalProps): ModalContent => {
 	const Hook = () => {
 		const tryOnImage = <HTMLImageElement>document.getElementById("tfr-tryon-image")
 		const onChange = (slider, imageUrl) => {
-			console.log("slider change", slider, imageUrl);
+			console.debug("slider change", slider, imageUrl);
 			tryOnImage.src = imageUrl;
 		}
 		const slider = InitImageSlider("tfr-slider", onChange)

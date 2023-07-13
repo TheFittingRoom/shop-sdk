@@ -1,18 +1,16 @@
 {
-	// Use IntelliSense to learn about possible attributes.
-	// Hover to view descriptions of existing attributes.
-	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "node",
+			"type": "chrome",
+			"name": "shopify dev",
 			"request": "launch",
-			"program": "${workspaceFolder}/src/index.ts",
-			"type": "node",
-			"url": "http://localhost:8080/index.html",
+			"url": "https://tfrshop-1346.myshopify.com/products/ahiri-back-zip-mini-dress?variant=43230053040259",
+			"runtimeExecutable": "/usr/bin/iridium-browser",
 			"webRoot": "${workspaceFolder}/src",
-			"smartStep": true,
-			"sourceMaps": true,
-		},
+			"skipFiles": [
+				"<node_internals>/**",
+				"**/node_modules/**"
+			]
+		}
 	]
 }
