@@ -1,14 +1,13 @@
 interface UIError {
-    userMessage: string;
-    error: Error;
+  userMessage: string
+  error: Error
 }
-
 
 function createUIError(message: string, error?: Error): UIError {
-    return {
-        userMessage: message,
-        error
-    };
+  return {
+    userMessage: message,
+    error,
+  }
 }
 
-export {createUIError, UIError};
+export { createUIError, UIError }

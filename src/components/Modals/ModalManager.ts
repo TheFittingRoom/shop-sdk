@@ -1,22 +1,22 @@
-import { ModalContent, TfrLogo } from "../../types";
-import { L } from "../../api/Locale";
+import { L } from '../../api/Locale'
+import { ModalContent, TfrLogo } from '../../types'
 
 interface ModalManager {
-	Open(content: ModalContent): void;
-	Close(): void;
-	Content(): ModalContent;
+  Open(content: ModalContent): void
+  Close(): void
+  Content(): ModalContent
 }
 
 const InitModalManager = (elementID: string): ModalManager => {
-	const modal = document.getElementById(elementID);
-	if (!modal) {
-		throw new Error(`element with id ${elementID} not found`);
-	}
+  const modal = document.getElementById(elementID)
+  if (!modal) {
+    throw new Error(`element with id ${elementID} not found`)
+  }
 
-	let previousContent: ModalContent;
+  let previousContent: ModalContent
 
-	const renderBody = (modalBody: string) => {
-		return `
+  const renderBody = (modalBody: string) => {
+    return `
         <div class="tfr-modal" id="tfr-modal-background">
             <div class="tfr-modal-content-container tfr-p-20">
                 <div class="tfr-close-container">
@@ -36,70 +36,69 @@ const InitModalManager = (elementID: string): ModalManager => {
                 </div>
             </div>
         </div>
-    `;
-	};
+    `
+  }
 
-	const Open = (content: ModalContent) => {
-		if (previousContent) {
-			previousContent.Unhook();
-		}
-		modal.innerHTML = renderBody(content.Body());
-		hook();
-		content.Hook();
-		modal.style.display = "block";
-		previousContent = content;
-	};
+  const Open = (content: ModalContent) => {
+    if (previousContent) {
+      previousContent.Unhook()
+    }
+    modal.innerHTML = renderBody(content.Body())
+    hook()
+    content.Hook()
+    modal.style.display = 'block'
+    previousContent = content
+  }
 
-	const Close = () => {
-		if (previousContent) {
-			previousContent.Unhook();
-			unhook();
-		}
-		modal.style.display = "none";
-	};
+  const Close = () => {
+    if (previousContent) {
+      previousContent.Unhook()
+      unhook()
+    }
+    modal.style.display = 'none'
+  }
 
-	const EscClose = (e: KeyboardEvent) => {
-		if (e.key === "Escape") {
-			Close();
-		}
-	};
+  const EscClose = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      Close()
+    }
+  }
 
-	const ContainerClose = (e: MouseEvent) => {
-		const background = modal.querySelector("#tfr-modal-background");
-		if (e.target === background) {
-			console.debug("container close")
-			Close();
-		}
-	};
+  const ContainerClose = (e: MouseEvent) => {
+    const background = modal.querySelector('#tfr-modal-background')
+    if (e.target === background) {
+      console.debug('container close')
+      Close()
+    }
+  }
 
-	const hook = () => {
-		modal.querySelector("#tfr-close-container").addEventListener("click", Close);
-		document.addEventListener("keydown", EscClose);
-		document.addEventListener("click", ContainerClose);
-	};
+  const hook = () => {
+    modal.querySelector('#tfr-close-container').addEventListener('click', Close)
+    document.addEventListener('keydown', EscClose)
+    document.addEventListener('click', ContainerClose)
+  }
 
-	const unhook = () => {
-		const closeLink = modal.querySelector("#tfr-close-container")
-		if (closeLink) {
-			closeLink.removeEventListener("click", Close);
-		} else {
-			console.error("#tfr-close-container not found on unhook")
-			console.debug(document.getElementById(elementID)?.innerHTML)
-		}
-		document.removeEventListener("keydown", EscClose);
-		document.removeEventListener("click", ContainerClose);
-	};
+  const unhook = () => {
+    const closeLink = modal.querySelector('#tfr-close-container')
+    if (closeLink) {
+      closeLink.removeEventListener('click', Close)
+    } else {
+      console.error('#tfr-close-container not found on unhook')
+      console.debug(document.getElementById(elementID)?.innerHTML)
+    }
+    document.removeEventListener('keydown', EscClose)
+    document.removeEventListener('click', ContainerClose)
+  }
 
-	const Content = () => {
-		return previousContent;
-	};
+  const Content = () => {
+    return previousContent
+  }
 
-	return {
-		Open,
-		Close,
-		Content
-	};
-};
+  return {
+    Open,
+    Close,
+    Content,
+  }
+}
 
-
-export { InitModalManager, ModalManager };
+export { InitModalManager, ModalManager }

@@ -1,72 +1,71 @@
-import { L } from "../../api/Locale";
-import { ModalContent, SignInModalProps, QrCodeLogo, AppStoreLogo, AposeLogo } from "../../types";
+import { L } from '../../api/Locale'
+import { AposeLogo, AppStoreLogo, ModalContent, QrCodeLogo, SignInModalProps } from '../../types'
 
+const SignInModal = (props: SignInModalProps): ModalContent => {
+  const { email } = props
 
-const SignInModal = (props: SignInModalProps): ModalContent =>  {
-    const { email } = props;
+  const onSignIn = () => {
+    const email = (<HTMLInputElement>document.getElementById('email-input')).value
+    const password = (<HTMLInputElement>document.getElementById('password-input')).value
+    resetValidation()
+    props.onSignIn(email, password, validationError)
+  }
 
-    const onSignIn = () => {
-        const email = (<HTMLInputElement>document.getElementById("email-input")).value;
-        const password = (<HTMLInputElement>document.getElementById("password-input")).value;
-        resetValidation();
-        props.onSignIn(email, password, validationError);
-    };
+  const onNavForgotPassword = () => {
+    const email = (<HTMLInputElement>document.getElementById('email-input')).value
+    props.onNavForgotPassword(email)
+  }
 
-    const onNavForgotPassword = () => {
-        const email = (<HTMLInputElement>document.getElementById("email-input")).value;
-        props.onNavForgotPassword(email);
-    }
+  const onNavScanCode = () => {
+    props.onNavScanCode()
+  }
 
-    const onNavScanCode = () => {
-        props.onNavScanCode();
-    }
+  const onHook = () => {
+    document.getElementById('tfr-sign-in').addEventListener('click', onSignIn)
+    document.getElementById('tfr-forgot-password').addEventListener('click', onNavForgotPassword)
+    document.getElementById('tfr-scan-code').addEventListener('click', onNavScanCode)
+  }
 
-    const onHook = () => {
-        document.getElementById("tfr-sign-in").addEventListener("click", onSignIn);
-        document.getElementById("tfr-forgot-password").addEventListener("click", onNavForgotPassword);
-        document.getElementById("tfr-scan-code").addEventListener("click", onNavScanCode);
-    };
+  const onUnhook = () => {
+    document.getElementById('tfr-sign-in').removeEventListener('click', onSignIn)
+    document.getElementById('tfr-forgot-password').removeEventListener('click', onNavForgotPassword)
+    document.getElementById('tfr-scan-code').removeEventListener('click', onNavScanCode)
+  }
 
-    const onUnhook = () => {
-        document.getElementById("tfr-sign-in").removeEventListener("click", onSignIn);
-        document.getElementById("tfr-forgot-password").removeEventListener("click", onNavForgotPassword);
-        document.getElementById("tfr-scan-code").removeEventListener("click", onNavScanCode);
-    };
+  const resetValidation = () => {
+    const fieldsetElement = document.querySelectorAll('.tfr-fieldset-element')
+    fieldsetElement.forEach((element) => {
+      element.classList.remove('tfr-fieldset-err')
+    })
 
-    const resetValidation = () => {
-        const fieldsetElement = document.querySelectorAll('.tfr-fieldset-element');
-        fieldsetElement.forEach(element => {
-            element.classList.remove('tfr-fieldset-err');
-        });
+    const labelElement = document.querySelectorAll('.tfr-label-element')
+    labelElement.forEach((element) => {
+      element.classList.remove('tfr-c-red')
+    })
 
-        const labelElement = document.querySelectorAll('.tfr-label-element');
-        labelElement.forEach(element => {
-            element.classList.remove('tfr-c-red');
-        });
+    const formError = document.querySelector('#tfr-form-error')
+    formError.classList.remove('tfr-d-block')
+    formError.innerHTML = ''
+  }
 
-        const formError = document.querySelector('#tfr-form-error');
-        formError.classList.remove('tfr-d-block');
-        formError.innerHTML = '';
-    }
+  const validationError = (message: string) => {
+    const fieldsetElement = document.querySelectorAll('.tfr-fieldset-element')
+    fieldsetElement.forEach((element) => {
+      element.classList.add('tfr-fieldset-err')
+    })
 
-    const validationError = (message: string) => {
-        const fieldsetElement = document.querySelectorAll('.tfr-fieldset-element');
-        fieldsetElement.forEach(element => {
-            element.classList.add('tfr-fieldset-err');
-        });
+    const labelElement = document.querySelectorAll('.tfr-label-element')
+    labelElement.forEach((element) => {
+      element.classList.add('tfr-c-red')
+    })
 
-        const labelElement = document.querySelectorAll('.tfr-label-element');
-        labelElement.forEach(element => {
-            element.classList.add('tfr-c-red');
-        });
+    const formError = document.querySelector('#tfr-form-error')
+    formError.innerHTML = message || 'Something went wrong'
+    formError.classList.add('tfr-d-block')
+  }
 
-        const formError = document.querySelector('#tfr-form-error');
-        formError.innerHTML = message || "Something went wrong";
-        formError.classList.add('tfr-d-block');
-    }
-
-    const body = () => {
-        return `
+  const body = () => {
+    return `
             <fieldset class="tfr-fieldset-element tfr-fieldset tfr-mt-20">
                 <legend tfr-element="true" class="tfr-label-element tfr-body-font tfr-14-default tfr-c-dark-o5">${L.EmailAddress}</legend>
                 <input tfr-element="true" type="email" id="email-input" value="${email}" />
@@ -128,13 +127,13 @@ const SignInModal = (props: SignInModalProps): ModalContent =>  {
                     </object>
                 </div>
             </div>
-            `;
-    };
+            `
+  }
 
-    return {
-        Hook: onHook,
-        Unhook: onUnhook,
-        Body: body,
-    };
-};
-export default SignInModal;
+  return {
+    Hook: onHook,
+    Unhook: onUnhook,
+    Body: body,
+  }
+}
+export default SignInModal
