@@ -26,8 +26,6 @@ function GetFirebaseUIError(e: FirebaseError): UIError {
 
 
 const InitFirebaseUser = (firebase: types.Firebase, User: firebaseAuth.User): types.FirebaseUser => {
-	const FirebaseInstance = firebase;
-
 	const notLoggedIn = (reject): boolean => {
 		if (User == null || !User.uid) {
 			console.error("checkLoggedIn failed; rejecting with NotLoggedIn")
@@ -73,7 +71,7 @@ const InitFirebaseUser = (firebase: types.Firebase, User: firebaseAuth.User): ty
 		return new Promise<void>((resolve, reject) => {
 			firebaseAuth.signOut(firebase.Auth)
 				.then(async () => {
-					console.log("signout successful")
+					console.debug("signout successful")
 					User = null;
 					resolve();
 				})
@@ -85,8 +83,7 @@ const InitFirebaseUser = (firebase: types.Firebase, User: firebaseAuth.User): ty
 	};
 
 	return {
-		FirebaseInstance,
-		notLoggedIn,
+		Firebase: firebase,
 		ID,
 		Token,
 		GetUserProfile,

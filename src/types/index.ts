@@ -38,8 +38,7 @@ export interface FirebaseInstance {
 }
 
 export interface FirebaseUser {
-    FirebaseInstance: Firebase;
-    notLoggedIn: (reject: any) => boolean;
+    Firebase: Firebase;
     ID: () => string;
     Token: () => Promise<string>;
     GetUserProfile: () => Promise<DocumentData | null>;
@@ -47,17 +46,15 @@ export interface FirebaseUser {
 }
 
 export interface Shop {
-    AwaitAvatarCreated: () => Promise<void>;
-    AwaitColorwaySizeAssetFrames: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames>;
-    GetColorwaySizeAssetFrames: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames>;
-    TryOn: (colorwaySizeAssetSKU: string) => Promise<TryOnFrames | (() => Promise<TryOnFrames>)>;
-    GetRecommendedSizes(BrandStyleID: string): Promise<responses.SizeRecommendation | errors.ErrorResponse>;
+    AwaitAvatarCreated: (user: types.FirebaseUser) => Promise<void>;
+    AwaitColorwaySizeAssetFrames: (user: types.FirebaseUser, colorwaySizeAssetSKU: string) => Promise<TryOnFrames>;
+    GetColorwaySizeAssetFrames: (user: types.FirebaseUser, colorwaySizeAssetSKU: string) => Promise<TryOnFrames>;
+    TryOn: (user: types.FirebaseUser, colorwaySizeAssetSKU: string) => Promise<TryOnFrames | (() => Promise<TryOnFrames>)>;
+    GetRecommendedSizes(user: types.FirebaseUser, brandStyleID: string): Promise<responses.SizeRecommendation | errors.ErrorResponse>;
+    RequestColorwaySizeAssetFrames(user: types.FirebaseUser, colorwayID: number): Promise<void>;
 
-    GetStyles: (ids: number[]) => Promise<Map<number, FirestoreStyle>>;
+    GetStyles: (ids: number[], brandStyleIDs: string[]) => Promise<Map<number, FirestoreStyle>>;
     GetColorwaySizeAssets: (style_id?: number, skus?: string[]) => Promise<Map<number, FirestoreColorwaySizeAsset>>;
-    RequestColorwaySizeAssetFrames(colorwayID: number): Promise<void>;
-
-    User(): FirebaseUser;
 }
 
 export interface FittingRoom {

@@ -1,16 +1,34 @@
+function loadImageRecursive(imageURL, imageURLs) {
+	let next = function () {
+		if (imageURLs.length === 0) {
+			return;
+		}
+		loadImageRecursive(imageURLs.slice(-1), imageURLs.slice(0, -1));
+	};
+	var img = new Image();
+	img.onload = next;
+	img.onerror = next;
+	img.src = imageURL;
+}
+
+function loadImages(imageURLs) {
+	loadImageRecursive(imageURLs.slice(-1), imageURLs.slice(0, -1));
+}
+
 const InitImageSlider = (sliderID: string, onChange: (slider: HTMLInputElement, imageUrl: string) => void) => {
 	const slider = <HTMLInputElement>(document.getElementById(sliderID));
 	if (!slider) {
 		throw new Error(`Slider with id ${sliderID} not found`);
 	}
 
+
 	return {
 		Load(imageURLs: string[]) {
 			if (!Array.isArray(imageURLs) || !imageURLs.length) {
-				console.log("slider has no images to load")
+				console.debug("slider has no images to load")
 				return new Error("slider has no images to load")
 			}
-			imageURLs.forEach(function (path) { new Image().src = path; });
+			loadImages(imageURLs)
 			const defaultScrollValue = imageURLs?.length-2;
 			slider.value = defaultScrollValue.toString();
 			slider.max = (imageURLs.length - 1).toString();
