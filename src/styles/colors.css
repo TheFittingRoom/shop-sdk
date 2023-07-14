@@ -1,20 +1,19 @@
-
 .tfr-bg-aquamarina-strong {
-    background-color: #209DA7;
+  background-color: #209da7;
 }
 
 .tfr-c-white {
-    color: white;
+  color: white;
 }
 
 .tfr-c-dark {
-    color: #000000;
+  color: #000000;
 }
 
 .tfr-c-dark-o5 {
-    color: rgba(0, 0, 0, 0.5);
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .tfr-c-red {
-    color: red;
+  color: red;
 }

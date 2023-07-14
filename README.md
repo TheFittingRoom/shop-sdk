@@ -28,16 +28,18 @@ npm run dev:rollup
 # run a live server on localhost:3000 and disable cors
 npx live-server --host=localhost --port=3000 --cors
 ```
+
 The sdk gets transpiled from typescript a javascript ESM module located at `dist/esm/main(.min).js`
 
 You can develop locally and reference it in your html like this:
-```import {InitFittingRoom, comps, InitLocale} from "http://localhost:3000/dist/cjs/main.js"```
+`import {InitFittingRoom, comps, InitLocale} from "http://localhost:3000/dist/cjs/main.js"`
 
 ## Merges on main branch
+
 When a pull request gets merged into main, a development build gets published to S3.
 You can access the development builds by using a commit sha on main like this:
 
-```import {InitFittingRoom, comps, InitLocale} from "https://assets.dev.thefittingroom.xyz/shop-sdk/<COMMIT_SHA>/main.js"```
+`import {InitFittingRoom, comps, InitLocale} from "https://assets.dev.thefittingroom.xyz/shop-sdk/<COMMIT_SHA>/main.js"`
 
 ## Overriding library functions
 
@@ -47,41 +49,44 @@ View the [FittingRoom](https://github.com/TheFittingRoom/shop-sdk/blob/96d59558b
 The main implementation can be found in `init.ts`
 
 ```javascript
-    // use the language code in the get url (ex. ?lang=en)
-    InitLocale()
+// use the language code in the get url (ex. ?lang=en)
+InitLocale()
 
-    // define a modal div in the html to attach the fitting room to
-    let tfr = InitFittingRoom(1, "tfr-tryon-modal")
+// define a modal div in the html to attach the fitting room to
+let tfr = InitFittingRoom(1, 'tfr-tryon-modal')
 
-    // add an optional sign out button
-    let signout = document.getElementById("signout")
-    signout.addEventListener("click", () => {
-        // pass an empty sku to the onSignout since its not being used in a modal
-        // call the onSignout function wrapper to return a promise
-        // wait for the promise
-        // shows signed out modal by default
-        tfr.onSignout("")()
-            .then(() => {
-                // do something after signing out of the fitting room
-            })
+// add an optional sign out button
+let signout = document.getElementById('signout')
+signout.addEventListener('click', () => {
+  // pass an empty sku to the onSignout since its not being used in a modal
+  // call the onSignout function wrapper to return a promise
+  // wait for the promise
+  // shows signed out modal by default
+  tfr
+    .onSignout('')()
+    .then(() => {
+      // do something after signing out of the fitting room
     })
+})
 
-    // call TryOn with a colorway_size_asset sku
-    document.getElementById("tryon").addEventListener("click", (e) => {
-        tfr.TryOn("5003-007-08")
-    })
+// call TryOn with a colorway_size_asset sku
+document.getElementById('tryon').addEventListener('click', (e) => {
+  tfr.TryOn('5003-007-08')
+})
 ```
 
 ## Localization
+
 You can call `SetLocale` to change the language of the sdk without using url searchParams.
 
 ```javascript
-    SetLocale("en").then(() => {
-        // do something after setting the locale
-    }).catch((err) => {
-        // handle error
-    })
+SetLocale('en')
+  .then(() => {
+    // do something after setting the locale
+  })
+  .catch((err) => {
+    // handle error
+  })
 ```
 
 Warnings will be generated in the console for any missing locale definitions.
-

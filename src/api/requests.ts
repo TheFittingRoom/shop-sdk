@@ -4,185 +4,185 @@
 // source: avatar.go
 
 export interface BodyMeasurement {
-  avatar_id: number /* int64 */;
-  position: number /* int64 */;
-  value: number /* float64 */;
+  avatar_id: number /* int64 */
+  position: number /* int64 */
+  value: number /* float64 */
 }
 export interface Avatar {
-  BrandID: string;
-  HeightCM: string;
-  WeightKG: string;
-  Gender: string;
-  BodyType: string;
-  SkinToneHex: string;
-  SkinToneFac: string;
-  FrameCount: string;
-  Video?: any /* multipart.FileHeader */;
+  BrandID: string
+  HeightCM: string
+  WeightKG: string
+  Gender: string
+  BodyType: string
+  SkinToneHex: string
+  SkinToneFac: string
+  FrameCount: string
+  Video?: any /* multipart.FileHeader */
 }
 export interface UpdateAvatarWebhook {
-  waist: number /* float64 */;
-  hip: number /* float64 */;
-  bust: number /* float64 */;
-  under_bust: number /* float64 */;
-  right_hip_x: number /* float64 */;
-  right_hip_y: number /* float64 */;
-  right_hip_z: number /* float64 */;
-  left_hip_x: number /* float64 */;
-  left_hip_y: number /* float64 */;
-  left_hip_z: number /* float64 */;
-  right_waist_x: number /* float64 */;
-  right_waist_y: number /* float64 */;
-  right_waist_z: number /* float64 */;
-  left_waist_x: number /* float64 */;
-  left_waist_y: number /* float64 */;
-  left_waist_z: number /* float64 */;
-  right_shoulder_x: number /* float64 */;
-  right_shoulder_y: number /* float64 */;
-  right_shoulder_z: number /* float64 */;
-  left_shoulder_x: number /* float64 */;
-  left_shoulder_y: number /* float64 */;
-  left_shoulder_z: number /* float64 */;
-  frames_storage_path: string;
-  object_storage_path: string;
+  waist: number /* float64 */
+  hip: number /* float64 */
+  bust: number /* float64 */
+  under_bust: number /* float64 */
+  right_hip_x: number /* float64 */
+  right_hip_y: number /* float64 */
+  right_hip_z: number /* float64 */
+  left_hip_x: number /* float64 */
+  left_hip_y: number /* float64 */
+  left_hip_z: number /* float64 */
+  right_waist_x: number /* float64 */
+  right_waist_y: number /* float64 */
+  right_waist_z: number /* float64 */
+  left_waist_x: number /* float64 */
+  left_waist_y: number /* float64 */
+  left_waist_z: number /* float64 */
+  right_shoulder_x: number /* float64 */
+  right_shoulder_y: number /* float64 */
+  right_shoulder_z: number /* float64 */
+  left_shoulder_x: number /* float64 */
+  left_shoulder_y: number /* float64 */
+  left_shoulder_z: number /* float64 */
+  frames_storage_path: string
+  object_storage_path: string
 }
 
 //////////
 // source: brand.go
 
 export interface Brand {
-  name: string;
-  business_number: string;
-  logo_storage_path: string;
-  country_code: string;
-  about: string;
-  why_tfr: string;
-  specialty: string;
-  phone_number: string;
+  name: string
+  business_number: string
+  logo_storage_path: string
+  country_code: string
+  about: string
+  why_tfr: string
+  specialty: string
+  phone_number: string
 }
 
 //////////
 // source: collection.go
 
 export interface Collection {
-  external_id: string;
-  name: string;
-  description: string;
+  external_id: string
+  name: string
+  description: string
 }
 
 //////////
 // source: colorway_size_asset.go
 
 export interface PatchColorwaySizeAsset {
-  Sku: string;
+  Sku: string
 }
 export interface ColorwaySizeAsset {
-  Sku: string;
-  File?: any /* multipart.FileHeader */;
+  Sku: string
+  File?: any /* multipart.FileHeader */
 }
 export interface UpdateColorwaySizeAssetWebhook {
-  avatar_id: number /* int64 */;
-  frames_storage_path: string;
-  frame_count: number /* int */;
+  avatar_id: number /* int64 */
+  frames_storage_path: string
+  frame_count: number /* int */
 }
 
 //////////
 // source: invitation.go
 
 export interface Invitation {
-  email: string;
-  first_name: string;
-  last_name: string;
-  brand_id: number /* int64 */;
+  email: string
+  first_name: string
+  last_name: string
+  brand_id: number /* int64 */
 }
 
 //////////
 // source: style.go
 
 export interface GarmentMeasurement {
-  garment_measurement_location: string;
-  value: number /* float64 */;
-  tolerance: number /* float64 */;
+  garment_measurement_location: string
+  value: number /* float64 */
+  tolerance: number /* float64 */
 }
 export interface Size {
-  size_value_id: number /* int64 */;
-  label: string;
-  garment_measurements: GarmentMeasurement[];
+  size_value_id: number /* int64 */
+  label: string
+  garment_measurements: GarmentMeasurement[]
 }
 export interface Colorway {
-  name: string;
+  name: string
 }
 export interface Style {
-  brand_style_id: string;
-  collection_id?: number /* int64 */; // POST only
-  name: string;
-  description: string;
-  sale_type: string;
-  garment_category_id: number /* int64 */;
-  sizes: Size[];
-  colorways: Colorway[];
+  brand_style_id: string
+  collection_id?: number /* int64 */ // POST only
+  name: string
+  description: string
+  sale_type: string
+  garment_category_id: number /* int64 */
+  sizes: Size[]
+  colorways: Colorway[]
 }
 export interface StylePatch {
-  publish: boolean;
+  publish: boolean
 }
 
 //////////
 // source: user.go
 
 export interface User {
-  first_name: string;
-  last_name: string;
-  date_of_birth: string;
-  job: string;
+  first_name: string
+  last_name: string
+  date_of_birth: string
+  job: string
 }
 export interface InvitedUser {
-  token: string;
-  password: string;
+  token: string
+  password: string
 }
 
 //////////
 // source: vto.go
 
 export interface Joint {
-  id: number /* int64 */;
-  name: string;
-  side: string;
-  x: number /* float64 */;
-  y: number /* float64 */;
-  z: number /* float64 */;
+  id: number /* int64 */
+  name: string
+  side: string
+  x: number /* float64 */
+  y: number /* float64 */
+  z: number /* float64 */
 }
 export interface Joints {
-  right_hip_x: number /* float64 */;
-  right_hip_y: number /* float64 */;
-  right_hip_z: number /* float64 */;
-  left_hip_x: number /* float64 */;
-  left_hip_y: number /* float64 */;
-  left_hip_z: number /* float64 */;
-  right_waist_x: number /* float64 */;
-  right_waist_y: number /* float64 */;
-  right_waist_z: number /* float64 */;
-  left_waist_x: number /* float64 */;
-  left_waist_y: number /* float64 */;
-  left_waist_z: number /* float64 */;
-  right_shoulder_x: number /* float64 */;
-  right_shoulder_y: number /* float64 */;
-  right_shoulder_z: number /* float64 */;
-  left_shoulder_x: number /* float64 */;
-  left_shoulder_y: number /* float64 */;
-  left_shoulder_z: number /* float64 */;
+  right_hip_x: number /* float64 */
+  right_hip_y: number /* float64 */
+  right_hip_z: number /* float64 */
+  left_hip_x: number /* float64 */
+  left_hip_y: number /* float64 */
+  left_hip_z: number /* float64 */
+  right_waist_x: number /* float64 */
+  right_waist_y: number /* float64 */
+  right_waist_z: number /* float64 */
+  left_waist_x: number /* float64 */
+  left_waist_y: number /* float64 */
+  left_waist_z: number /* float64 */
+  right_shoulder_x: number /* float64 */
+  right_shoulder_y: number /* float64 */
+  right_shoulder_z: number /* float64 */
+  left_shoulder_x: number /* float64 */
+  left_shoulder_y: number /* float64 */
+  left_shoulder_z: number /* float64 */
 }
 export interface FramesRequest {
-  user_id: string;
-  avatar_id: number /* int64 */;
-  gender: string;
-  garment_id: number /* int64 */;
-  colorway_id: number /* int64 */;
-  size_id: number /* int64 */;
-  avatar: string;
-  garment: string;
-  material: string;
-  textures: string;
-  hex_value: string;
-  color_value: number /* float64 */;
-  frame_count: number /* int64 */;
-  joints: Joints;
+  user_id: string
+  avatar_id: number /* int64 */
+  gender: string
+  garment_id: number /* int64 */
+  colorway_id: number /* int64 */
+  size_id: number /* int64 */
+  avatar: string
+  garment: string
+  material: string
+  textures: string
+  hex_value: string
+  color_value: number /* float64 */
+  frame_count: number /* int64 */
+  joints: Joints
 }

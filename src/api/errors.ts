@@ -4,74 +4,74 @@
 // source: errors.go
 
 export interface ErrorResponse {
-  error: string;
+  error: string
 }
 export interface ErrorOutsideRecommendedSizes {
-  error: string;
-  recommended_size_id: number /* int64 */;
-  available_size_ids: number /* int64 */[];
+  error: string
+  recommended_size_id: number /* int64 */
+  available_size_ids: number /* int64 */[]
 }
-export const AvatarNotFound = "avatar not found";
-export const BrandNotFound = "brand not found";
-export const CollectionNotFound = "collection not found";
-export const ColorwaySizeAssetNotFound = "colorway size asset not found";
-export const GarmentCategoryNotFound = "garment category not found";
-export const InvitationNotFound = "invitation not found";
-export const SaleTypeNotFound = "sale type not found";
-export const SizeNotFound = "size not found";
-export const StyleNotFound = "style not found";
-export const UserNotFound = "user not found";
-export const SizeValueNotFound = "size value not found";
-export const BrandStyleIDExists = "brand_style_id exists";
-export const ColorwaySizeAssetSKUExists = "colorway exists";
-export const EmailExists = "email exists";
-export const InvitationExists = "invitation exists";
-export const UserExists = "user exists";
-export const UserIDExists = "user_id exists";
-export const HeightExpectsFloatString = "height expects a float in string format";
-export const SkinToneFactorExpectsFloatString = "skin_tone_factor expects float in string format";
-export const WeightExpectsFloatString = "weight expects a float in string format";
-export const FrameCountExpectsIntString = "frame_count expects an integer in string format";
-export const BrandIDExpectsIntString = "brand_id expects an integer in string format";
-export const CollectionIDParseError = "failed to parse collection id";
-export const StyleIDParseError = "failed to parse style id";
-export const ColorwaySizeAssetIDParseError = "failed to parse colorway size asset id";
-export const SizeIDParseError = "failed to parse size id";
-export const ColorwayIDParseError = "failed to parse colorway id";
-export const ColorwayRequired = "colorway required";
-export const GenderOrBodyTypeRequired = "gender or body_type required";
-export const SkuRequired = "sku is required";
-export const SizeRequired = "size required";
-export const CollectionWrongBrand = "collection does not belong to users brand";
-export const ColorwaySizeAssetWrongBrand = "colorway size asset does not belong to users brand";
-export const StyleWrongBrand = "style does not belong to users brand";
-export const AvatarNotCreated = "avatar not created";
-export const AvatarNotReady = "avatar not ready";
-export const BodyTypeNotNumber = "body_type expects integer";
-export const StyleRequiresSize = "style requires size";
-export const EmptyResourceID = "empty resource id in url";
-export const GarmentMeasurementLocationNotFound = "garment_measurement_location not found";
-export const InvitationExpired = "invitation expired";
-export const IDParseError = "failed to parse id";
-export const PermissionDenied = "permission denied";
-export const SkinToneFacExpectsBetween0And1 = "skin_tone_factor expects between 0 and 1";
-export const StyleSizeRequiresColorway = "style size requires colorway";
-export const StyleNotPublished = "style not published";
-export const UserBrandMismatchStyleBrand = "user brand different than style brand";
-export const UserBrandMismatchBrandID = "user brand different than brand_id";
-export const UserBrandRequired = "user brand required";
-export const ValueToleranceTooLarge = "value greater than 999.99 or tolerance greater than 99.99";
-export const ZipInvalid = "invalid zip file";
-export const ZipObjNotFound = "obj file not found";
-export const ZipMtlNotFound = "mtl file not found";
-export const ZipTextureDirNotFound = "texture directory not found";
-export const ZipTextureDirEmpty = "texture directory empty";
-export const FileSizeTooLarge = "file size too large";
-export const ZipCompressionUnsupported = "unsupported compression method";
-export const MaterialMultipleNotAllowed = "multiple materials (.mtl) not allowed";
-export const ObjectMultipleNotAllowed = "multiple objects (.obj) not allowed";
-export const DateOfBirthFormatWrong = "date of birth should be in format 01-02-2006";
-export const SizeIDOutsideRecommendedRange = "size_id outside of recommended range";
-export const SizeDuplicated = "duplicate size";
-export const ColorwayDuplicated = "duplicate colorway";
-export const GarmentMeasurementLocationDuplicated = "garment measurement location duplicated";
+export const AvatarNotFound = 'avatar not found'
+export const BrandNotFound = 'brand not found'
+export const CollectionNotFound = 'collection not found'
+export const ColorwaySizeAssetNotFound = 'colorway size asset not found'
+export const GarmentCategoryNotFound = 'garment category not found'
+export const InvitationNotFound = 'invitation not found'
+export const SaleTypeNotFound = 'sale type not found'
+export const SizeNotFound = 'size not found'
+export const StyleNotFound = 'style not found'
+export const UserNotFound = 'user not found'
+export const SizeValueNotFound = 'size value not found'
+export const BrandStyleIDExists = 'brand_style_id exists'
+export const ColorwaySizeAssetSKUExists = 'colorway exists'
+export const EmailExists = 'email exists'
+export const InvitationExists = 'invitation exists'
+export const UserExists = 'user exists'
+export const UserIDExists = 'user_id exists'
+export const HeightExpectsFloatString = 'height expects a float in string format'
+export const SkinToneFactorExpectsFloatString = 'skin_tone_factor expects float in string format'
+export const WeightExpectsFloatString = 'weight expects a float in string format'
+export const FrameCountExpectsIntString = 'frame_count expects an integer in string format'
+export const BrandIDExpectsIntString = 'brand_id expects an integer in string format'
+export const CollectionIDParseError = 'failed to parse collection id'
+export const StyleIDParseError = 'failed to parse style id'
+export const ColorwaySizeAssetIDParseError = 'failed to parse colorway size asset id'
+export const SizeIDParseError = 'failed to parse size id'
+export const ColorwayIDParseError = 'failed to parse colorway id'
+export const ColorwayRequired = 'colorway required'
+export const GenderOrBodyTypeRequired = 'gender or body_type required'
+export const SkuRequired = 'sku is required'
+export const SizeRequired = 'size required'
+export const CollectionWrongBrand = 'collection does not belong to users brand'
+export const ColorwaySizeAssetWrongBrand = 'colorway size asset does not belong to users brand'
+export const StyleWrongBrand = 'style does not belong to users brand'
+export const AvatarNotCreated = 'avatar not created'
+export const AvatarNotReady = 'avatar not ready'
+export const BodyTypeNotNumber = 'body_type expects integer'
+export const StyleRequiresSize = 'style requires size'
+export const EmptyResourceID = 'empty resource id in url'
+export const GarmentMeasurementLocationNotFound = 'garment_measurement_location not found'
+export const InvitationExpired = 'invitation expired'
+export const IDParseError = 'failed to parse id'
+export const PermissionDenied = 'permission denied'
+export const SkinToneFacExpectsBetween0And1 = 'skin_tone_factor expects between 0 and 1'
+export const StyleSizeRequiresColorway = 'style size requires colorway'
+export const StyleNotPublished = 'style not published'
+export const UserBrandMismatchStyleBrand = 'user brand different than style brand'
+export const UserBrandMismatchBrandID = 'user brand different than brand_id'
+export const UserBrandRequired = 'user brand required'
+export const ValueToleranceTooLarge = 'value greater than 999.99 or tolerance greater than 99.99'
+export const ZipInvalid = 'invalid zip file'
+export const ZipObjNotFound = 'obj file not found'
+export const ZipMtlNotFound = 'mtl file not found'
+export const ZipTextureDirNotFound = 'texture directory not found'
+export const ZipTextureDirEmpty = 'texture directory empty'
+export const FileSizeTooLarge = 'file size too large'
+export const ZipCompressionUnsupported = 'unsupported compression method'
+export const MaterialMultipleNotAllowed = 'multiple materials (.mtl) not allowed'
+export const ObjectMultipleNotAllowed = 'multiple objects (.obj) not allowed'
+export const DateOfBirthFormatWrong = 'date of birth should be in format 01-02-2006'
+export const SizeIDOutsideRecommendedRange = 'size_id outside of recommended range'
+export const SizeDuplicated = 'duplicate size'
+export const ColorwayDuplicated = 'duplicate colorway'
+export const GarmentMeasurementLocationDuplicated = 'garment measurement location duplicated'
