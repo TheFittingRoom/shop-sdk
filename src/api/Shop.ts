@@ -55,7 +55,7 @@ const InitShop = (firebaseInstance: any, id: number): types.Shop => {
 	const AwaitColorwaySizeAssetFrames = async (user: types.FirebaseUser, colorwaySizeAssetSKU: string): Promise<types.TryOnFrames> => {
 		return new Promise((resolve, reject) => {
 			console.debug("waiting for frames to be ready")
-			window.setTimeout(() => {
+			const id = window.setTimeout(() => {
 				unsubscribe();
 				console.error("timed out waiting for frames")
 				reject(createUIError(L.SomethingWentWrong, new Error("timed out waiting for frames")));
@@ -67,6 +67,7 @@ const InitShop = (firebaseInstance: any, id: number): types.Shop => {
 				console.debug("checking for frames")
 				GetColorwaySizeAssetFrames(user, colorwaySizeAssetSKU).then((frames) => {
 					unsubscribe();
+					window.clearTimeout(id);
 					resolve(frames);
 				}).catch((error) => {
 					if (error === types.NoFramesFound) {
