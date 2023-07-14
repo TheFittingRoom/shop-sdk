@@ -92,10 +92,11 @@
 }
 
 .tfr-standard-button {
-  border: 0;
-  width: 138px;
-  height: 43px;
   border-radius: 3px;
+  border: 0;
+  color: #ffffff;
+  height: 43px;
+  width: 138px;
 }
 
 .tfr-modal-title-logo-container {
@@ -179,4 +180,20 @@
   font-size: 16px;
   color: white;
   transition: width 600ms linear;
+}
+
+.tfr-logo-box {
+  margin: 40px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 380px;
+  width: 430px;
+  background-color: #209da7;
+}
+
+.tfr-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

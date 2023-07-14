@@ -1,5 +1,5 @@
 import { L } from '../../api/Locale'
-import { AposeLogo, AppStoreLogo, ModalContent, QrCodeLogo, SignInModalProps } from '../../types'
+import { ModalContent, SignInModalProps } from '../../types'
 
 const SignInModal = (props: SignInModalProps): ModalContent => {
   const { email } = props
@@ -66,67 +66,36 @@ const SignInModal = (props: SignInModalProps): ModalContent => {
 
   const body = () => {
     return `
+            <div class="tfr-title-font tfr-light-22-300 tfr-mt-10">${L.SignIn}</div>
+
             <fieldset class="tfr-fieldset-element tfr-fieldset tfr-mt-20">
-                <legend tfr-element="true" class="tfr-label-element tfr-body-font tfr-14-default tfr-c-dark-o5">${L.EmailAddress}</legend>
-                <input tfr-element="true" type="email" id="email-input" value="${email}" />
+                <legend tfr-element="true" class="tfr-label-element tfr-body-font tfr-14-default tfr-c-dark-o5">${
+                  L.EmailAddress
+                }</legend>
+                <input tfr-element="true" type="email" id="email-input" value="${email || ''}" />
             </fieldset>
 
             <fieldset class="tfr-fieldset-element tfr-fieldset tfr-mt-20">
-                <legend tfr-element="true" class="tfr-label-element tfr-body-font tfr-14-default tfr-c-dark-o5">${L.Password}</legend>
+                <legend tfr-element="true" class="tfr-label-element tfr-body-font tfr-14-default tfr-c-dark-o5">${
+                  L.Password
+                }</legend>
                 <input tfr-element="true" type="password" id="password-input" />
             </fieldset>
 
             <div tfr-element="true" class="tfr-body-font tfr-12-default tfr-c-red tfr-mt-10 tfr-d-none" id="tfr-form-error"></div>
 
-            <div class="tfr-mt-30">
-                <span id="tfr-forgot-password" tfr-element="true" class="tfr-body-font tfr-12-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mr-15">${L.ForgotPasswordWithSymbol}</span>
-                <span id="tfr-scan-code" tfr-element="true" class="tfr-body-font tfr-12-default tfr-c-dark-o5 tfr-underline tfr-cursor">${L.DontHaveAcc}</span>
+            <div class="tfr-mt-20">
+                <span id="tfr-forgot-password" tfr-element="true" class="tfr-body-font tfr-14-default tfr-c-dark-o5 tfr-underline tfr-cursor tfr-mr-15">${
+                  L.ForgotPasswordWithSymbol
+                }</span>
+                <span id="tfr-scan-code" tfr-element="true" class="tfr-body-font tfr-14-default tfr-c-dark-o5 tfr-underline tfr-cursor">${
+                  L.DontHaveAcc
+                }</span>
             </div>
 
             <button id="tfr-sign-in" tfr-element="true" class="tfr-standard-button tfr-bg-aquamarina-strong tfr-c-whitetfr-title-font tfr-medium-16-default tfr-cursor tfr-mt-30" id="sign-in-button">
                 ${L.SignIn}
             </button>
-
-            <div>
-                <div tfr-element="true" class="tfr-title-font tfr-light-24-300 tfr-c-dark tfr-mt-30">${L.HowItWorks}</div>
-
-                <div tfr-element="true" class="tfr-title-font tfr-light-16-300 tfr-c-dark tfr-mt-15">${L.HowItWorksText}</div>
-
-                <div class="tfr-how-it-works-item tfr-mt-15">
-                    <div>
-                        <div tfr-element="true" class="tfr-title-font tfr-light-22-300 tfr-c-dark">${L.SimplyScan}</div>
-                        <div tfr-element="true" class="tfr-title-font tfr-light-16-300 tfr-c-dark tfr-mt-15">${L.SimplyScanText}</div>
-                    </div>
-
-                    <div class="tfr-girl-clothes tfr-d-flex">
-                        <img src="${AposeLogo}" />
-                    </div>
-                </div>
-
-                <div class="tfr-how-it-works-item tfr-mt-15">
-                    <img src='TODO' class="tfr-girl-clothes" />
-                    <div class="tfr-try-on-content">
-                        <div tfr-element="true" class="tfr-title-font tfr-light-22-300 tfr-c-dark">${L.TryOn}</div>
-                        <div tfr-element="true" class="tfr-title-font tfr-light-16-300 tfr-c-dark tfr-mt-15">${L.TryOnText}</div>
-                    </div>
-                </div>
-
-                <div tfr-element="true" class="tfr-title-font tfr-light-22-300 tfr-c-dark tfr-w-85-p tfr-m-h-auto tfr-mt-50">${L.CreateAvatarSc}</div>
-
-                <div class="tfr-w-150 tfr-h-150 tfr-mt-30 tfr-m-h-auto">
-                    <object data="qr-code-logo.svg" type="image/svg+xml">
-                        <img src="${QrCodeLogo}" />
-                    </object>
-                </div>
-
-                <div tfr-element="true" class="tfr-title-font tfr-light-22-300 tfr-c-dark tfr-w-85-p tfr-mt-20 tfr-m-h-auto">${L.Or}</div>
-
-                <div class="tfr-mt-20 tfr-m-h-auto">
-                    <object data="app-store-logo.svg" type="image/svg+xml">
-                        <img src="${AppStoreLogo}" />
-                    </object>
-                </div>
-            </div>
             `
   }
 

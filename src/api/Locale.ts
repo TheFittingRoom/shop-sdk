@@ -1,9 +1,11 @@
 import { createUIError } from './UIError'
 
 var L = {
+  TheFittingRoom: 'The Fitting Room',
   VirtualTryOnWith: 'Virtual try on with',
   EmailAddress: 'Email address',
   Password: 'Password',
+  PhoneNumber: 'Phone number',
   SignBackIn: 'Sign back in',
   SignUp: 'Sign up',
   SignOut: 'Sign out',
@@ -13,6 +15,7 @@ var L = {
   Send: 'Send',
   ReturnToSignIn: 'Return to sign in',
   ForgotPasswordWithSymbol: 'Forgot password?',
+  HaveAcc: 'Have an account? Sign in',
   DontHaveAcc: "Don't have an account?",
   HowItWorks: 'How it works',
   HowItWorksText:
@@ -31,6 +34,7 @@ var L = {
   ReturnToSite: 'Return to site',
   ModalTitle: 'Enter your email address to be notified when The Fitting Room try on is offered on Google Play:',
   EnterEmailAddress: 'Enter your email address, we will send you a link to reset your password.',
+  EnterPhoneNumber: 'Enter your phone number to be texted a link to download The Fitting Room app.',
   StyleNotReadyForVTO: 'This style is not ready for virtual try on yet. Please check back later.',
   NoSizeAvailable: 'Unfortunately, that size is not available for try on.',
   TrySize: 'You can try on a size',
@@ -126,4 +130,4 @@ const InitLocale = (): Promise<string> => {
 
 //TODO: add OverrideLocale function that rewrites all non-empty keys in the new locale over the old locale
 
-export { L, SetLocale, InitLocale }
+export { InitLocale, L, SetLocale }

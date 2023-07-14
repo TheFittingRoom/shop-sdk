@@ -1,5 +1,5 @@
 import { L } from '../../api/Locale'
-import { ModalContent, TfrLogo } from '../../types'
+import { ModalContent } from '../../types'
 
 interface ModalManager {
   Open(content: ModalContent): void
@@ -26,11 +26,15 @@ const InitModalManager = (elementID: string): ModalManager => {
                 <div class="tfr-modal-content tfr-pt-20 tfr-pb-50">
                     <div class="tfr-modal-title-logo-container">
                         <div tfr-element="true" class="tfr-title-font tfr-light-24-300 tfr-c-dark tfr-mr-10">${L.VirtualTryOnWith}</div>
-                        <div>
-                            <object data="tfr-logo.svg" type="image/svg+xml">
-                                <img src="${TfrLogo}" />
-                            </object>
+                        <div class="tfr-mr-15">
+                          <svg width="26" height="47" viewBox="0 0 68 124" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0.911938 0L67.4819 17.09V106.49L0.911938 123.51V0Z" fill="#209DA7">
+                            </path>
+                            <path d="M52.8019 64.44C54.7791 64.44 56.3819 62.4387 56.3819 59.97C56.3819 57.5013 54.7791 55.5 52.8019 55.5C50.8248 55.5 49.2219 57.5013 49.2219 59.97C49.2219 62.4387 50.8248 64.44 52.8019 64.44Z" fill="white">
+                            </path>
+                          </svg>
                         </div>
+                        <div tfr-element="true" class="tfr-title-font tfr-light-24-500 tfr-c-dark tfr-mr-10">${L.TheFittingRoom}</div>
                     </div>
 										${modalBody}
                 </div>
