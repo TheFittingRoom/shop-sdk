@@ -4,3 +4,8 @@
 build
 patches
 src
+.eslintrc.json
+.prettierrc
+tsconfig.json
+tsconfig.module.json
+.env
