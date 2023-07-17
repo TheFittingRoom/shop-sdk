@@ -4,7 +4,7 @@
   "description": "the fitting room SDK",
   "type": "module",
   "main": "./dist/esm/main.min.js",
-  "private": "false",
+  "access": "public",
   "scripts": {
     "build:rollup": "rm -rf dist && rollup --config",
     "dev:rollup": "rm -rf dist && rollup --config -w",
