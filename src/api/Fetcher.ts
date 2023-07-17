@@ -1,78 +1,60 @@
 import * as types from '../types'
 
-const Fetcher = {
-  Fetch: async (
-    user: types.FirebaseUser,
-    endpointPath: string,
-    method: string,
-    body: object | null,
-  ): Promise<Response> => {
-    return new Promise((resolve, reject) => {
-      user
-        .Token()
-        .then((token) => {
-          const config: RequestInit = {
-            method: method,
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-            credentials: 'include',
-          }
-          if (body) {
-            config.body = JSON.stringify(body)
-          }
-          const url = process.env.API_ENDPOINT + endpointPath
-          fetch(url, config)
-            .then((r) => {
-              if (r.ok) {
-                resolve(r)
-              } else {
-                if (r.status === 500) {
-                  // 500s dont return error responses
-                  reject(new Error(r.statusText))
-                } else {
-                  r.json()
-                    .then((json) => {
-                      reject(json)
-                    })
-                    .catch((error: SyntaxError) => {
-                      reject(error)
-                    })
-                }
-              }
-            })
-            .catch((error) => {
-              console.error('failed to fetch', error)
-              reject(error)
-            })
-        })
-        .catch((error) => {
-          console.error('failed to get token', error)
-          reject(error)
-        })
-    })
-  },
-
-  Get: async (user: types.FirebaseUser, endpointPath: string, body: any): Promise<object> => {
-    return Fetcher.Fetch(user, endpointPath, 'GET', body)
-  },
-
-  Post: async (user: types.FirebaseUser, endpointPath: string, body: object): Promise<object> => {
-    return Fetcher.Fetch(user, endpointPath, 'POST', body)
-  },
-
-  Put: async (user: types.FirebaseUser, endpointPath: string, body: object): Promise<object> => {
-    return Fetcher.Fetch(user, endpointPath, 'PUT', body)
-  },
-
-  Patch: async (user: types.FirebaseUser, endpointPath: string, body: object): Promise<object> => {
-    return Fetcher.Fetch(user, endpointPath, 'PATCH', body)
-  },
-
-  Delete: async (user: types.FirebaseUser, endpointPath: string, body: object): Promise<object> => {
-    return Fetcher.Fetch(user, endpointPath, 'DELETE', body)
-  },
+interface FetchParams {
+  user: types.FirebaseUser
+  endpointPath: string
+  method: string
+  body?: Record<string, any>
 }
 
-export { Fetcher }
+export class Fetcher {
+  private static async Fetch({ user, endpointPath, method, body }: FetchParams): Promise<Response> {
+    const url = process.env.API_ENDPOINT + endpointPath
+    const token = await this.getToken(user)
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    }
+    const config: RequestInit = { method, headers, credentials: 'include' }
+
+    if (body) config.body = JSON.stringify(body)
+
+    const res = await fetch(url, config)
+
+    if (res.ok) return res
+    if (res.status === 500) throw new Error(res.statusText)
+
+    const json = await res.json()
+
+    return Promise.reject(json)
+  }
+
+  private static getToken(user: types.FirebaseUser): Promise<string> {
+    try {
+      return user.Token()
+    } catch (error) {
+      console.error('failed to get token')
+      return Promise.reject(error)
+    }
+  }
+
+  static Get(user: types.FirebaseUser, endpointPath: string, body: any): Promise<object> {
+    return this.Fetch({ user, endpointPath, method: 'GET', body })
+  }
+
+  static Post(user: types.FirebaseUser, endpointPath: string, body: object): Promise<object> {
+    return this.Fetch({ user, endpointPath, method: 'POST', body })
+  }
+
+  static Put(user: types.FirebaseUser, endpointPath: string, body: object): Promise<object> {
+    return this.Fetch({ user, endpointPath, method: 'PUT', body })
+  }
+
+  static Patch(user: types.FirebaseUser, endpointPath: string, body: object): Promise<object> {
+    return this.Fetch({ user, endpointPath, method: 'PATCH', body })
+  }
+
+  static Delete(user: types.FirebaseUser, endpointPath: string, body: object): Promise<object> {
+    return this.Fetch({ user, endpointPath, method: 'DELETE', body })
+  }
+}
