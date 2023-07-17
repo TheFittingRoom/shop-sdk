@@ -1,8 +1,9 @@
 {
-  "name": "tfr-library",
+  "name": "@thefittingroom/sdk",
   "version": "1.0.0",
-  "description": "the fitting room library",
+  "description": "the fitting room SDK",
   "type": "module",
+  "main": "./dist/esm/main.min.js",
   "scripts": {
     "build:rollup": "rm -rf dist && rollup --config",
     "dev:rollup": "rm -rf dist && rollup --config -w",
