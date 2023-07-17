@@ -1,6 +1,0 @@
-import './colors.css'
-import './general.css'
-import './input.css'
-import './media.css'
-import './spaces.css'
-import './text.css'
