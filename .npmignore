@@ -1,0 +1,6 @@
+.github
+.rollup.cachs
+.vscode
+build
+patches
+src

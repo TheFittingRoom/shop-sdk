@@ -1,9 +1,10 @@
 {
   "name": "@thefittingroom/sdk",
-  "version": "1.0.0",
+  "version": "0.0.1-alpha.0",
   "description": "the fitting room SDK",
   "type": "module",
   "main": "./dist/esm/main.min.js",
+  "private": "false",
   "scripts": {
     "build:rollup": "rm -rf dist && rollup --config",
     "dev:rollup": "rm -rf dist && rollup --config -w",
@@ -36,8 +37,7 @@
     "node": ">=10"
   },
   "dependencies": {
-    "firebase": "^9.10.0",
-    "patch-package": "^6.5.0"
+    "firebase": "^9.10.0"
   },
   "devDependencies": {
     "@ava/typescript": "^1.1.1",
@@ -60,6 +60,7 @@
     "live-server": "^1.2.2",
     "npm-run-all": "^4.1.5",
     "open-cli": "^7.2.0",
+    "patch-package": "^6.5.0",
     "prettier": "^3.0.0",
     "rollup": "^2.79.1",
     "rollup-plugin-dotenv": "^0.4.0",
