@@ -16,14 +16,15 @@ export default {
   input: 'src/index.ts',
   output: [
     {
-      file: `dist/esm/main.js`,
+      file: `dist/esm/index.js`,
       format: 'esm',
       sourcemap: true,
       banner,
     },
     {
-      file: `dist/esm/main.min.js`,
+      file: `dist/esm/index.min.js`,
       format: 'esm',
+      sourcemap: true,
       banner,
       plugins: [terser()],
     },
