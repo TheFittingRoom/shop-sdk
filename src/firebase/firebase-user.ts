@@ -17,6 +17,17 @@ export class FirebaseUser {
     return this.user?.uid
   }
 
+  public onInit() {
+    return new Promise<void>((resolve) => {
+      this.auth.onAuthStateChanged((user) => {
+        this.setUser(user)
+        if (user) return resolve()
+
+        throw new Errors.UserNotLoggedInError()
+      })
+    })
+  }
+
   public setUser(user: firebaseAuth.User) {
     this.user = user
   }

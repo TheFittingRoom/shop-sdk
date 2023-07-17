@@ -34,6 +34,10 @@ export class Firebase {
     this.user = new FirebaseUser(this.firestore, Firebase.App)
   }
 
+  public onInit() {
+    return this.user.onInit()
+  }
+
   public query(collectionName: string, constraint: QueryFieldFilterConstraint) {
     const q = query(collection(this.firestore, collectionName), constraint)
 
