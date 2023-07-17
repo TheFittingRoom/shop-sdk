@@ -1,7 +1,6 @@
 import * as firebase from 'firebase/app'
 import * as firebaseAuth from 'firebase/auth'
-import { DocumentData } from 'firebase/firestore'
-import { Firestore } from 'firebase/firestore'
+import { DocumentData, Firestore } from 'firebase/firestore'
 
 import { UIError } from '../api/UIError'
 import * as errors from '../api/errors'
@@ -91,8 +90,8 @@ export interface FittingRoom {
   onNavSignIn(colorwaySizeAssetSKU: string): (email: string) => void
   onPasswordReset(colorwaySizeAssetSKU: string): (email: string) => void
   onNavForgotPassword(colorwaySizeAssetSKU: string): (email: string) => void
-  onNavScanCode(): void
-  TryOn(colorwaySizeAssetSKU: string)
+  onNavScanCode(colorwaySizeAssetSKU: string): void
+  TryOn(colorwaySizeAssetSKU: string): void
 }
 
 export interface ModalContent {
@@ -148,7 +147,9 @@ export interface ResetLinkModalProps {
   email: string
   onNavSignIn: (email: string) => void
 }
-export type ScanCodeModalProps = ModalProps
+export interface ScanCodeModalProps {
+  onSignInNav: () => void
+}
 export interface LoggedOutModalProps {
   onClose: () => void
   onNavSignIn: (email: string) => void

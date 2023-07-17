@@ -1,4 +1,3 @@
-// import { InitFirebase, ModalManager, Shop, SignInModal, ForgotPasswordModal, ScanCodeModal, NoAvatarModal, LoadingAvatarModal, LoggedOutModal, ErrorModal, types, L } from "@thefittingroom/ui";
 import { InitLocale, L } from './api/Locale'
 import { InitShop } from './api/Shop'
 import { UIError } from './api/UIError'
@@ -126,11 +125,8 @@ const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom 
 
     whenNotSignedIn(colorwaySizeAssetSKU: string) {
       this.manager.Open(
-        modals.SignInModal({
-          email: '',
-          onSignIn: this.onSignIn(colorwaySizeAssetSKU),
-          onNavForgotPassword: this.onNavForgotPassword(colorwaySizeAssetSKU),
-          onNavScanCode: this.onNavScanCode.bind(this),
+        modals.ScanCodeModal({
+          onSignInNav: this.onNavSignIn(colorwaySizeAssetSKU),
         }),
       )
     },
@@ -229,7 +225,7 @@ const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom 
             email,
             onSignIn: this.onSignIn(colorwaySizeAssetSKU),
             onNavForgotPassword: this.onNavForgotPassword(colorwaySizeAssetSKU),
-            onNavScanCode: this.onNavScanCode.bind(this),
+            onNavScanCode: () => this.onNavScanCode(colorwaySizeAssetSKU),
           }),
         )
       }
@@ -266,8 +262,12 @@ const InitFittingRoom = (shopID: number, modalDivID: string): types.FittingRoom 
     },
 
     // requires binding to modal (.bind(this))
-    onNavScanCode(): void {
-      this.manager.Open(modals.ScanCodeModal({}))
+    onNavScanCode(colorwaySizeAssetSKU: string): void {
+      this.manager.Open(
+        modals.ScanCodeModal({
+          onSignInNav: this.onNavSignIn(colorwaySizeAssetSKU),
+        }),
+      )
     },
 
     TryOn(colorwaySizeAssetSKU: string) {

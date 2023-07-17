@@ -25,14 +25,14 @@ ASSETS_URL=https://assets.dev.thefittingroom.xyz/shop-sdk/assets
 
 # build everytime changes are detected
 npm run dev:rollup
-# run a live server on localhost:3000 and disable cors
-npx live-server --host=localhost --port=3000 --cors
+# run a live server on localhost:3030 and disable cors
+npx live-server --host=localhost --port=3030 --cors
 ```
 
 The sdk gets transpiled from typescript a javascript ESM module located at `dist/esm/main(.min).js`
 
 You can develop locally and reference it in your html like this:
-`import {InitFittingRoom, comps, InitLocale} from "http://localhost:3000/dist/cjs/main.js"`
+`import {InitFittingRoom, comps, InitLocale} from "http://localhost:3030/dist/cjs/main.js"`
 
 ## Merges on main branch
 
