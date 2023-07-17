@@ -9,3 +9,4 @@ src
 tsconfig.json
 tsconfig.module.json
 .env
+rollup.config.js
