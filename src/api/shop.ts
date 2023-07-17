@@ -12,10 +12,7 @@ import { TestImage } from './utils'
 export class TfrShop {
   private static AVATAR_TIMEOUT = process.env.AVATAR_TIMEOUT ? Number(process.env.AVATAR_TIMEOUT) : 10000
 
-  constructor(
-    private readonly brandId: string,
-    private readonly firebase: Firebase,
-  ) {}
+  constructor(private readonly brandId: string, private readonly firebase: Firebase) {}
 
   public get user() {
     return this.firebase.user
@@ -23,6 +20,10 @@ export class TfrShop {
 
   public get isLoggedIn(): boolean {
     return !this.firebase || Boolean(this.user.id)
+  }
+
+  public onInit() {
+    return this.firebase.onInit()
   }
 
   public async tryOn(colorwaySizeAssetSku: string) {
