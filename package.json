@@ -1,9 +1,9 @@
 {
   "name": "@thefittingroom/sdk",
-  "version": "0.0.1-alpha.5",
+  "version": "0.0.1-alpha.8",
   "description": "the fitting room SDK",
   "type": "module",
-  "main": "./dist/esm/main.min.js",
+  "main": "./dist/esm/index.js",
   "access": "public",
   "scripts": {
     "build:rollup": "rm -rf dist && rollup --config",
