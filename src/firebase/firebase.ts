@@ -27,7 +27,7 @@ export class Firebase {
     appId: process.env.FIREBASE_APP_ID,
   })
 
-  private readonly firestore: Firestore
+  public readonly firestore: Firestore
 
   constructor() {
     this.firestore = getFirestore(Firebase.App)

@@ -10,9 +10,9 @@ import { SizeRecommendation } from './responses'
 import { TestImage } from './utils'
 
 export class TfrShop {
-  private static AVATAR_TIMEOUT = process.env.AVATAR_TIMEOUT ? Number(process.env.AVATAR_TIMEOUT) : 10000
+  private static AVATAR_TIMEOUT = process.env.AVATAR_TIMEOUT_MS ? Number(process.env.AVATAR_TIMEOUT_MS) : 12000
 
-  constructor(private readonly brandId: string, private readonly firebase: Firebase) {}
+  constructor(private readonly brandId: number, private readonly firebase: Firebase) {}
 
   public get user() {
     return this.firebase.user
@@ -34,7 +34,7 @@ export class TfrShop {
 
       return frames
     } catch (error) {
-      if (error instanceof Errors.NoFramesFoundError) throw new Errors.NoFramesFoundError()
+      if (!(error instanceof Errors.NoFramesFoundError)) throw error
 
       return this.requestThenGetColorwaySizeAssetFrames(colorwaySizeAssetSku)
     }
@@ -57,7 +57,7 @@ export class TfrShop {
     return userProfile.avatar_status === 'CREATED'
   }
 
-  public async getRecommendedSize(brandStyleId: string) {
+  public async getRecommendedSizes(brandStyleId: string) {
     if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
 
     const res = await Fetcher.Get(this.user, `/styles/${brandStyleId}/recommendation`)
@@ -167,4 +167,4 @@ export class TfrShop {
   }
 }
 
-export const initShop = (brandId: string) => new TfrShop(brandId, new Firebase())
+export const initShop = (brandId: number) => new TfrShop(brandId, new Firebase())

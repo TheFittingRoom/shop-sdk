@@ -18,12 +18,11 @@ export class FirebaseUser {
   }
 
   public onInit() {
-    return new Promise<void>((resolve) => {
-      this.auth.onAuthStateChanged((user) => {
+    return new Promise<boolean>((resolve) => {
+      const unsub = this.auth.onAuthStateChanged((user) => {
         this.setUser(user)
-        if (user) return resolve()
-
-        throw new Errors.UserNotLoggedInError()
+        resolve(Boolean(user))
+        unsub()
       })
     })
   }
