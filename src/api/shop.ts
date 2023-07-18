@@ -184,5 +184,5 @@ export const initShop = (brandId: number, env: string = 'dev') => {
   if (env === 'dev' || env === 'development') console.warn('TfrShop is in development mode')
 
   Config.getInstance().setEnv(env)
-  new TfrShop(brandId, new Firebase())
+  return new TfrShop(brandId, new Firebase())
 }
