@@ -1,4 +1,5 @@
 import { FirebaseUser } from '../firebase/firebase-user'
+import { Config } from '../helpers/config'
 
 interface FetchParams {
   user: FirebaseUser
@@ -9,6 +10,12 @@ interface FetchParams {
 }
 
 export class Fetcher {
+  private static endpoint() {
+    const api = Config.getInstance().api
+
+    return api.url
+  }
+
   private static async Fetch({ user, endpointPath, method, body, useToken = true }: FetchParams): Promise<Response> {
     const url = this.getUrl(endpointPath, useToken)
     const headers = await this.getHeaders(user, useToken)
@@ -27,7 +34,7 @@ export class Fetcher {
   }
 
   private static getUrl(endpointPath: string, useToken: boolean): string {
-    return useToken ? `${process.env.API_ENDPOINT}/v1${endpointPath}` : process.env.API_ENDPOINT + endpointPath
+    return useToken ? `${this.endpoint}/v1${endpointPath}` : this.endpoint + endpointPath
   }
 
   private static async getHeaders(user: FirebaseUser, useToken: boolean): Promise<Record<string, string>> {

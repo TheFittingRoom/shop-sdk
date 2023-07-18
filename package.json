@@ -1,6 +1,6 @@
 {
   "name": "@thefittingroom/sdk",
-  "version": "0.0.1-rc1",
+  "version": "0.0.1",
   "description": "the fitting room SDK",
   "type": "module",
   "main": "./dist/esm/index.js",
@@ -8,10 +8,8 @@
   "scripts": {
     "clean": "rm -rf dist",
     "clean:all": "rm -rf dist && rm -rf build && rm -rf .rollup.cache",
-    "build:prod": "npm run clean && NODE_ENV=prod rollup --config",
-    "build:dev": "npm run clean && NODE_ENV=dev rollup --config",
-    "watch:prod": "npm run clean && NODE_ENV=prod rollup --config -w",
-    "watch:dev": "npm run clean && NODE_ENV=dev rollup --config -w",
+    "build": "npm run clean && rollup --config",
+    "watch": "npm run clean && rollup --config -w",
     "postinstall": "patch-package"
   },
   "engines": {

@@ -3,6 +3,7 @@ import { QueryFieldFilterConstraint, documentId, where } from 'firebase/firestor
 import { Firebase } from '../firebase/firebase'
 import { getFirebaseError } from '../firebase/firebase-error'
 import { asyncTry } from '../helpers/async'
+import { Config } from '../helpers/config'
 import * as Errors from '../helpers/errors'
 import * as types from '../types'
 import { Fetcher } from './fetcher'
@@ -10,9 +11,15 @@ import { SizeRecommendation } from './responses'
 import { TestImage } from './utils'
 
 export class TfrShop {
-  private static AVATAR_TIMEOUT = process.env.AVATAR_TIMEOUT_MS ? Number(process.env.AVATAR_TIMEOUT_MS) : 12000
+  private static avatarTimeout: number
+  public static vtoTimeout: number
 
-  constructor(private readonly brandId: number, private readonly firebase: Firebase) {}
+  constructor(private readonly brandId: number, private readonly firebase: Firebase) {
+    const config = Config.getInstance().config
+
+    TfrShop.avatarTimeout = config.avatarTimeout ? Number(config.avatarTimeout) : 120000
+    TfrShop.vtoTimeout = config.vtoTimeout ? Number(config.vtoTimeout) : 120000
+  }
 
   public get user() {
     return this.firebase.user
@@ -47,7 +54,7 @@ export class TfrShop {
     const cancel = setTimeout(() => {
       unsubscribe()
       throw new Errors.RequestTimeoutError()
-    }, TfrShop.AVATAR_TIMEOUT)
+    }, TfrShop.avatarTimeout)
 
     const snapshot = await promise
     clearTimeout(cancel)
@@ -173,4 +180,9 @@ export class TfrShop {
   }
 }
 
-export const initShop = (brandId: number) => new TfrShop(brandId, new Firebase())
+export const initShop = (brandId: number, env: string = 'dev') => {
+  if (env === 'dev' || env === 'development') console.warn('TfrShop is in development mode')
+
+  Config.getInstance().setEnv(env)
+  new TfrShop(brandId, new Firebase())
+}
