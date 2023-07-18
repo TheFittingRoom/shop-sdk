@@ -10,7 +10,7 @@ interface FetchParams {
 }
 
 export class Fetcher {
-  private static endpoint() {
+  private static get endpoint() {
     const api = Config.getInstance().api
 
     return api.url

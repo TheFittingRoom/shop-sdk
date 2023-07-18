@@ -52,8 +52,8 @@ const devKeys = {
     url: process.env.DEV_API_ENDPOINT,
   },
   config: {
-    avatarTimeout: process.env.DEV_AVATAR_TIMEOUT_MS,
-    vtoTimeout: process.env.DEV_VTO_TIMEOUT_MS,
+    avatarTimeout: Number(process.env.DEV_AVATAR_TIMEOUT_MS),
+    vtoTimeout: Number(process.env.DEV_VTO_TIMEOUT_MS),
   },
 }
 
@@ -70,7 +70,7 @@ const prodKeys = {
     url: process.env.PROD_API_ENDPOINT,
   },
   config: {
-    avatarTimeout: process.env.PROD_AVATAR_TIMEOUT_MS,
-    vtoTimeout: process.env.PROD_VTO_TIMEOUT_MS,
+    avatarTimeout: Number(process.env.PROD_AVATAR_TIMEOUT_MS),
+    vtoTimeout: Number(process.env.PROD_VTO_TIMEOUT_MS),
   },
 }

@@ -2,7 +2,7 @@ import { QueryFieldFilterConstraint, documentId, where } from 'firebase/firestor
 
 import { Firebase } from '../firebase/firebase'
 import { getFirebaseError } from '../firebase/firebase-error'
-import { asyncTry } from '../helpers/async'
+import { asyncTry, asyncWait } from '../helpers/async'
 import { Config } from '../helpers/config'
 import * as Errors from '../helpers/errors'
 import * as types from '../types'
@@ -11,8 +11,8 @@ import { SizeRecommendation } from './responses'
 import { TestImage } from './utils'
 
 export class TfrShop {
-  private static avatarTimeout: number
-  public static vtoTimeout: number
+  private static avatarTimeout: number = 120000
+  public static vtoTimeout: number = 120000
 
   constructor(private readonly brandId: number, private readonly firebase: Firebase) {
     const config = Config.getInstance().config
@@ -99,10 +99,18 @@ export class TfrShop {
     console.log(res)
   }
 
-  private awaitColorwaySizeAssetFrames(colorwaySizeAssetSKU: string) {
+  private async awaitColorwaySizeAssetFrames(colorwaySizeAssetSKU: string) {
     if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
 
-    return this.getColorwaySizeAssetFrames(colorwaySizeAssetSKU)
+    console.log('polling')
+
+    try {
+      const frames = await this.getColorwaySizeAssetFrames(colorwaySizeAssetSKU)
+      return frames
+    } catch {
+      await asyncWait(1500)
+      return this.awaitColorwaySizeAssetFrames(colorwaySizeAssetSKU)
+    }
   }
 
   private async requestThenGetColorwaySizeAssetFrames(colorwaySizeAssetSku: string) {
