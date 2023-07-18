@@ -5,16 +5,13 @@ interface FetchParams {
   endpointPath: string
   method: string
   body?: Record<string, any>
+  useToken?: boolean
 }
 
 export class Fetcher {
-  private static async Fetch({ user, endpointPath, method, body }: FetchParams): Promise<Response> {
-    const url = process.env.API_ENDPOINT + endpointPath
-    const token = await user.getToken()
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    }
+  private static async Fetch({ user, endpointPath, method, body, useToken = true }: FetchParams): Promise<Response> {
+    const url = this.getUrl(endpointPath, useToken)
+    const headers = await this.getHeaders(user, useToken)
     const config: RequestInit = { method, headers, credentials: 'include' }
 
     if (body) config.body = JSON.stringify(body)
@@ -29,23 +26,57 @@ export class Fetcher {
     return Promise.reject(json)
   }
 
-  static Get(user: FirebaseUser, endpointPath: string): Promise<Response> {
-    return this.Fetch({ user, endpointPath, method: 'GET', body: null })
+  private static getUrl(endpointPath: string, useToken: boolean): string {
+    return useToken ? `${process.env.API_ENDPOINT}/v1${endpointPath}` : process.env.API_ENDPOINT + endpointPath
   }
 
-  static Post(user: FirebaseUser, endpointPath: string, body: Record<string, any> = null): Promise<Response> {
-    return this.Fetch({ user, endpointPath, method: 'POST', body })
+  private static async getHeaders(user: FirebaseUser, useToken: boolean): Promise<Record<string, string>> {
+    if (!useToken) return { 'Content-Type': 'application/json' }
+
+    const token = await user.getToken()
+    return {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    }
   }
 
-  static Put(user: FirebaseUser, endpointPath: string, body: Record<string, any>): Promise<Response> {
-    return this.Fetch({ user, endpointPath, method: 'PUT', body })
+  static Get(user: FirebaseUser, endpointPath: string, useToken?: boolean): Promise<Response> {
+    return this.Fetch({ user, endpointPath, method: 'GET', body: null, useToken })
   }
 
-  static Patch(user: FirebaseUser, endpointPath: string, body: Record<string, any>): Promise<Response> {
-    return this.Fetch({ user, endpointPath, method: 'PATCH', body })
+  static Post(
+    user: FirebaseUser,
+    endpointPath: string,
+    body: Record<string, any> = null,
+    useToken?: boolean,
+  ): Promise<Response> {
+    return this.Fetch({ user, endpointPath, method: 'POST', body, useToken })
   }
 
-  static Delete(user: FirebaseUser, endpointPath: string, body: Record<string, any>): Promise<Response> {
-    return this.Fetch({ user, endpointPath, method: 'DELETE', body })
+  static Put(
+    user: FirebaseUser,
+    endpointPath: string,
+    body: Record<string, any>,
+    useToken?: boolean,
+  ): Promise<Response> {
+    return this.Fetch({ user, endpointPath, method: 'PUT', body, useToken })
+  }
+
+  static Patch(
+    user: FirebaseUser,
+    endpointPath: string,
+    body: Record<string, any>,
+    useToken?: boolean,
+  ): Promise<Response> {
+    return this.Fetch({ user, endpointPath, method: 'PATCH', body, useToken })
+  }
+
+  static Delete(
+    user: FirebaseUser,
+    endpointPath: string,
+    body: Record<string, any>,
+    useToken?: boolean,
+  ): Promise<Response> {
+    return this.Fetch({ user, endpointPath, method: 'DELETE', body, useToken })
   }
 }

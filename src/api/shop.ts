@@ -86,6 +86,12 @@ export class TfrShop {
     }
   }
 
+  public async submitTelephoneNumber(tel: string) {
+    const sanitizedTel = tel.replace(/[^\+0-9]/g, '')
+    const res = await Fetcher.Post(this.user, '/ios-app-link', { phone_number: sanitizedTel }, false)
+    console.log(res)
+  }
+
   private awaitColorwaySizeAssetFrames(colorwaySizeAssetSKU: string) {
     if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
 
