@@ -67,10 +67,16 @@ export class TfrShop {
   public async getRecommendedSizes(brandStyleId: string) {
     if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
 
-    const res = await Fetcher.Get(this.user, `/styles/${brandStyleId}/recommendation`)
-    const json = await res.json()
+    try {
+      const res = await Fetcher.Get(this.user, `/styles/${brandStyleId}/recommendation`)
+      const json = await res.json()
 
-    return json as SizeRecommendation
+      return json as SizeRecommendation
+    } catch (error) {
+      if (error?.error === Errors.AvatarNotCreated) throw new Errors.AvatarNotCreatedError()
+
+      throw error
+    }
   }
 
   public async getStyles(ids: number[], skus: string[]) {
@@ -124,6 +130,8 @@ export class TfrShop {
 
       return this.awaitColorwaySizeAssetFrames(colorwaySizeAssetSku)
     } catch (error) {
+      if (error?.error === Errors.AvatarNotCreated) throw new Errors.AvatarNotCreatedError()
+
       if (!error.recommended_size_id) throw new Error(error)
 
       const errorOutsideRecommended = error as Errors.ErrorOutsideRecommendedSizes

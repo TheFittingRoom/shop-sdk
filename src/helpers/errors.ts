@@ -8,6 +8,13 @@ export interface ErrorOutsideRecommendedSizes {
   available_size_ids: number /* int64 */[]
 }
 
+export class AvatarNotCreatedError extends Error {
+  constructor() {
+    super('Avatar not created')
+    this.name = 'AvatarNotCreatedError'
+  }
+}
+
 export class NoFramesFoundError extends Error {
   constructor() {
     super('no frames found')
@@ -54,3 +61,6 @@ export class RecommendedAvailableSizesError extends Error {
     this.available_sizes = available_sizes
   }
 }
+
+// Backend responses
+export const AvatarNotCreated = 'avatar not created'
