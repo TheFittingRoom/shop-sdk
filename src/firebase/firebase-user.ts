@@ -1,6 +1,18 @@
 import * as firebase from 'firebase/app'
 import * as firebaseAuth from 'firebase/auth'
-import { Firestore, doc, getDoc } from 'firebase/firestore'
+import {
+  DocumentData,
+  Firestore,
+  QuerySnapshot,
+  Unsubscribe,
+  collection,
+  doc,
+  documentId,
+  getDoc,
+  onSnapshot,
+  query,
+  where,
+} from 'firebase/firestore'
 
 import * as Errors from '../helpers/errors'
 
@@ -45,6 +57,23 @@ export class FirebaseUser {
     const userProfile = await getDoc(doc(this.firestore, 'users', this.id))
 
     return userProfile.data()
+  }
+
+  public watchUserProfileForChanges(predicate: (data: QuerySnapshot<DocumentData>) => boolean, timeout: number) {
+    let unsub: Unsubscribe
+
+    const q = query(collection(this.firestore, 'users'), where(documentId(), '==', this.id))
+
+    const cancel = setTimeout(() => unsub(), timeout)
+
+    return new Promise<DocumentData>((resolve) => {
+      unsub = onSnapshot(q, (snapshot) => {
+        if (!predicate(snapshot)) return
+        clearTimeout(cancel)
+        unsub()
+        resolve(snapshot.docs[0].data())
+      })
+    })
   }
 
   public async login(username: string, password: string) {

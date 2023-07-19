@@ -47,7 +47,6 @@ const brandId = 9001
 // The environment: 'development', 'dev', 'production', 'prod'
 const env = 'dev'
 const shop = initShop(brandId, env)
-await shop.onInit()
 ```
 
 ### Shop API
@@ -55,6 +54,9 @@ await shop.onInit()
 #### Auth
 
 ```typescript
+// Hook used to check authentication, return isLoggedIn Promise<boolean>
+await shop.onInit()
+
 // Login user with session
 shop.user.login(username, password)
 

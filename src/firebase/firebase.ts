@@ -33,10 +33,10 @@ export class Firebase {
     return this.user.onInit()
   }
 
-  public query(collectionName: string, constraint: QueryFieldFilterConstraint) {
+  public query(collectionName: string, constraint: QueryFieldFilterConstraint, unsubscribeWhenData: boolean = true) {
     const q = query(collection(this.firestore, collectionName), constraint)
 
-    return this.promisefyOnSnapshot(q)
+    return this.promisefyOnSnapshot(q, unsubscribeWhenData)
   }
 
   public getDocs(collectionName: string, constraints: QueryFieldFilterConstraint[]) {
@@ -45,12 +45,15 @@ export class Firebase {
     return getDocs(q)
   }
 
-  private promisefyOnSnapshot = (q: Query<DocumentData>) => {
+  private promisefyOnSnapshot = (q: Query<DocumentData>, unsubscribeWhenData: boolean) => {
     let unsub: Unsubscribe
 
-    const promise = new Promise<QuerySnapshot<DocumentData>>(
-      (resolve) => (unsub = onSnapshot(q, (snapshot) => resolve(snapshot))),
-    )
+    const promise = new Promise<QuerySnapshot<DocumentData>>((resolve) => {
+      unsub = onSnapshot(q, (snapshot) => {
+        resolve(snapshot)
+        if (unsubscribeWhenData) unsub()
+      })
+    })
 
     return { promise, unsubscribe: () => unsub() }
   }

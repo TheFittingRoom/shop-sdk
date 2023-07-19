@@ -1,8 +1,8 @@
-import { QueryFieldFilterConstraint, documentId, where } from 'firebase/firestore'
+import { DocumentData, QueryFieldFilterConstraint, QuerySnapshot, documentId, where } from 'firebase/firestore'
 
 import { Firebase } from '../firebase/firebase'
 import { getFirebaseError } from '../firebase/firebase-error'
-import { asyncTry, asyncWait } from '../helpers/async'
+import { asyncTry } from '../helpers/async'
 import { Config } from '../helpers/config'
 import * as Errors from '../helpers/errors'
 import * as types from '../types'
@@ -102,15 +102,17 @@ export class TfrShop {
   private async awaitColorwaySizeAssetFrames(colorwaySizeAssetSKU: string) {
     if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
 
-    console.log('polling')
+    const predicate = (data: QuerySnapshot<DocumentData>) =>
+      Boolean(data.docs[0].data()?.vto?.[this.brandId]?.[colorwaySizeAssetSKU])
 
-    try {
-      const frames = await this.getColorwaySizeAssetFrames(colorwaySizeAssetSKU)
-      return frames
-    } catch {
-      await asyncWait(1500)
-      return this.awaitColorwaySizeAssetFrames(colorwaySizeAssetSKU)
-    }
+    const userProfile = (await this.user.watchUserProfileForChanges(
+      predicate,
+      TfrShop.vtoTimeout,
+    )) as types.FirestoreUser
+
+    if (!userProfile?.vto?.[this.brandId]?.[colorwaySizeAssetSKU]?.frames?.length) throw new Errors.NoFramesFoundError()
+
+    return userProfile.vto[this.brandId][colorwaySizeAssetSKU].frames
   }
 
   private async requestThenGetColorwaySizeAssetFrames(colorwaySizeAssetSku: string) {

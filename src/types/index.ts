@@ -6,7 +6,7 @@ export enum AvatarState {
   PENDING = 'PENDING',
 }
 
-export type FirestoreColorwaySizeAsset = {
+export interface FirestoreColorwaySizeAsset {
   id: number
   size_id: number
   style_id: number
@@ -15,14 +15,14 @@ export type FirestoreColorwaySizeAsset = {
   sku: string
 }
 
-export type FirestoreGarmentMeasurement = {
+export interface FirestoreGarmentMeasurement {
   id: number
   garment_measurement_location: string
   tolerance: number
   value: number
 }
 
-export type FirestoreSize = {
+export interface FirestoreSize {
   id: number
   size: string
   label: string
@@ -31,12 +31,12 @@ export type FirestoreSize = {
   garment_measurements: Map<string, FirestoreGarmentMeasurement>
 }
 
-export type FirestoreColorway = {
+export interface FirestoreColorway {
   id: number
   name: string
 }
 
-export type FirestoreStyle = {
+export interface FirestoreStyle {
   id: number
   brand_id: number
   brand_style_id: string
@@ -47,4 +47,26 @@ export type FirestoreStyle = {
   sale_type: string
   colorways: { [key: number]: FirestoreColorway }
   sizes: { [key: number]: FirestoreSize }
+}
+
+export interface FirestoreFrames {
+  colorway_size_asset_id: number
+  frames: TryOnFrames
+}
+
+export interface FirestoreVTO {
+  [key: number]: Record<string, FirestoreFrames>
+}
+
+export interface FirestoreUser {
+  avatar_frames: string[]
+  avatar_status: AvatarState
+  brand_id: number
+  date_of_birth: string
+  first_name: string
+  is_admin: boolean
+  is_approved: boolean
+  job: string
+  last_name: string
+  vto: FirestoreVTO
 }
