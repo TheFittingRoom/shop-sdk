@@ -77,8 +77,8 @@ shop.tryOn(colorwaySizeAssetSku)
 // await for the avatar creation
 shop.awaitAvatarCreated()
 
-// get recommended sizes for use
-shop.getRecommendedSizes()
+// get recommended sizes for styleId: string
+shop.getRecommendedSizes(styleId)
 
 // get available styles by ids: number[] or skus: string[]
 shop.getStyles(ids, skus)
