@@ -79,6 +79,15 @@ export class TfrShop {
     }
   }
 
+  public async getRecommendedSizesLabels(styleId: string) {
+    const sizeRecommendation = await this.getRecommendedSizes(styleId)
+    const recommendedSizeLabel =
+      sizeRecommendation.recommended_sizes.label || sizeRecommendation.recommended_sizes.size_value.size
+    const availableSizeLabels = sizeRecommendation.available_sizes.map((size) => size.label || size.size_value.size)
+
+    return { recommendedSizeLabel, availableSizeLabels }
+  }
+
   public async getStyles(ids: number[], skus: string[]) {
     const constraints: QueryFieldFilterConstraint[] = [where('brand_id', '==', this.brandId)]
     if (ids?.length > 0) constraints.push(where('id', 'in', ids))

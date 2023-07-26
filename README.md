@@ -75,12 +75,12 @@ shop.awaitAvatarCreated()
 
 #### Shop
 
-We'll make references to `sku` several times here. This is the unique identifier that matches a styles particular size 
+We'll make references to `sku` several times here. This is the unique identifier that matches a styles particular size
 from your inventory to our system.
 
 ```typescript
-// A good first step would be to ensure your style and size exists in the fitting room system before executing any of the 
-// following functions. You'll get back some data about the style(s), such as the ID of the style, which you can use 
+// A good first step would be to ensure your style and size exists in the fitting room system before executing any of the
+// following functions. You'll get back some data about the style(s), such as the ID of the style, which you can use
 // for the getRecommendedSizes function below.
 // ids: number[] or skus: string[]
 // At least one parameter must not be null
@@ -90,7 +90,13 @@ shop.getStyles(ids, skus)
 // The styleID can be extracted from the previous getStyles function call.
 const sizeRecommendation = shop.getRecommendedSizes(styleID)
 
-// Once the user has downloaded the mobile application and has created an avatar, they may now virtually try on a size. 
+// get recommended sizes label for a particular style
+// returns: { recommendedSizeLabel, availableSizeLabels }
+// recommendedSizeLabel: string
+// availableSizeLabels: string[]
+const { recommendedSizeLabel, availableSizeLabels } = shop.getRecommendedSizesLabels(styleID)
+
+// Once the user has downloaded the mobile application and has created an avatar, they may now virtually try on a size.
 // The size they try on must be one of the recommended sizes from the previous function call. or an error will get returned.
 // returns frames: types.TryOnFrames
 // These `frames` are images that can be used to cycle through the VTO 360 degrees.
