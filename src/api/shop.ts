@@ -80,6 +80,8 @@ export class TfrShop {
   }
 
   public async getRecommendedSizesLabels(styleId: string) {
+    if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
+
     const sizeRecommendation = await this.getRecommendedSizes(styleId)
     const recommendedSizeLabel =
       sizeRecommendation.recommended_sizes.label || sizeRecommendation.recommended_sizes.size_value.size
