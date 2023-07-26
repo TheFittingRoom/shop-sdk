@@ -64,11 +64,11 @@ export class TfrShop {
     return userProfile.avatar_status === 'CREATED'
   }
 
-  public async getRecommendedSizes(brandStyleId: string) {
+  public async getRecommendedSizes(styleId: string) {
     if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
 
     try {
-      const res = await Fetcher.Get(this.user, `/styles/${brandStyleId}/recommendation`)
+      const res = await Fetcher.Get(this.user, `/styles/${styleId}/recommendation`)
       const json = await res.json()
 
       return json as SizeRecommendation
