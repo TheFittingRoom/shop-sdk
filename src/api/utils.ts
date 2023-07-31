@@ -1,4 +1,4 @@
-export const TestImage = (url: string): Promise<boolean> => {
+export const testImage = (url: string): Promise<boolean> => {
   const img = new Image()
   img.src = url
 

@@ -8,7 +8,7 @@ import * as Errors from '../helpers/errors'
 import * as types from '../types'
 import { Fetcher } from './fetcher'
 import { SizeRecommendation } from './responses'
-import { TestImage } from './utils'
+import { testImage } from './utils'
 
 export class TfrShop {
   private static avatarTimeout: number = 120000
@@ -117,8 +117,12 @@ export class TfrShop {
   private async awaitColorwaySizeAssetFrames(colorwaySizeAssetSKU: string) {
     if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
 
-    const predicate = (data: QuerySnapshot<DocumentData>) =>
-      Boolean(data.docs[0].data()?.vto?.[this.brandId]?.[colorwaySizeAssetSKU])
+    const predicate = async (data: QuerySnapshot<DocumentData>) => {
+      const frames = data.docs[0].data()?.vto?.[this.brandId]?.[colorwaySizeAssetSKU]?.frames
+      if (!frames?.length) return false
+
+      return testImage(frames[0])
+    }
 
     const userProfile = (await this.user.watchUserProfileForChanges(
       predicate,
@@ -200,7 +204,7 @@ export class TfrShop {
     const frames = userProfile?.vto?.[this.brandId]?.[colorwaySizeAssetSKU]?.frames || []
     if (!frames.length) throw new Errors.NoFramesFoundError()
 
-    const testedImage = await TestImage(frames[0])
+    const testedImage = await testImage(frames[0])
     if (!testedImage) throw new Errors.NoFramesFoundError()
 
     return frames as types.TryOnFrames
