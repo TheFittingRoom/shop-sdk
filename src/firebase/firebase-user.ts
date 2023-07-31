@@ -59,7 +59,10 @@ export class FirebaseUser {
     return userProfile.data()
   }
 
-  public watchUserProfileForChanges(predicate: (data: QuerySnapshot<DocumentData>) => boolean, timeout: number) {
+  public watchUserProfileForChanges(
+    predicate: (data: QuerySnapshot<DocumentData>) => Promise<boolean>,
+    timeout: number,
+  ) {
     let unsub: Unsubscribe
 
     const q = query(collection(this.firestore, 'users'), where(documentId(), '==', this.id))
@@ -67,8 +70,8 @@ export class FirebaseUser {
     const cancel = setTimeout(() => unsub(), timeout)
 
     return new Promise<DocumentData>((resolve) => {
-      unsub = onSnapshot(q, (snapshot) => {
-        if (!predicate(snapshot)) return
+      unsub = onSnapshot(q, async (snapshot) => {
+        if (!(await predicate(snapshot))) return
         clearTimeout(cancel)
         unsub()
         resolve(snapshot.docs[0].data())
