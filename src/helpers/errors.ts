@@ -62,5 +62,12 @@ export class RecommendedAvailableSizesError extends Error {
   }
 }
 
+export class BrandUserIdNotSetError extends Error {
+  constructor() {
+    super('brand user id not set')
+    this.name = 'BrandUserIdNotSetError'
+  }
+}
+
 // Backend responses
 export const AvatarNotCreated = 'avatar not created'

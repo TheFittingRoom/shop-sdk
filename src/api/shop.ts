@@ -194,8 +194,11 @@ export class TfrShop {
 
   private async requestColorwaySizeAssetFrames(colorwaySizeAssetId: number) {
     if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
+    if (!this.user.brandUserId) throw new Errors.BrandUserIdNotSetError()
 
-    await Fetcher.Post(this.user, `/colorway-size-assets/${colorwaySizeAssetId}/frames`)
+    await Fetcher.Post(this.user, `/colorway-size-assets/${colorwaySizeAssetId}/frames`, {
+      brand_user_id: String(this.user.brandUserId),
+    })
   }
 
   private async getColorwaySizeAssetFrames(colorwaySizeAssetSKU: string) {

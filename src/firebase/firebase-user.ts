@@ -16,7 +16,11 @@ import {
 
 import * as Errors from '../helpers/errors'
 
+export type BrandUserId = string | number
+
 export class FirebaseUser {
+  public brandUserId: BrandUserId = null
+
   private user: firebaseAuth.User
   private readonly auth: firebaseAuth.Auth
 
@@ -41,6 +45,10 @@ export class FirebaseUser {
 
   public setUser(user: firebaseAuth.User) {
     this.user = user
+  }
+
+  public setBrandUserId(brandUserId: BrandUserId) {
+    this.brandUserId = brandUserId
   }
 
   public async getToken() {
