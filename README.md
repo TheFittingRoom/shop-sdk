@@ -63,6 +63,11 @@ shop.user.login(email, password)
 // Logout current user
 shop.user.logout()
 
+// Set the brand userId, the internal userId used by the shop/brand
+// This is a required field for requesting a VTO
+// string | number
+shop.user.setBrandUserId(brandUserId)
+
 // In order for the user to create an avatar, they'll need to download the mobile application.
 // This will send an SMS to the given phone number with a link to the iOS app
 // No spaces and must include country code e.g. +18005551234
@@ -113,4 +118,5 @@ UserNotLoggedInError
 NoColorwaySizeAssetsFoundError
 NoStylesFoundError
 RecommendedAvailableSizesError
+BrandUserIdNotSetError
 ```
