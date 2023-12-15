@@ -114,6 +114,13 @@ export class TfrShop {
     console.log(res)
   }
 
+  public async getColorwaySizeAssetFromSku(colorwaySizeAssetSku: string) {
+    const assets = await this.getColorwaySizeAssets(null, [colorwaySizeAssetSku])
+    if (!assets?.size) throw new Errors.NoColorwaySizeAssetsFoundError()
+
+    return Array.from(assets.values())[0]
+  }
+
   private async awaitColorwaySizeAssetFrames(colorwaySizeAssetSKU: string) {
     if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
 
@@ -163,13 +170,6 @@ export class TfrShop {
 
       throw new Errors.RecommendedAvailableSizesError(recommendedSize, availableSizes)
     }
-  }
-
-  private async getColorwaySizeAssetFromSku(colorwaySizeAssetSku: string) {
-    const assets = await this.getColorwaySizeAssets(null, [colorwaySizeAssetSku])
-    if (!assets?.size) throw new Errors.NoColorwaySizeAssetsFoundError()
-
-    return Array.from(assets.values())[0]
   }
 
   private async getColorwaySizeAssets(styleId?: number, skus?: string[]) {
