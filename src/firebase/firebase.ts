@@ -7,6 +7,8 @@ import {
   QuerySnapshot,
   Unsubscribe,
   collection,
+  doc,
+  getDoc,
   getDocs,
   getFirestore,
   onSnapshot,
@@ -43,6 +45,13 @@ export class Firebase {
     const q = query(collection(this.firestore, collectionName), ...constraints)
 
     return getDocs(q)
+  }
+
+  public async getDoc(collectionName: string, id: string) {
+    const docRef = doc(this.firestore, collectionName, id)
+    const docSnap = await getDoc(docRef)
+
+    return docSnap.exists() ? docSnap.data() : null
   }
 
   private promisefyOnSnapshot = (q: Query<DocumentData>, unsubscribeWhenData: boolean) => {

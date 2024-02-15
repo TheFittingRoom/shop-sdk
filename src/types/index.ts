@@ -70,3 +70,9 @@ export interface FirestoreUser {
   last_name: string
   vto: FirestoreVTO
 }
+
+export interface FirestoreStyleCategory {
+  category: string
+  classification: string
+  sub_category: string
+}

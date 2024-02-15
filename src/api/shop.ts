@@ -1,25 +1,17 @@
-import { DocumentData, QueryFieldFilterConstraint, QuerySnapshot, documentId, where } from 'firebase/firestore'
+import { QueryFieldFilterConstraint, where } from 'firebase/firestore'
 
 import { Firebase } from '../firebase/firebase'
 import { getFirebaseError } from '../firebase/firebase-error'
-import { asyncTry } from '../helpers/async'
 import { Config } from '../helpers/config'
 import * as Errors from '../helpers/errors'
 import * as types from '../types'
-import { MeasurementLocationName } from '../types/measurement'
+import { ClassificationLocations, MeasurementLocationName, Taxonomy } from '../types/measurement'
 import { Fetcher } from './fetcher'
 import { SizeRecommendation } from './responses'
-import { testImage } from './utils'
 
 export class TfrShop {
-  private static avatarTimeout: number = 120000
-  public static vtoTimeout: number = 120000
-
   constructor(private readonly brandId: number, private readonly firebase: Firebase) {
     const config = Config.getInstance().config
-
-    TfrShop.avatarTimeout = config.avatarTimeout ? Number(config.avatarTimeout) : 120000
-    TfrShop.vtoTimeout = config.vtoTimeout ? Number(config.vtoTimeout) : 120000
   }
 
   public get user() {
@@ -32,37 +24,6 @@ export class TfrShop {
 
   public onInit() {
     return this.firebase.onInit()
-  }
-
-  public async tryOn(colorwaySizeAssetSku: string) {
-    if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
-
-    try {
-      const frames = await this.getColorwaySizeAssetFrames(colorwaySizeAssetSku)
-
-      return frames
-    } catch (error) {
-      if (!(error instanceof Errors.NoFramesFoundError)) throw error
-
-      return this.requestThenGetColorwaySizeAssetFrames(colorwaySizeAssetSku)
-    }
-  }
-
-  public async awaitAvatarCreated() {
-    if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
-
-    const { promise, unsubscribe } = this.firebase.query('users', where(documentId(), '==', this.user.id))
-    const cancel = setTimeout(() => {
-      unsubscribe()
-      throw new Errors.RequestTimeoutError()
-    }, TfrShop.avatarTimeout)
-
-    const snapshot = await promise
-    clearTimeout(cancel)
-
-    const userProfile = snapshot.docs[0].data()
-
-    return userProfile.avatar_status === 'CREATED'
   }
 
   public async getRecommendedSizes(styleId: string) {
@@ -80,46 +41,6 @@ export class TfrShop {
     }
   }
 
-  public async getRecommendedSizesLabels(styleId: string) {
-    const sizeRecommendation = await this.getRecommendedSizes(styleId)
-    const recommendedSizeLabel =
-      sizeRecommendation.recommended_sizes.label || sizeRecommendation.recommended_sizes.size_value.size
-    const availableSizeLabels = sizeRecommendation.available_sizes.map((size) => size.label || size.size_value.size)
-
-    return { recommendedSizeLabel, availableSizeLabels }
-  }
-
-  public async getStyles(ids: number[], skus: string[]) {
-    const constraints: QueryFieldFilterConstraint[] = [where('brand_id', '==', this.brandId)]
-    if (ids?.length > 0) constraints.push(where('id', 'in', ids))
-    if (skus?.length > 0) constraints.push(where('brand_style_id', 'in', skus))
-
-    try {
-      const querySnapshot = await this.firebase.getDocs('styles', constraints)
-
-      const styles: Map<number, types.FirestoreStyle> = new Map()
-      querySnapshot.forEach((doc) => {
-        const FirestoreStyle = doc.data() as types.FirestoreStyle
-        styles.set(FirestoreStyle.id, FirestoreStyle)
-      })
-
-      return styles
-    } catch (error) {
-      return getFirebaseError(error)
-    }
-  }
-
-  public async getMeasurementLocationsByStyleId(styleId: number) {
-    const styles = await this.getStyles([styleId], [])
-    const style = styles.get(styleId)
-
-    if (!style?.sizes.length) return []
-
-    return style.sizes[0].garment_measurements.map(
-      (measurement) => MeasurementLocationName[measurement.garment_measurement_location],
-    )
-  }
-
   public async submitTelephoneNumber(tel: string) {
     const sanitizedTel = tel.replace(/[^\+0-9]/g, '')
     const res = await Fetcher.Post(this.user, '/ios-app-link', { phone_number: sanitizedTel }, false)
@@ -133,55 +54,14 @@ export class TfrShop {
     return Array.from(assets.values())[0]
   }
 
-  private async awaitColorwaySizeAssetFrames(colorwaySizeAssetSKU: string) {
-    if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
+  public async getMeasurementLocationsFromSku(sku: string) {
+    const asset = await this.getColorwaySizeAssetFromSku(sku)
+    const styleCategory = await this.getStyleCategory(asset.style_id)
+    const classificationLocation = Taxonomy[styleCategory.category]?.[styleCategory.sub_category] || null
 
-    const predicate = async (data: QuerySnapshot<DocumentData>) => {
-      const frames = data.docs[0].data()?.vto?.[this.brandId]?.[colorwaySizeAssetSKU]?.frames
-      if (!frames?.length) return false
-
-      return testImage(frames[0])
-    }
-
-    const userProfile = (await this.user.watchUserProfileForChanges(
-      predicate,
-      TfrShop.vtoTimeout,
-    )) as types.FirestoreUser
-
-    if (!userProfile?.vto?.[this.brandId]?.[colorwaySizeAssetSKU]?.frames?.length) throw new Errors.NoFramesFoundError()
-
-    return userProfile.vto[this.brandId][colorwaySizeAssetSKU].frames
-  }
-
-  private async requestThenGetColorwaySizeAssetFrames(colorwaySizeAssetSku: string) {
-    const [error, colorwaySizeAsset] = await asyncTry(this.getColorwaySizeAssetFromSku(colorwaySizeAssetSku))
-    if (error) throw error
-
-    try {
-      await this.requestColorwaySizeAssetFrames(colorwaySizeAsset.id)
-
-      return this.awaitColorwaySizeAssetFrames(colorwaySizeAssetSku)
-    } catch (error) {
-      if (error?.error === Errors.AvatarNotCreated) throw new Errors.AvatarNotCreatedError()
-
-      if (!error.recommended_size_id) throw new Error(error)
-
-      const errorOutsideRecommended = error as Errors.ErrorOutsideRecommendedSizes
-
-      const styles = await this.getStyles([colorwaySizeAsset.style_id], null)
-      const style = styles.get(colorwaySizeAsset.style_id)
-      if (!style?.sizes) throw new Errors.NoStylesFoundError()
-
-      const recommendedSize =
-        style.sizes[errorOutsideRecommended.recommended_size_id]?.label ||
-        style.sizes[errorOutsideRecommended.recommended_size_id]?.size
-
-      const availableSizes = errorOutsideRecommended.available_size_ids
-        .filter((id) => style.sizes[id]?.size !== recommendedSize)
-        .map((id) => style.sizes[id]?.label || style.sizes[id]?.size)
-
-      throw new Errors.RecommendedAvailableSizesError(recommendedSize, availableSizes)
-    }
+    return classificationLocation
+      ? ClassificationLocations[classificationLocation].map((location) => MeasurementLocationName[location])
+      : null
   }
 
   private async getColorwaySizeAssets(styleId?: number, skus?: string[]) {
@@ -204,25 +84,14 @@ export class TfrShop {
     }
   }
 
-  private async requestColorwaySizeAssetFrames(colorwaySizeAssetId: number) {
-    if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
-    if (!this.user.brandUserId) throw new Errors.BrandUserIdNotSetError()
+  private async getStyleCategory(styleId: number) {
+    try {
+      const doc = await this.firebase.getDoc('style_categories', String(styleId))
 
-    await Fetcher.Post(this.user, `/colorway-size-assets/${colorwaySizeAssetId}/frames`, {
-      brand_user_id: String(this.user.brandUserId),
-    })
-  }
-
-  private async getColorwaySizeAssetFrames(colorwaySizeAssetSKU: string) {
-    const userProfile = await this.user.getUserProfile()
-
-    const frames = userProfile?.vto?.[this.brandId]?.[colorwaySizeAssetSKU]?.frames || []
-    if (!frames.length) throw new Errors.NoFramesFoundError()
-
-    const testedImage = await testImage(frames[0])
-    if (!testedImage) throw new Errors.NoFramesFoundError()
-
-    return frames as types.TryOnFrames
+      return doc as types.FirestoreStyleCategory
+    } catch (error) {
+      return getFirebaseError(error)
+    }
   }
 }
 

@@ -87,3 +87,361 @@ export const MeasurementLocationName = {
   [MeasurementLocation.WAIST]: 'Waist',
   [MeasurementLocation.WRIST]: 'Wrist',
 }
+
+export enum Classification {
+  BLOUSES = 'blouses',
+  COATS = 'coats',
+  DRESSES = 'dresses',
+  JACKETS = 'jackets',
+  PANTS = 'pants',
+  PUFFERS_AND_PARKAS = 'puffer_and_parkas',
+  SHORTS = 'shorts',
+  SKIRTS = 'skirts',
+  SWEATERS = 'sweaters',
+  T_SHIRTS_AND_TANKS = 't_shirts_and_tanks',
+}
+
+export const ClassificationLocations = {
+  [Classification.BLOUSES]: [
+    MeasurementLocation.BUST,
+    MeasurementLocation.ACROSS_SHOULDER,
+    MeasurementLocation.WAIST,
+    MeasurementLocation.LOW_HIP,
+    MeasurementLocation.HIGH_HIP,
+  ],
+
+  // prettier-ignore
+  [Classification.COATS]: [
+    MeasurementLocation.BUST,
+    MeasurementLocation.ACROSS_SHOULDER,
+    MeasurementLocation.WAIST,
+    MeasurementLocation.LOW_HIP,
+    MeasurementLocation.HIGH_HIP
+  ],
+
+  [Classification.DRESSES]: [
+    MeasurementLocation.LOW_HIP,
+    MeasurementLocation.BUST,
+    MeasurementLocation.ACROSS_SHOULDER,
+    MeasurementLocation.WAIST,
+  ],
+
+  [Classification.JACKETS]: [
+    MeasurementLocation.BUST,
+    MeasurementLocation.ACROSS_SHOULDER,
+    MeasurementLocation.WAIST,
+    MeasurementLocation.LOW_HIP,
+    MeasurementLocation.HIGH_HIP,
+  ],
+
+  [Classification.PANTS]: [
+    MeasurementLocation.LOW_HIP,
+    MeasurementLocation.WAIST,
+    MeasurementLocation.THIGH,
+    MeasurementLocation.INSEAM,
+  ],
+
+  [Classification.PUFFERS_AND_PARKAS]: [
+    MeasurementLocation.BUST,
+    MeasurementLocation.ACROSS_SHOULDER,
+    MeasurementLocation.WAIST,
+    MeasurementLocation.LOW_HIP,
+    MeasurementLocation.HIGH_HIP,
+  ],
+
+  [Classification.SHORTS]: [
+    MeasurementLocation.LOW_HIP,
+    MeasurementLocation.WAIST,
+    MeasurementLocation.THIGH,
+    MeasurementLocation.INSEAM,
+  ],
+
+  // prettier-ignore
+  [Classification.SKIRTS]: [
+    MeasurementLocation.LOW_HIP,
+    MeasurementLocation.WAIST
+  ],
+
+  // prettier-ignore
+  [Classification.SWEATERS]: [
+    MeasurementLocation.BUST,
+    MeasurementLocation.ACROSS_SHOULDER,
+    MeasurementLocation.WAIST,
+    MeasurementLocation.LOW_HIP,
+    MeasurementLocation.HIGH_HIP
+  ],
+
+  // prettier-ignore
+  [Classification.T_SHIRTS_AND_TANKS]: [
+    MeasurementLocation.BUST,
+    MeasurementLocation.ACROSS_SHOULDER,
+    MeasurementLocation.WAIST,
+    MeasurementLocation.LOW_HIP,
+    MeasurementLocation.HIGH_HIP
+  ],
+}
+
+export const enum Category {
+  ACTIVEWEAR = 'activewear',
+  DRESSES = 'dresses',
+  JACKETS_AND_COATS = 'jackets_and_coats',
+  JEANS = 'jeans',
+  JUMPSUITS_AND_ROMPERS = 'jumpsuits_and_rompers',
+  PANTS_AND_SHORTS = 'pants_and_shorts',
+  SKIRTS = 'skirts',
+  SUITS_AND_TAILORING = 'suits_and_tailoring',
+  SWEATERS = 'sweaters',
+  TOPS = 'tops',
+}
+
+export const CategoryNames = {
+  [Category.ACTIVEWEAR]: 'Active Wear',
+  [Category.DRESSES]: 'Dresses',
+  [Category.JACKETS_AND_COATS]: 'Jackets and Coats',
+  [Category.JEANS]: 'Jeans',
+  [Category.JUMPSUITS_AND_ROMPERS]: 'Jumpsuits and Rompers',
+  [Category.PANTS_AND_SHORTS]: 'Pants and Shorts',
+  [Category.SKIRTS]: 'Skirts',
+  [Category.SUITS_AND_TAILORING]: 'Suits and Tailoring',
+  [Category.SWEATERS]: 'Sweaters',
+  [Category.TOPS]: 'Tops',
+}
+
+export const Categories = [
+  Category.ACTIVEWEAR,
+  Category.DRESSES,
+  Category.JACKETS_AND_COATS,
+  Category.JEANS,
+  Category.JUMPSUITS_AND_ROMPERS,
+  Category.PANTS_AND_SHORTS,
+  Category.SKIRTS,
+  Category.SUITS_AND_TAILORING,
+  Category.SWEATERS,
+  Category.TOPS,
+]
+
+export const enum Subcategory {
+  A_LINE = 'a_line',
+  A_LINE_FLARED = 'a_line_flared',
+  BLAZERS = 'blazers',
+  BODYCON = 'bodycon',
+  BODYSUITS = 'bodysuits',
+  BOILER_SUITS = 'boiler_suits',
+  BOOTCUT = 'bootcut',
+  CARDIGANS = 'cardigans',
+  CIGARETTE = 'cigarette',
+  CORSETS_AND_BUSTIERS = 'corsets_and_bustiers',
+  CREWNECKS = 'crewnecks',
+  CULOTTES = 'culottes',
+  DENIM = 'denim',
+  DENIM_JACKETS = 'denim_jackets',
+  DENIM_SHORTS = 'denim_shorts',
+  FIT_AND_FLARE = 'fit_and_flare',
+  FLARED = 'flared',
+  HOODIES_AND_ZIPUPS = 'hoodies_and_zipups',
+  JOGGERS = 'joggers',
+  JUMPSUITS = 'jumpsuits',
+  KNIT = 'knit',
+  LEGGINGS = 'leggings',
+  MOM = 'mom',
+  OVERALLS = 'overalls',
+  PARKAS = 'parkas',
+  PEACOATS = 'peacoats',
+  PENCIL = 'pencil',
+  PLEATED = 'pleated',
+  POLOS = 'polos',
+  PUFFER_JACKETS = 'puffer_jackets',
+  RAINCOATS = 'raincoats',
+  RELAXED = 'relaxed',
+  ROMPERS = 'rompers',
+  SHACKETS = 'shackets',
+  SHIRT = 'shirt',
+  SHIRTS_AND_BLOUSES = 'shirts_and_blouses',
+  SKATER = 'skater',
+  SKINNY = 'skinny',
+  SLIM = 'slim',
+  SLIP = 'slip',
+  SPORTS_BRAS = 'sports_bras',
+  STRAIGHT = 'straight',
+  SUIT_JACKETS = 'suit_jackets',
+  SUIT_SKIRTS = 'suit_skirts',
+  SUIT_TROUSERS = 'suit_trousers',
+  SUIT_VESTS = 'suit_vests',
+  SWEATSHIRTS = 'sweatshirts',
+  T_SHIRTS = 't_shirts',
+  TANK_TOPS_AND_CAMISOLES = 'tank_tops_and_camisoles',
+  TAPERED = 'tapered',
+  TRENCH_COATS = 'trench_coats',
+  TROUSERS = 'trousers',
+  TURTLENECKS = 'turtlenecks',
+  UNITARDS = 'unitards',
+  V_NECKS = 'v_necks',
+  WIDE_LEG = 'wide_leg',
+  WRAP = 'wrap',
+}
+
+export const SubcategoryNames = {
+  [Subcategory.A_LINE]: 'A Line',
+  [Subcategory.A_LINE_FLARED]: 'A Line Flared',
+  [Subcategory.BLAZERS]: 'Blazers',
+  [Subcategory.BODYCON]: 'Bodycon',
+  [Subcategory.BODYSUITS]: 'Bodysuits',
+  [Subcategory.BOILER_SUITS]: 'Boiler Suits',
+  [Subcategory.BOOTCUT]: 'Bootcut',
+  [Subcategory.CARDIGANS]: 'Cardigans',
+  [Subcategory.CIGARETTE]: 'Cigarette',
+  [Subcategory.CORSETS_AND_BUSTIERS]: 'Corsets and Bustiers',
+  [Subcategory.CREWNECKS]: 'Crewnecks',
+  [Subcategory.CULOTTES]: 'Culottes',
+  [Subcategory.DENIM]: 'Denim',
+  [Subcategory.DENIM_JACKETS]: 'Denim Jackets',
+  [Subcategory.DENIM_SHORTS]: 'Denim Shorts',
+  [Subcategory.FIT_AND_FLARE]: 'Fit and Flare',
+  [Subcategory.FLARED]: 'Flared',
+  [Subcategory.HOODIES_AND_ZIPUPS]: 'Hoodies and Zipups',
+  [Subcategory.JOGGERS]: 'Joggers',
+  [Subcategory.JUMPSUITS]: 'Jumpsuits',
+  [Subcategory.KNIT]: 'Knit',
+  [Subcategory.LEGGINGS]: 'Leggings',
+  [Subcategory.MOM]: 'Mom',
+  [Subcategory.OVERALLS]: 'Overalls',
+  [Subcategory.PARKAS]: 'Parkas',
+  [Subcategory.PEACOATS]: 'Peacoats',
+  [Subcategory.PENCIL]: 'Pencil',
+  [Subcategory.PLEATED]: 'Pleated',
+  [Subcategory.POLOS]: 'Polos',
+  [Subcategory.PUFFER_JACKETS]: 'Puffer Jackets',
+  [Subcategory.RAINCOATS]: 'Raincoats',
+  [Subcategory.RELAXED]: 'Relaxed',
+  [Subcategory.ROMPERS]: 'Rompers',
+  [Subcategory.SHACKETS]: 'Shackets',
+  [Subcategory.SHIRT]: 'Shirt',
+  [Subcategory.SHIRTS_AND_BLOUSES]: 'Shirts and Blouses',
+  [Subcategory.SKATER]: 'Skater',
+  [Subcategory.SKINNY]: 'Skinny',
+  [Subcategory.SLIM]: 'Slim',
+  [Subcategory.SLIP]: 'Slip',
+  [Subcategory.SPORTS_BRAS]: 'Sports Bras',
+  [Subcategory.STRAIGHT]: 'Straight',
+  [Subcategory.SUIT_JACKETS]: 'Suit Jackets',
+  [Subcategory.SUIT_SKIRTS]: 'Suit Skirts',
+  [Subcategory.SUIT_TROUSERS]: 'Suit Trousers',
+  [Subcategory.SUIT_VESTS]: 'Suit Vests',
+  [Subcategory.SWEATSHIRTS]: 'Sweatshirts',
+  [Subcategory.T_SHIRTS]: 'T-Shirts',
+  [Subcategory.TANK_TOPS_AND_CAMISOLES]: 'Tank Tops and Camisoles',
+  [Subcategory.TAPERED]: 'Tapered',
+  [Subcategory.TRENCH_COATS]: 'Trench Coats',
+  [Subcategory.TROUSERS]: 'Trousers',
+  [Subcategory.TURTLENECKS]: 'Turtleneck',
+  [Subcategory.UNITARDS]: 'Unitards',
+  [Subcategory.V_NECKS]: 'V-Necks',
+  [Subcategory.WIDE_LEG]: 'Wide Leg',
+  [Subcategory.WRAP]: 'Wrap',
+}
+
+type Taxonomy = {
+  [key in Category]: {
+    [key in Subcategory]?: Classification
+  }
+}
+
+export const Taxonomy: Taxonomy = {
+  [Category.ACTIVEWEAR]: {
+    [Subcategory.LEGGINGS]: Classification.PANTS,
+    [Subcategory.JOGGERS]: Classification.PANTS,
+    [Subcategory.SWEATSHIRTS]: Classification.SWEATERS,
+  },
+
+  [Category.DRESSES]: {
+    [Subcategory.A_LINE]: Classification.DRESSES,
+    [Subcategory.BODYCON]: Classification.DRESSES,
+    [Subcategory.FIT_AND_FLARE]: Classification.DRESSES,
+    [Subcategory.KNIT]: Classification.DRESSES,
+    [Subcategory.SHIRT]: Classification.DRESSES,
+    [Subcategory.SLIP]: Classification.DRESSES,
+    [Subcategory.STRAIGHT]: Classification.DRESSES,
+    [Subcategory.WRAP]: Classification.DRESSES,
+  },
+
+  [Category.JACKETS_AND_COATS]: {
+    [Subcategory.DENIM_JACKETS]: Classification.JACKETS,
+    [Subcategory.PARKAS]: Classification.PUFFERS_AND_PARKAS,
+    [Subcategory.PEACOATS]: Classification.COATS,
+    [Subcategory.PUFFER_JACKETS]: Classification.PUFFERS_AND_PARKAS,
+    [Subcategory.RAINCOATS]: Classification.COATS,
+    [Subcategory.ROMPERS]: Classification.COATS,
+    [Subcategory.SHACKETS]: Classification.JACKETS,
+    [Subcategory.TRENCH_COATS]: Classification.COATS,
+  },
+
+  [Category.JEANS]: {
+    [Subcategory.BOOTCUT]: Classification.PANTS,
+    [Subcategory.FLARED]: Classification.PANTS,
+    [Subcategory.MOM]: Classification.PANTS,
+    [Subcategory.RELAXED]: Classification.PANTS,
+    [Subcategory.SKINNY]: Classification.PANTS,
+    [Subcategory.SLIM]: Classification.PANTS,
+    [Subcategory.STRAIGHT]: Classification.PANTS,
+    [Subcategory.TAPERED]: Classification.PANTS,
+    [Subcategory.WIDE_LEG]: Classification.PANTS,
+  },
+
+  [Category.JUMPSUITS_AND_ROMPERS]: {
+    [Subcategory.BOILER_SUITS]: Classification.DRESSES,
+    [Subcategory.DENIM]: Classification.DRESSES,
+    [Subcategory.JUMPSUITS]: Classification.DRESSES,
+    [Subcategory.OVERALLS]: Classification.DRESSES,
+    [Subcategory.ROMPERS]: Classification.DRESSES,
+    [Subcategory.UNITARDS]: Classification.DRESSES,
+  },
+
+  [Category.PANTS_AND_SHORTS]: {
+    [Subcategory.CIGARETTE]: Classification.PANTS,
+    [Subcategory.CULOTTES]: Classification.SHORTS,
+    [Subcategory.DENIM_SHORTS]: Classification.SHORTS,
+    [Subcategory.FLARED]: Classification.PANTS,
+    [Subcategory.JOGGERS]: Classification.PANTS,
+    [Subcategory.LEGGINGS]: Classification.PANTS,
+    [Subcategory.SKINNY]: Classification.PANTS,
+    [Subcategory.WIDE_LEG]: Classification.PANTS,
+  },
+
+  [Category.SKIRTS]: {
+    [Subcategory.A_LINE_FLARED]: Classification.SKIRTS,
+    [Subcategory.DENIM]: Classification.SKIRTS,
+    [Subcategory.KNIT]: Classification.SKIRTS,
+    [Subcategory.PENCIL]: Classification.SKIRTS,
+    [Subcategory.PLEATED]: Classification.SKIRTS,
+    [Subcategory.SKATER]: Classification.SKIRTS,
+    [Subcategory.SLIP]: Classification.SKIRTS,
+    [Subcategory.WRAP]: Classification.SKIRTS,
+  },
+
+  [Category.SUITS_AND_TAILORING]: {
+    [Subcategory.BLAZERS]: Classification.JACKETS,
+    [Subcategory.SUIT_JACKETS]: Classification.JACKETS,
+    [Subcategory.SUIT_SKIRTS]: Classification.SKIRTS,
+    [Subcategory.SUIT_TROUSERS]: Classification.PANTS,
+    [Subcategory.SUIT_VESTS]: Classification.SWEATERS,
+    [Subcategory.TROUSERS]: Classification.PANTS,
+  },
+
+  [Category.SWEATERS]: {
+    [Subcategory.CARDIGANS]: Classification.SWEATERS,
+    [Subcategory.CREWNECKS]: Classification.SWEATERS,
+    [Subcategory.HOODIES_AND_ZIPUPS]: Classification.SWEATERS,
+    [Subcategory.SWEATSHIRTS]: Classification.SWEATERS,
+    [Subcategory.TURTLENECKS]: Classification.SWEATERS,
+    [Subcategory.V_NECKS]: Classification.SWEATERS,
+  },
+
+  [Category.TOPS]: {
+    [Subcategory.BODYSUITS]: Classification.BLOUSES,
+    [Subcategory.CORSETS_AND_BUSTIERS]: Classification.BLOUSES,
+    [Subcategory.POLOS]: Classification.T_SHIRTS_AND_TANKS,
+    [Subcategory.SHIRTS_AND_BLOUSES]: Classification.BLOUSES,
+    [Subcategory.T_SHIRTS]: Classification.T_SHIRTS_AND_TANKS,
+    [Subcategory.TANK_TOPS_AND_CAMISOLES]: Classification.T_SHIRTS_AND_TANKS,
+  },
+}
