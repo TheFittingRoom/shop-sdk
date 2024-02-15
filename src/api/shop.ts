@@ -6,6 +6,7 @@ import { asyncTry } from '../helpers/async'
 import { Config } from '../helpers/config'
 import * as Errors from '../helpers/errors'
 import * as types from '../types'
+import { MeasurementLocationName } from '../types/measurement'
 import { Fetcher } from './fetcher'
 import { SizeRecommendation } from './responses'
 import { testImage } from './utils'
@@ -106,6 +107,17 @@ export class TfrShop {
     } catch (error) {
       return getFirebaseError(error)
     }
+  }
+
+  public async getMeasurementLocationsByStyleId(styleId: number) {
+    const styles = await this.getStyles([styleId], [])
+    const style = styles.get(styleId)
+
+    if (!style?.sizes.length) return []
+
+    return style.sizes[0].garment_measurements.map(
+      (measurement) => MeasurementLocationName[measurement.garment_measurement_location],
+    )
   }
 
   public async submitTelephoneNumber(tel: string) {

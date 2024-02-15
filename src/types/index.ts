@@ -28,7 +28,7 @@ export interface FirestoreSize {
   label: string
   size_system: string
   size_value_id: string
-  garment_measurements: Map<string, FirestoreGarmentMeasurement>
+  garment_measurements: FirestoreGarmentMeasurement[]
 }
 
 export interface FirestoreColorway {
@@ -45,8 +45,8 @@ export interface FirestoreStyle {
   garment_category: string
   is_published: boolean
   sale_type: string
-  colorways: { [key: number]: FirestoreColorway }
-  sizes: { [key: number]: FirestoreSize }
+  colorways: FirestoreColorway[]
+  sizes: FirestoreSize[]
 }
 
 export interface FirestoreFrames {
