@@ -1,3 +1,5 @@
+export * from './measurement'
+
 export type TryOnFrames = string[]
 
 export enum AvatarState {
