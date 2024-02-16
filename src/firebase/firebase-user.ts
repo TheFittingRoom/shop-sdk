@@ -1,9 +1,7 @@
 import * as firebase from 'firebase/app'
 import * as firebaseAuth from 'firebase/auth'
 import {
-  DocumentData,
   Firestore,
-  QuerySnapshot,
   Unsubscribe,
   collection,
   doc,
@@ -15,6 +13,7 @@ import {
 } from 'firebase/firestore'
 
 import * as Errors from '../helpers/errors'
+import { FirestoreUser } from '../types'
 
 export type BrandUserId = string | number
 
@@ -67,24 +66,14 @@ export class FirebaseUser {
     return userProfile.data()
   }
 
-  public watchUserProfileForChanges(
-    predicate: (data: QuerySnapshot<DocumentData>) => Promise<boolean>,
-    timeout: number,
-  ) {
+  public watchUserProfileForChanges(callback: (data: FirestoreUser) => void) {
     let unsub: Unsubscribe
 
     const q = query(collection(this.firestore, 'users'), where(documentId(), '==', this.id))
 
-    const cancel = setTimeout(() => unsub(), timeout)
+    unsub = onSnapshot(q, (snapshot) => callback(snapshot.docs[0].data() as FirestoreUser))
 
-    return new Promise<DocumentData>((resolve) => {
-      unsub = onSnapshot(q, async (snapshot) => {
-        if (!(await predicate(snapshot))) return
-        clearTimeout(cancel)
-        unsub()
-        resolve(snapshot.docs[0].data())
-      })
-    })
+    return () => unsub()
   }
 
   public async login(username: string, password: string) {
