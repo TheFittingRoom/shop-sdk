@@ -10,9 +10,7 @@ import { Fetcher } from './fetcher'
 import { SizeRecommendation } from './responses'
 
 export class TfrShop {
-  constructor(private readonly brandId: number, private readonly firebase: Firebase) {
-    const config = Config.getInstance().config
-  }
+  constructor(private readonly brandId: number, private readonly firebase: Firebase) {}
 
   public get user() {
     return this.firebase.user
@@ -31,9 +29,11 @@ export class TfrShop {
 
     try {
       const res = await Fetcher.Get(this.user, `/styles/${styleId}/recommendation`)
-      const json = await res.json()
+      const data = (await res.json()) as SizeRecommendation
 
-      return json as SizeRecommendation
+      if (!data?.fits?.length || !data?.recommended_size?.id) return null
+
+      return data
     } catch (error) {
       if (error?.error === Errors.AvatarNotCreated) throw new Errors.AvatarNotCreatedError()
 

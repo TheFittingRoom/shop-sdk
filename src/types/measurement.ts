@@ -445,3 +445,23 @@ export const Taxonomy: Taxonomy = {
     [Subcategory.TANK_TOPS_AND_CAMISOLES]: Classification.T_SHIRTS_AND_TANKS,
   },
 }
+
+export enum Fit {
+  TOO_TIGHT = 'too_tight',
+  TIGHT = 'tight',
+  SLIGHTLY_TIGHT = 'slightly_tight',
+  PERFECT_FIT = 'perfect_fit',
+  SLIGHTLY_LOOSE = 'slightly_loose',
+  LOOSE = 'loose',
+  OVERSIZED = 'oversized',
+}
+
+export const FitNames = {
+  [Fit.TOO_TIGHT]: 'Too Tight',
+  [Fit.TIGHT]: 'Tight',
+  [Fit.SLIGHTLY_TIGHT]: 'Slightly Tight',
+  [Fit.PERFECT_FIT]: 'Perfect Fit',
+  [Fit.SLIGHTLY_LOOSE]: 'Slightly Loose',
+  [Fit.LOOSE]: 'Loose',
+  [Fit.OVERSIZED]: 'Oversized',
+}
