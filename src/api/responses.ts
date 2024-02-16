@@ -98,7 +98,7 @@ export interface SizeRecommendationIDs {
 
 export interface MeasurementLocationFits {
   measurement_location: MeasurementLocation
-  fit: Fit[]
+  fit: Fit
 }
 
 export interface Fits {
