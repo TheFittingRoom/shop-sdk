@@ -72,10 +72,6 @@ shop.user.setBrandUserId(brandUserId)
 // This will send an SMS to the given phone number with a link to the iOS app
 // No spaces and must include country code e.g. +18005551234
 shop.submitTelephoneNumber(tel)
-
-// await for the avatar creation
-// Returns boolean on whether the avatar is created or not after the configured `avatarTimeout` period
-shop.awaitAvatarCreated()
 ```
 
 #### Shop
@@ -84,39 +80,32 @@ We'll make references to `sku` several times here. This is the unique identifier
 from your inventory to our system.
 
 ```typescript
+// get the garment measurement locations for a particular style
+// This is used to pre-populate the size recommendation table with data before the user is logged into The Fitting Room
+// sku: string
+// returns: string[]
+const locations = await shop.getMeasurementLocationsFromSku(sku)
+
 // A good first step would be to ensure your style and size exists in the fitting room system before executing any of the
-// following functions. You'll get back some data about the style(s), such as the ID of the style, which you can use
+// following functions. You'll get back some data about the style, such as the ID of the style, which you can use
 // for the getRecommendedSizes function below.
-// ids: number[] or skus: string[]
-// At least one parameter must not be null
-shop.getStyles(ids, skus)
+// sku: string
+// returns: FirestoreColorwaySizeAsset
+const colorwaySizeAsset = await shop.getColorwaySizeAssetFromSku(sku)
 
 // get recommended sizes for a particular style
-// The styleID can be extracted from the previous getStyles function call.
-const sizeRecommendation = shop.getRecommendedSizes(styleID)
-
-// get recommended sizes label for a particular style
-// returns: { recommendedSizeLabel, availableSizeLabels }
-// recommendedSizeLabel: string
-// availableSizeLabels: string[]
-const { recommendedSizeLabel, availableSizeLabels } = shop.getRecommendedSizesLabels(styleID)
-
-// Once the user has downloaded the mobile application and has created an avatar, they may now virtually try on a size.
-// The size they try on must be one of the recommended sizes from the previous function call. or an error will get returned.
-// returns frames: types.TryOnFrames
-// These `frames` are images that can be used to cycle through the VTO 360 degrees.
-// NOTE: this process can take a minute or two
-const frames = await this.shop.tryOn(sku)
+// The styleId can be extracted from the previous getColorwaySizeAssetFromSku function call.
+// styleId: string
+// returns: SizeRecommendation
+const sizeRecommendation = shop.getRecommendedSizes(styleId)
 ```
+
+[Types Reference](https://github.com/TheFittingRoom/shop-sdk/blob/main/src/types/index.ts)
 
 #### Errors
 
 ```typescript
-NoFramesFoundError
-RequestTimeoutError
+AvatarNotCreatedError
 UserNotLoggedInError
 NoColorwaySizeAssetsFoundError
-NoStylesFoundError
-RecommendedAvailableSizesError
-BrandUserIdNotSetError
 ```

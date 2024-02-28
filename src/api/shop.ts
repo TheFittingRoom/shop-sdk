@@ -54,7 +54,7 @@ export class TfrShop {
     return Array.from(assets.values())[0]
   }
 
-  public async getMeasurementLocationsFromSku(sku: string) {
+  public async getMeasurementLocationsFromSku(sku: string): Promise<string[]> {
     const asset = await this.getColorwaySizeAssetFromSku(sku)
     const styleCategory = await this.getStyleCategory(asset.style_id)
     const classificationLocation = Taxonomy[styleCategory.category]?.[styleCategory.sub_category] || null
