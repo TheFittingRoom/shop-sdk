@@ -74,7 +74,5 @@ export interface FirestoreUser {
 }
 
 export interface FirestoreStyleCategory {
-  category: string
-  classification: string
-  sub_category: string
+  style_garment_category_id: number
 }

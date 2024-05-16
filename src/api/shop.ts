@@ -57,7 +57,8 @@ export class TfrShop {
   public async getMeasurementLocationsFromSku(sku: string): Promise<string[]> {
     const asset = await this.getColorwaySizeAssetFromSku(sku)
     const styleCategory = await this.getStyleCategory(asset.style_id)
-    const classificationLocation = Taxonomy[styleCategory.category]?.[styleCategory.sub_category] || null
+    const taxonomy = await this.getGetTaxonomy(styleCategory.style_garment_category_id)
+    const classificationLocation = Taxonomy[taxonomy.style_category]?.[taxonomy.garment_category] || null
 
     return classificationLocation
       ? ClassificationLocations[classificationLocation].map((location) => MeasurementLocationName[location])
@@ -86,9 +87,22 @@ export class TfrShop {
 
   private async getStyleCategory(styleId: number) {
     try {
-      const doc = await this.firebase.getDoc('style_categories', String(styleId))
+      const doc = await this.firebase.getDoc('styles', String(styleId))
 
       return doc as types.FirestoreStyleCategory
+    } catch (error) {
+      return getFirebaseError(error)
+    }
+  }
+
+  private async getGetTaxonomy(styleId: number) {
+    try {
+      const doc = await this.firebase.getDoc('style_garment_categories', String(styleId))
+
+      return doc as {
+        garment_category: string
+        style_category: string
+      }
     } catch (error) {
       return getFirebaseError(error)
     }
