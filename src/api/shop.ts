@@ -5,11 +5,12 @@ import { getFirebaseError } from '../firebase/firebase-error'
 import { Config } from '../helpers/config'
 import * as Errors from '../helpers/errors'
 import * as types from '../types'
-import { ClassificationLocations, MeasurementLocationName, Taxonomy } from '../types/measurement'
 import { Fetcher } from './fetcher'
 import { SizeRecommendation } from './responses'
 
 export class TfrShop {
+  private measurementLocations: Map<string, string> = new Map()
+
   constructor(private readonly brandId: number, private readonly firebase: Firebase) {}
 
   public get user() {
@@ -20,7 +21,9 @@ export class TfrShop {
     return !this.firebase || Boolean(this.user.id)
   }
 
-  public onInit() {
+  public async onInit() {
+    await this.getMeasurementLocations()
+
     return this.firebase.onInit()
   }
 
@@ -64,11 +67,9 @@ export class TfrShop {
     const taxonomy = await this.getGetTaxonomy(styleCategory.style_garment_category_id)
     if (!taxonomy) throw new Error('Taxonomy not found for style garment category id')
 
-    const classificationLocation = Taxonomy[taxonomy.style_category]?.[taxonomy.garment_category] || null
-
-    return classificationLocation
-      ? ClassificationLocations[classificationLocation].map((location) => MeasurementLocationName[location])
-      : null
+    return taxonomy.garment_measurement_locations.female.map((location) => {
+      return this.measurementLocations.has(location) ? this.measurementLocations.get(location) : location
+    })
   }
 
   private async getColorwaySizeAssets(styleId?: number, skus?: string[]) {
@@ -105,10 +106,25 @@ export class TfrShop {
     try {
       const doc = await this.firebase.getDoc('style_garment_categories', String(styleId))
 
-      return doc as {
-        garment_category: string
-        style_category: string
-      }
+      return doc as types.FirestoreStyleGarmentCategory
+    } catch (error) {
+      return getFirebaseError(error)
+    }
+  }
+
+  private async getMeasurementLocations() {
+    const locations = await this.fetchMeasurementLocations()
+
+    locations.forEach((location) => {
+      this.measurementLocations.set(location.name, location.label)
+    })
+  }
+
+  private async fetchMeasurementLocations() {
+    try {
+      const docs = await this.firebase.getDocs('garment_measurement_locations', [])
+
+      return docs.docs.map((doc) => doc.data()) as types.FirestoreGarmentMeasurementLocation[]
     } catch (error) {
       return getFirebaseError(error)
     }

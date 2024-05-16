@@ -76,3 +76,19 @@ export interface FirestoreUser {
 export interface FirestoreStyleCategory {
   style_garment_category_id: number
 }
+
+export interface FirestoreStyleGarmentCategory {
+  garment_category: string
+  garment_category_label: string
+  garment_measurement_locations: {
+    female: string[]
+    male: string[]
+  }
+  style_category: string
+  style_category_label: string
+}
+
+export interface FirestoreGarmentMeasurementLocation {
+  label: string
+  name: string
+}

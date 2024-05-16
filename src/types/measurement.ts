@@ -454,6 +454,12 @@ export enum Fit {
   SLIGHTLY_LOOSE = 'slightly_loose',
   LOOSE = 'loose',
   OVERSIZED = 'oversized',
+  TOO_SHORT = 'too_short',
+  SHORT = 'short',
+  SLIGHTLY_SHORT = 'slightly_short',
+  SLIGHTLY_LONG = 'slightly_long',
+  LONG = 'long',
+  TOO_LONG = 'too_long',
 }
 
 export const FitNames = {
@@ -464,4 +470,10 @@ export const FitNames = {
   [Fit.SLIGHTLY_LOOSE]: 'Slightly Loose',
   [Fit.LOOSE]: 'Loose',
   [Fit.OVERSIZED]: 'Oversized',
+  [Fit.TOO_SHORT]: 'Too Short',
+  [Fit.SHORT]: 'Short',
+  [Fit.SLIGHTLY_SHORT]: 'Slightly Short',
+  [Fit.SLIGHTLY_LONG]: 'Slightly Long',
+  [Fit.LONG]: 'Long',
+  [Fit.TOO_LONG]: 'Too Long',
 }
