@@ -61,7 +61,7 @@ export class TfrShop {
     const asset = await this.getColorwaySizeAssetFromSku(sku)
     if (!asset) throw new Error('No colorway size asset found for sku')
 
-    const styleCategory = await this.getStyleCategory(asset.style_id)
+    const styleCategory = await this.getStyle(asset.style_id)
     if (!styleCategory) throw new Error('Style category not found for style id')
 
     const taxonomy = await this.getGetTaxonomy(styleCategory.style_garment_category_id)
@@ -70,6 +70,18 @@ export class TfrShop {
     return taxonomy.garment_measurement_locations.female.map((location) => {
       return this.measurementLocations.has(location) ? this.measurementLocations.get(location) : location
     })
+  }
+
+  public async getStyleByBrandStyleId(brandStyleId: string) {
+    try {
+      const constraints: QueryFieldFilterConstraint[] = [where('brand_id', '==', this.brandId)]
+      constraints.push(where('brand_style_id', '==', brandStyleId))
+      const querySnapshot = await this.firebase.getDocs('styles', constraints)
+
+      return querySnapshot.docs?.[0]?.data() as types.FirestoreStyleCategory
+    } catch (error) {
+      return getFirebaseError(error)
+    }
   }
 
   private async getColorwaySizeAssets(styleId?: number, skus?: string[]) {
@@ -92,7 +104,7 @@ export class TfrShop {
     }
   }
 
-  private async getStyleCategory(styleId: number) {
+  public async getStyle(styleId: number) {
     try {
       const doc = await this.firebase.getDoc('styles', String(styleId))
 

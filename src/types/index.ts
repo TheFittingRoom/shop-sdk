@@ -74,7 +74,14 @@ export interface FirestoreUser {
 }
 
 export interface FirestoreStyleCategory {
+  id: number
+  is_published: boolean
   style_garment_category_id: number
+  sizes: {
+    garment_measurements: {
+      garment_measurement_location: string
+    }
+  }[]
 }
 
 export interface FirestoreStyleGarmentCategory {
