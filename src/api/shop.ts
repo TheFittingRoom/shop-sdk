@@ -69,7 +69,7 @@ export class TfrShop {
 
     const filteredLocations = !filledLocations.length
       ? taxonomy.garment_measurement_locations.female
-      : taxonomy.garment_measurement_locations.female.filter((location) => !filledLocations.includes(location))
+      : taxonomy.garment_measurement_locations.female.filter((location) => filledLocations.includes(location))
 
     return filteredLocations.map((location) => {
       return this.measurementLocations.has(location) ? this.measurementLocations.get(location) : location
