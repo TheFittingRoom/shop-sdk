@@ -1,6 +1,6 @@
 {
   "name": "@thefittingroom/sdk",
-  "version": "1.1.13",
+  "version": "1.1.14",
   "description": "the fitting room SDK",
   "type": "module",
   "main": "./dist/esm/index.js",

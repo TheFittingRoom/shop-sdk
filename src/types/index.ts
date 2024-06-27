@@ -80,7 +80,7 @@ export interface FirestoreStyleCategory {
   sizes: {
     garment_measurements: {
       garment_measurement_location: string
-    }
+    }[]
   }[]
 }
 
