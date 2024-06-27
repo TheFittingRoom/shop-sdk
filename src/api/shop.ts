@@ -57,7 +57,7 @@ export class TfrShop {
     return Array.from(assets.values())[0]
   }
 
-  public async getMeasurementLocationsFromSku(sku: string): Promise<string[]> {
+  public async getMeasurementLocationsFromSku(sku: string, filledLocations: string[] = []): Promise<string[]> {
     const asset = await this.getColorwaySizeAssetFromSku(sku)
     if (!asset) throw new Error('No colorway size asset found for sku')
 
@@ -67,7 +67,11 @@ export class TfrShop {
     const taxonomy = await this.getGetTaxonomy(styleCategory.style_garment_category_id)
     if (!taxonomy) throw new Error('Taxonomy not found for style garment category id')
 
-    return taxonomy.garment_measurement_locations.female.map((location) => {
+    const filteredLocations = !filledLocations.length
+      ? taxonomy.garment_measurement_locations.female
+      : taxonomy.garment_measurement_locations.female.filter((location) => !filledLocations.includes(location))
+
+    return filteredLocations.map((location) => {
       return this.measurementLocations.has(location) ? this.measurementLocations.get(location) : location
     })
   }
