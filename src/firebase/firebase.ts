@@ -31,8 +31,8 @@ export class Firebase {
     this.user = new FirebaseUser(this.firestore, firebaseApp)
   }
 
-  public onInit() {
-    return this.user.onInit()
+  public onInit(brandId: number) {
+    return this.user.onInit(brandId)
   }
 
   public query(collectionName: string, constraint: QueryFieldFilterConstraint, unsubscribeWhenData: boolean = true) {

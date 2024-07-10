@@ -1,3 +1,4 @@
+import dayjs from 'dayjs/esm'
 import * as firebase from 'firebase/app'
 import * as firebaseAuth from 'firebase/auth'
 import {
@@ -9,9 +10,11 @@ import {
   getDoc,
   onSnapshot,
   query,
+  setDoc,
   where,
 } from 'firebase/firestore'
 
+import { fromFirebaseDate } from '../helpers/date'
 import * as Errors from '../helpers/errors'
 import { FirestoreUser } from '../types'
 
@@ -32,18 +35,51 @@ export class FirebaseUser {
     return this.user?.uid
   }
 
-  public onInit() {
+  public onInit(brandId: number) {
     return new Promise<boolean>((resolve) => {
       const unsub = this.auth.onAuthStateChanged((user) => {
         this.setUser(user)
         resolve(Boolean(user))
         unsub()
+        if (user) this.logUserLogin(brandId, user)
       })
     })
   }
 
   public setUser(user: firebaseAuth.User) {
     this.user = user
+  }
+
+  public async logUserLogin(brandId: number, user: firebaseAuth.User) {
+    try {
+      const userLoggingDoc = doc(this.firestore, 'user_logging', user.uid)
+      const savedDoc = await getDoc(userLoggingDoc)
+      const lastLogin = new Date()
+      const savedData = savedDoc.exists ? savedDoc.data() : null
+      const lastBrandLogin = savedData?.brands?.[brandId]?.last_login
+
+      if (lastBrandLogin && dayjs(lastLogin).diff(fromFirebaseDate(lastBrandLogin), 'days') <= 7) return
+
+      const logins = savedData?.brands?.[brandId]?.logins ?? []
+      logins.push(lastLogin)
+
+      const userLoggingData = {
+        brands: {
+          [brandId]: {
+            brand_id: brandId,
+            last_login: lastLogin,
+            logins,
+          },
+        },
+        last_brand_id: brandId,
+        created_at: !savedDoc.exists() ? lastLogin : savedDoc.data().created_at,
+        updated_at: lastLogin,
+      }
+
+      await setDoc(userLoggingDoc, userLoggingData, { merge: true })
+    } catch (e) {
+      console.error('LOGGING ERROR:', e)
+    }
   }
 
   public setBrandUserId(brandUserId: BrandUserId) {

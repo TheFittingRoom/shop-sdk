@@ -24,7 +24,7 @@ export class TfrShop {
   public async onInit() {
     await this.getMeasurementLocations()
 
-    return this.firebase.onInit()
+    return this.firebase.onInit(this.brandId)
   }
 
   public async getRecommendedSizes(styleId: string) {
