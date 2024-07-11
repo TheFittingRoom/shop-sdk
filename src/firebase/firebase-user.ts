@@ -58,7 +58,7 @@ export class FirebaseUser {
       const savedData = savedDoc.exists ? savedDoc.data() : null
       const lastBrandLogin = savedData?.brands?.[brandId]?.last_login
 
-      if (lastBrandLogin && dayjs(lastLogin).diff(fromFirebaseDate(lastBrandLogin), 'days') <= 7) return
+      if (lastBrandLogin && dayjs(lastLogin).diff(fromFirebaseDate(lastBrandLogin), 'seconds') <= 10080) return
 
       const logins = savedData?.brands?.[brandId]?.logins ?? []
       logins.push(lastLogin)
