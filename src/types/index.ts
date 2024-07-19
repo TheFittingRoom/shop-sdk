@@ -19,7 +19,7 @@ export interface FirestoreColorwaySizeAsset {
 
 export interface FirestoreGarmentMeasurement {
   id: number
-  garment_measurement_location: string
+  measurement_location: string
   tolerance: number
   value: number
 }
@@ -79,7 +79,7 @@ export interface FirestoreStyleCategory {
   style_garment_category_id: number
   sizes: {
     garment_measurements: {
-      garment_measurement_location: string
+      measurement_location: string
     }[]
   }[]
 }
@@ -87,7 +87,7 @@ export interface FirestoreStyleCategory {
 export interface FirestoreStyleGarmentCategory {
   garment_category: string
   garment_category_label: string
-  garment_measurement_locations: {
+  measurement_locations: {
     female: string[]
     male: string[]
   }

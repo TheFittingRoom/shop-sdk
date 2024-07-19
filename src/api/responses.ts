@@ -117,7 +117,7 @@ export interface SizeRecommendation {
 
 export interface GarmentMeasurement {
   id: number /* int64 */
-  garment_measurement_location: string
+  measurement_location: string
   value: number /* float64 */
   tolerance: number /* float64 */
 }

@@ -99,7 +99,7 @@ export interface Invitation {
 // source: style.go
 
 export interface GarmentMeasurement {
-  garment_measurement_location: string
+  measurement_location: string
   value: number /* float64 */
   tolerance: number /* float64 */
 }

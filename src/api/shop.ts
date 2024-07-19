@@ -75,8 +75,8 @@ export class TfrShop {
     if (!taxonomy) throw new Error('Taxonomy not found for style garment category id')
 
     const filteredLocations = !filledLocations.length
-      ? taxonomy.garment_measurement_locations.female
-      : taxonomy.garment_measurement_locations.female.filter((location) => filledLocations.includes(location))
+      ? taxonomy.measurement_locations.female
+      : taxonomy.measurement_locations.female.filter((location) => filledLocations.includes(location))
 
     return filteredLocations.map((location) => {
       return this.measurementLocations.has(location) ? this.measurementLocations.get(location) : location
@@ -97,8 +97,8 @@ export class TfrShop {
     if (!taxonomy) throw new Error('Taxonomy not found for style garment category id')
 
     const filteredLocations = !filledLocations.length
-      ? taxonomy.garment_measurement_locations.female
-      : taxonomy.garment_measurement_locations.female.filter((location) => filledLocations.includes(location))
+      ? taxonomy.measurement_locations.female
+      : taxonomy.measurement_locations.female.filter((location) => filledLocations.includes(location))
 
     return filteredLocations.map((location) => {
       return this.measurementLocations.has(location) ? this.measurementLocations.get(location) : location
@@ -167,7 +167,7 @@ export class TfrShop {
 
   private async fetchMeasurementLocations() {
     try {
-      const docs = await this.firebase.getDocs('garment_measurement_locations', [])
+      const docs = await this.firebase.getDocs('measurement_locations', [])
 
       return docs.docs.map((doc) => doc.data()) as types.FirestoreGarmentMeasurementLocation[]
     } catch (error) {
