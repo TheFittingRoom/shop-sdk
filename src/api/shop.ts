@@ -165,7 +165,7 @@ export class TfrShop {
     const locations = await this.fetchMeasurementLocations()
 
     locations.forEach((location) => {
-      this.measurementLocations.set(location.name, location.label)
+      this.measurementLocations.set(location.name, location.garment_label)
     })
   }
 

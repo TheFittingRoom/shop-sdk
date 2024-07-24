@@ -96,6 +96,6 @@ export interface FirestoreStyleGarmentCategory {
 }
 
 export interface FirestoreGarmentMeasurementLocation {
-  label: string
+  garment_label: string
   name: string
 }
