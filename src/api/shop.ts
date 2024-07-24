@@ -147,6 +147,10 @@ export class TfrShop {
     }
   }
 
+  public getMeasurementLocationName(location: string) {
+    return this.measurementLocations.has(location) ? this.measurementLocations.get(location) : location
+  }
+
   private async getGetTaxonomy(styleId: number) {
     try {
       const doc = await this.firebase.getDoc('style_garment_categories', String(styleId))
