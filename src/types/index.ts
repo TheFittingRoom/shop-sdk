@@ -98,4 +98,5 @@ export interface FirestoreStyleGarmentCategory {
 export interface FirestoreGarmentMeasurementLocation {
   garment_label: string
   name: string
+  sort_order: number
 }

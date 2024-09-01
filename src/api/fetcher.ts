@@ -19,7 +19,7 @@ export class Fetcher {
   private static async Fetch({ user, endpointPath, method, body, useToken = true }: FetchParams): Promise<Response> {
     const url = this.getUrl(endpointPath, useToken)
     const headers = await this.getHeaders(user, useToken)
-    const config: RequestInit = { method, headers, credentials: 'include' }
+    const config: RequestInit = { method, headers, credentials: 'omit' }
 
     if (body) config.body = JSON.stringify(body)
 

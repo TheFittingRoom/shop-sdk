@@ -9,7 +9,7 @@ import { Fetcher } from './fetcher'
 import { SizeRecommendation } from './responses'
 
 export class TfrShop {
-  private measurementLocations: Map<string, string> = new Map()
+  private measurementLocations: Map<string, { name: string; sort_order: number }> = new Map()
 
   constructor(private readonly brandId: number, private readonly firebase: Firebase) {}
 
@@ -78,9 +78,15 @@ export class TfrShop {
       ? taxonomy.measurement_locations.female
       : taxonomy.measurement_locations.female.filter((location) => filledLocations.includes(location))
 
-    return filteredLocations.map((location) => {
-      return this.measurementLocations.has(location) ? this.measurementLocations.get(location) : location
+    const locationsWithSortOrder = filteredLocations.map((location) => {
+      return this.measurementLocations.has(location)
+        ? this.measurementLocations.get(location)
+        : { name: location, sort_order: Infinity }
     })
+
+    return locationsWithSortOrder
+      .sort((a, b) => (a.sort_order < b.sort_order ? -1 : 0))
+      .map((location) => location.name)
   }
 
   public async getMeasurementLocationsFromBrandStyleId(
@@ -100,9 +106,15 @@ export class TfrShop {
       ? taxonomy.measurement_locations.female
       : taxonomy.measurement_locations.female.filter((location) => filledLocations.includes(location))
 
-    return filteredLocations.map((location) => {
-      return this.measurementLocations.has(location) ? this.measurementLocations.get(location) : location
+    const locationsWithSortOrder = filteredLocations.map((location) => {
+      return this.measurementLocations.has(location)
+        ? this.measurementLocations.get(location)
+        : { name: location, sort_order: Infinity }
     })
+
+    return locationsWithSortOrder
+      .sort((a, b) => (a.sort_order < b.sort_order ? -1 : 0))
+      .map((location) => location.name)
   }
 
   public async getStyleByBrandStyleId(brandStyleId: string) {
@@ -148,7 +160,11 @@ export class TfrShop {
   }
 
   public getMeasurementLocationName(location: string) {
-    return this.measurementLocations.has(location) ? this.measurementLocations.get(location) : location
+    return this.measurementLocations.has(location) ? this.measurementLocations.get(location).name : location
+  }
+
+  public getMeasurementLocationSortOrder(location: string) {
+    return this.measurementLocations.has(location) ? this.measurementLocations.get(location).sort_order : Infinity
   }
 
   private async getGetTaxonomy(styleId: number) {
@@ -165,7 +181,7 @@ export class TfrShop {
     const locations = await this.fetchMeasurementLocations()
 
     locations.forEach((location) => {
-      this.measurementLocations.set(location.name, location.garment_label)
+      this.measurementLocations.set(location.name, { name: location.garment_label, sort_order: location.sort_order })
     })
   }
 
