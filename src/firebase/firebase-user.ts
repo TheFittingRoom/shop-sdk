@@ -35,15 +35,18 @@ export class FirebaseUser {
     return this.user?.uid
   }
 
-  public onInit(brandId: number) {
-    return new Promise<boolean>((resolve) => {
-      const unsub = this.auth.onAuthStateChanged((user) => {
-        this.setUser(user)
-        resolve(Boolean(user))
-        unsub()
-        if (user) this.logUserLogin(brandId, user)
-      })
+  public async onInit(brandId: number) {
+    this.auth.onAuthStateChanged((user) => {
+      this.setUser(user)
+      if (user) this.logUserLogin(brandId, user)
     })
+
+    await this.auth.authStateReady()
+
+    const user = this.auth.currentUser
+    this.setUser(user)
+
+    return Boolean(user)
   }
 
   public setUser(user: firebaseAuth.User) {

@@ -1,6 +1,6 @@
 {
   "name": "@thefittingroom/sdk",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "the fitting room SDK",
   "type": "module",
   "main": "./dist/esm/index.js",
@@ -19,7 +19,7 @@
   "dependencies": {
     "dayjs": "^1.11.11",
     "dotenv": "^16.3.1",
-    "firebase": "^9.10.0",
+    "firebase": "10.13.0",
     "patch-package": "^6.5.0"
   },
   "devDependencies": {
