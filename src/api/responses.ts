@@ -99,6 +99,7 @@ export interface SizeRecommendationIDs {
 export interface MeasurementLocationFits {
   measurement_location: string
   fit: Fit
+  fit_label?: string
 }
 
 export interface Fits {
