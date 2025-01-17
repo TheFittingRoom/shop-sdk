@@ -1,12 +1,14 @@
-import { QueryFieldFilterConstraint, where } from 'firebase/firestore'
+import { DocumentData, QueryFieldFilterConstraint, QuerySnapshot, where } from 'firebase/firestore'
 
 import { Firebase } from '../firebase/firebase'
 import { getFirebaseError } from '../firebase/firebase-error'
+import { asyncTry } from '../helpers/async'
 import { Config } from '../helpers/config'
 import * as Errors from '../helpers/errors'
 import * as types from '../types'
 import { Fetcher } from './fetcher'
 import { SizeRecommendation } from './responses'
+import { testImage } from './utils'
 
 export class TfrShop {
   private measurementLocations: Map<string, { name: string; sort_order: number }> = new Map()
@@ -65,6 +67,7 @@ export class TfrShop {
   }
 
   public async getMeasurementLocationsFromSku(sku: string, filledLocations: string[] = []): Promise<string[]> {
+    console.log({ sku })
     const asset = await this.getColorwaySizeAssetFromSku(sku)
     if (!asset) throw new Error('No colorway size asset found for sku')
 
@@ -167,6 +170,35 @@ export class TfrShop {
     return this.measurementLocations.has(location) ? this.measurementLocations.get(location).sort_order : Infinity
   }
 
+  public async tryOn(styleId: number, sizeId: number) {
+    if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
+
+    const colorwaySizeAssetSku = await this.getColorwaySizeAssetSkuFromStyleIdAndSizeId(styleId, sizeId)
+
+    try {
+      const frames = await this.getColorwaySizeAssetFrames(colorwaySizeAssetSku)
+
+      return frames
+    } catch (error) {
+      if (!(error instanceof Errors.NoFramesFoundError)) throw error
+
+      return this.requestThenGetColorwaySizeAssetFrames(colorwaySizeAssetSku)
+    }
+  }
+
+  private async getColorwaySizeAssetSkuFromStyleIdAndSizeId(styleId: number, sizeId: number) {
+    try {
+      const constraints: QueryFieldFilterConstraint[] = [where('brand_id', '==', this.brandId)]
+      constraints.push(where('style_id', '==', styleId))
+      constraints.push(where('size_id', '==', sizeId))
+      const querySnapshot = await this.firebase.getDocs('colorway_size_assets', constraints)
+
+      return querySnapshot.docs?.[0]?.data()?.sku as string
+    } catch (error) {
+      return getFirebaseError(error)
+    }
+  }
+
   private async getGetTaxonomy(styleId: number) {
     try {
       const doc = await this.firebase.getDoc('style_garment_categories', String(styleId))
@@ -194,11 +226,65 @@ export class TfrShop {
       return getFirebaseError(error)
     }
   }
+
+  private async requestThenGetColorwaySizeAssetFrames(colorwaySizeAssetSku: string) {
+    const [error, colorwaySizeAsset] = await asyncTry(this.getColorwaySizeAssetFromSku(colorwaySizeAssetSku))
+    if (error) throw error
+
+    try {
+      await this.requestColorwaySizeAssetFrames(colorwaySizeAsset.id)
+
+      return this.awaitColorwaySizeAssetFrames(colorwaySizeAssetSku)
+    } catch (error) {
+      if (error?.error === Errors.AvatarNotCreated) throw new Errors.AvatarNotCreatedError()
+
+      throw new Errors.NoStylesFoundError()
+    }
+  }
+
+  private async awaitColorwaySizeAssetFrames(colorwaySizeAssetSKU: string) {
+    if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
+
+    const callback = async (data: QuerySnapshot<DocumentData>) => {
+      const frames = data.docs[0].data()?.vto?.[this.brandId]?.[colorwaySizeAssetSKU]?.frames
+      if (!frames?.length) return false
+
+      return testImage(frames[0])
+    }
+
+    const userProfile = (await this.user.watchUserProfileForFrames(callback)) as types.FirestoreUser
+
+    if (!userProfile?.vto?.[this.brandId]?.[colorwaySizeAssetSKU]?.frames?.length) throw new Errors.NoFramesFoundError()
+
+    return userProfile.vto[this.brandId][colorwaySizeAssetSKU].frames
+  }
+
+  private async requestColorwaySizeAssetFrames(colorwaySizeAssetId: number) {
+    if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
+    if (!this.user.brandUserId) throw new Errors.BrandUserIdNotSetError()
+
+    await Fetcher.Post(this.user, `/colorway-size-assets/${colorwaySizeAssetId}/frames`, {
+      brand_user_id: String(this.user.brandUserId),
+    })
+  }
+
+  private async getColorwaySizeAssetFrames(colorwaySizeAssetSKU: string) {
+    const userProfile = await this.user.getUserProfile()
+
+    const frames = userProfile?.vto?.[this.brandId]?.[colorwaySizeAssetSKU]?.frames || []
+    if (!frames.length) throw new Errors.NoFramesFoundError()
+
+    const testedImage = await testImage(frames[0])
+    if (!testedImage) throw new Errors.NoFramesFoundError()
+
+    return frames as types.TryOnFrames
+  }
 }
 
 export const initShop = (brandId: number, env: string = 'dev') => {
   if (env === 'dev' || env === 'development') console.warn('TfrShop is in development mode')
 
   Config.getInstance().setEnv(env)
+
   return new TfrShop(brandId, new Firebase())
 }

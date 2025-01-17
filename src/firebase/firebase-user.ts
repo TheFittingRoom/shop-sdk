@@ -2,7 +2,9 @@ import dayjs from 'dayjs/esm'
 import * as firebase from 'firebase/app'
 import * as firebaseAuth from 'firebase/auth'
 import {
+  DocumentData,
   Firestore,
+  QuerySnapshot,
   Unsubscribe,
   collection,
   doc,
@@ -38,13 +40,17 @@ export class FirebaseUser {
   public async onInit(brandId: number) {
     this.auth.onAuthStateChanged((user) => {
       this.setUser(user)
-      if (user) this.logUserLogin(brandId, user)
+      if (!user) return
+
+      this.logUserLogin(brandId, user)
+      this.setBrandUserId(user.uid)
     })
 
     await this.auth.authStateReady()
 
     const user = this.auth.currentUser
     this.setUser(user)
+    this.setBrandUserId(user.uid)
 
     return Boolean(user)
   }
@@ -97,6 +103,12 @@ export class FirebaseUser {
     return token
   }
 
+  public get userId() {
+    if (!this.user?.uid) throw new Errors.UserNotLoggedInError()
+
+    return this.user.uid
+  }
+
   public async getUserProfile() {
     if (!this.user?.uid) throw new Errors.UserNotLoggedInError()
 
@@ -113,6 +125,20 @@ export class FirebaseUser {
     unsub = onSnapshot(q, (snapshot) => callback(snapshot.docs[0].data() as FirestoreUser))
 
     return () => unsub()
+  }
+
+  public watchUserProfileForFrames(predicate: (data: QuerySnapshot<DocumentData>) => Promise<boolean>) {
+    let unsub: Unsubscribe
+
+    const q = query(collection(this.firestore, 'users'), where(documentId(), '==', this.id))
+
+    return new Promise<DocumentData>((resolve) => {
+      unsub = onSnapshot(q, async (snapshot) => {
+        if (!(await predicate(snapshot))) return
+        unsub()
+        resolve(snapshot.docs[0].data())
+      })
+    })
   }
 
   public async login(username: string, password: string) {
