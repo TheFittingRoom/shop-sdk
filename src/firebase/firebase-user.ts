@@ -50,7 +50,7 @@ export class FirebaseUser {
 
     const user = this.auth.currentUser
     this.setUser(user)
-    this.setBrandUserId(user.uid)
+    this.setBrandUserId(user?.uid)
 
     return Boolean(user)
   }
