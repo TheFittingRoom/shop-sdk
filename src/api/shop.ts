@@ -232,7 +232,9 @@ export class TfrShop {
     if (error) throw error
 
     try {
-      this.requestColorwaySizeAssetFrames(colorwaySizeAsset.id)
+      try {
+        this.requestColorwaySizeAssetFrames(colorwaySizeAsset.id)
+      } catch {}
 
       return this.awaitColorwaySizeAssetFrames(colorwaySizeAssetSku)
     } catch (error) {
