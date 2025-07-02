@@ -130,7 +130,7 @@ export interface Size {
 }
 export interface SizeValue {
   id: any /* enums.SizeValueID */
-  size: string
+  name: string
   size_system: string
 }
 export interface GarmentCategory {
