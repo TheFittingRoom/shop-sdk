@@ -9,34 +9,25 @@
     "clean": "rm -rf dist",
     "clean:all": "rm -rf dist && rm -rf build && rm -rf .rollup.cache",
     "build": "npm run clean && rollup --config",
-    "watch": "npm run clean && rollup --config -w",
-    "postinstall": "patch-package",
-    "pub": "npm run build && npm publish --access public"
+    "watch": "npm run clean && rollup --config -w"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=20"
   },
   "dependencies": {
-    "dayjs": "^1.11.11",
-    "dotenv": "^16.3.1",
-    "firebase": "10.13.0",
-    "patch-package": "^6.5.0"
+    "firebase": "^11.0.1",
+    "dayjs": "^1.1.13",
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^14.1.0",
-    "@rollup/plugin-typescript": "^8.5.0",
-    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
-    "live-server": "^1.2.2",
-    "prettier": "^2.8.8",
-    "rollup": "^2.79.1",
-    "rollup-plugin-dotenv": "^0.4.0",
-    "rollup-plugin-styles": "^4.0.0",
-    "rollup-plugin-terser": "^7.0.2",
-    "ts-node": "^9.0.0",
-    "tslib": "^2.4.0",
-    "typescript": "^4.0.2"
-  },
-  "resolutions": {
-    "@firebase/firestore": "3.8.0"
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-typescript": "^12.1.0",
+    "@trivago/prettier-plugin-sort-imports": "^5.0.0",
+    "sirv-cli": "^3.0.0",
+    "prettier": "^3.3.3",
+    "rollup": "^4.24.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "tslib": "^2.8.1",
+    "typescript": "^5.6.3"
   }
 }
