@@ -1,11 +1,9 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import typescript from '@rollup/plugin-typescript'
+import terser from '@rollup/plugin-terser'
+import * as dotenv from 'dotenv'
 
-import dotenv from 'rollup-plugin-dotenv'
-import styles from 'rollup-plugin-styles'
-import { terser } from 'rollup-plugin-terser'
-
-import pkg from './package.json'
+import pkg from './package.json' with { type: 'json' }
 
 const banner = `/*!
 * thefittingroom v${pkg.version} (${new Date().toISOString()})
@@ -30,11 +28,16 @@ export default {
     },
   ],
   plugins: [
-    dotenv(),
-    styles({
-      minimize: true,
-    }),
+    // Load environment variables using the already installed dotenv package
+    {
+      name: 'dotenv',
+      buildStart() {
+        dotenv.config()
+      }
+    },
     nodeResolve(),
-    typescript(),
+    typescript({
+      outputToFilesystem: true
+    }),
   ],
 }

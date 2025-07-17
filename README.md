@@ -1,110 +1,104 @@
-# The Fitting Room - Shop SDK
+# The Fitting Room – Shop SDK
 
-### Installation
+Modern ESM SDK for integrating **The Fitting Room** into Shopify storefronts.
 
-```bash
-npm i @thefittingroom/shop-sdk
-```
+* **Production-ready** bundle published to npm and the `unpkg` CDN.
+* **Type-safe** API (written in TypeScript).
+* Supports both **development** and **production** environments.
 
-or
+---
 
-```bash
-yarn @thefittingroom/shop-sdk
-```
-
-### Build
+## ✨ Quick Start
 
 ```bash
-npm run build
+# Stable / production build
+npm install @thefittingroom/shop-sdk
+
+# Next / development build
+npm install @thefittingroom/shop-sdk@next
 ```
 
-or
+```ts
+import { initShop } from "@thefittingroom/shop-sdk"
 
-```bash
-yarn build
-```
-
-### Development
-
-```bash
-npm run watch
-```
-
-or
-
-```bash
-yarn watch
-```
-
-## Usage
-
-```typescript
-import { initShop } from '@thefittingroom/sdk'
-
-// Your brandId: Number
 const brandId = 9001
-
-// The environment: 'development', 'dev', 'production', 'prod'
-const env = 'dev'
-const shop = initShop(brandId, env)
+// env = "prod" | "dev"
+const shop   = initShop(brandId, "prod")
 ```
 
-### Shop API
+### Via CDN
 
-#### Auth
+```html
+<!-- Latest production build -->
+<script type="module" src="https://unpkg.com/@thefittingroom/shop-sdk@latest/dist/index.mjs"></script>
 
-```typescript
-// Hook used to check authentication, return isLoggedIn Promise<boolean>
-await shop.onInit()
+<!-- Specific version (recommended) -->
+<script type="module" src="https://unpkg.com/@thefittingroom/shop-sdk@1.2.3/dist/index.mjs"></script>
 
-// Login user with session
-shop.user.login(email, password)
-
-// Logout current user
-shop.user.logout()
-
-// Set the brand userId, the internal userId used by the shop/brand
-// This is a required field for requesting a VTO
-// string | number
-shop.user.setBrandUserId(brandUserId)
-
-// In order for the user to create an avatar, they'll need to download the mobile application.
-// This will send an SMS to the given phone number with a link to the iOS app
-// No spaces and must include country code e.g. +18005551234
-shop.submitTelephoneNumber(tel)
+<!-- Development build -->
+<script type="module" src="https://unpkg.com/@thefittingroom/shop-sdk@next/dist/index.mjs"></script>
 ```
 
-#### Shop
+---
 
-We'll make references to `sku` several times here. This is the unique identifier that matches a styles particular size
-from your inventory to our system.
+## 🔖 Semantic Versioning & Release Channels
 
-```typescript
-// get the garment measurement locations for a particular style
-// This is used to pre-populate the size recommendation table with data before the user is logged into The Fitting Room
-// sku: string
-// returns: string[]
-const locations = await shop.getMeasurementLocationsFromSku(sku)
+This package follows [SemVer 2.0.0](https://semver.org/): **MAJOR.MINOR.PATCH**
 
-// A good first step would be to ensure your style and size exists in the fitting room system before executing any of the
-// following functions. You'll get back some data about the style, such as the ID of the style, which you can use
-// for the getRecommendedSizes function below.
-// sku: string
-// returns: FirestoreColorwaySizeAsset
-const colorwaySizeAsset = await shop.getColorwaySizeAssetFromSku(sku)
+* **MAJOR** – Breaking changes. Partners must opt-in to upgrade.
+* **MINOR** – Back-compatible feature additions.
+* **PATCH** – Back-compatible bug fixes.
 
-// get recommended sizes for a particular style
-// The styleId can be extracted from the previous getColorwaySizeAssetFromSku function call.
-// styleId: string
-// returns: SizeRecommendation
+### Automated release pipeline (GitHub Actions)
+
+| Trigger | Workflow | Result |
+|---------|----------|--------|
+| Pull request → `main` | `PR Label Guard` | PR must carry `patch`, `minor`, or `major` label – otherwise CI fails and merge is blocked. |
+| Merge → `main` | `Deploy to dev` | CI bumps version (according to PR label), publishes build to npm with `next` tag, and uploads assets to dev S3 bucket. |
+| GitHub Release | `Production Release` | Tag (e.g. `v2.3.0`) is published to npm with `latest` tag and assets uploaded to prod S3 bucket. |
+
+Guidelines for consumers:
+
+```text
+^1.x   → always safe (only minor/patches)
+~1.2.0 → locks to patch updates only
+1.2.3  → locks to a specific publish
+```
+
+## 🛠️ Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run build`  | Create production bundle in `dist/` |
+| `npm run watch`  | Re-build on change (development) |
+
+---
+
+## 📚 API Overview
+
+### Authentication
+
+```ts
+await shop.onInit()                 // isLoggedIn: boolean
+shop.user.login(email, password)    // start session
+shop.user.logout()                  // end session
+shop.user.setBrandUserId(id)        // required for VTO
+shop.submitTelephoneNumber('+18005551234')
+```
+
+### Shop helpers
+
+```ts
+const locations          = await shop.getMeasurementLocationsFromSku(sku)
+const colorwaySizeAsset  = await shop.getColorwaySizeAssetFromSku(sku)
 const sizeRecommendation = shop.getRecommendedSizes(styleId)
 ```
 
-[Types Reference](https://github.com/TheFittingRoom/shop-sdk/blob/main/src/types/index.ts)
+Full type definitions live in [`src/types`](./src/types/index.ts).
 
-#### Errors
+### Error classes
 
-```typescript
+```ts
 AvatarNotCreatedError
 UserNotLoggedInError
 NoColorwaySizeAssetsFoundError
