@@ -8,8 +8,8 @@
   "scripts": {
     "clean": "rm -rf dist",
     "clean:all": "rm -rf dist && rm -rf build && rm -rf .rollup.cache",
-    "build": "npm run clean && rollup --config",
-    "watch": "npm run clean && rollup --config -w"
+    "build": "yarn clean && rollup --config",
+    "watch": "yarn clean && rollup --config -w"
   },
   "engines": {
     "node": ">=20"
