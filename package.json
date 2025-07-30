@@ -8,8 +8,9 @@
   "scripts": {
     "clean": "rm -rf dist",
     "clean:all": "rm -rf dist && rm -rf build && rm -rf .rollup.cache",
-    "build": "npm clean && rollup --config",
-    "watch": "npm clean && rollup --config -w"
+    "build": "npm run clean && rollup --config",
+    "watch": "npm run clean && rollup --config -w",
+    "build:rollup": "npm run clean && rollup --config"
   },
   "engines": {
     "node": ">=20"
