@@ -1,4 +1,4 @@
-const { execSync } = require('child_process');
+import { execSync } from 'child_process';
 
 function getVersionLabel() {
 	try {
@@ -14,4 +14,4 @@ function getVersionLabel() {
 }
 
 const label = getVersionLabel();
-console.log(`LABEL=${label}`);
+console.log(label);
