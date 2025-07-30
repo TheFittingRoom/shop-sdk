@@ -1,5 +1,5 @@
 {
-  "name": "@thefittingroom/sdk",
+  "name": "@thefittingroom/shop-sdk",
   "version": "2.0.0",
   "description": "the fitting room SDK",
   "type": "module",
