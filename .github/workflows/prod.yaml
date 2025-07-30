@@ -38,12 +38,12 @@ jobs:
 
       - name: Upload assets to S3
         run: |
-          aws s3 cp ./dist/esm/index.min.js s3://tfr-assets-prod/shop-sdk/${{ github.ref_name }}/index.min.js
-          aws s3 cp ./dist/esm/index.js s3://tfr-assets-prod/shop-sdk/${{ github.ref_name }}/index.js
+          aws s3 cp ./dist/esm/index.min.js s3://tfr-assets-prod/sdk/${{ github.ref_name }}/index.min.js
+          aws s3 cp ./dist/esm/index.js s3://tfr-assets-prod/sdk/${{ github.ref_name }}/index.js
 
       - name: Publish to npm (latest)
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
-          npm publish --access public --tag latest
+          npm publish --access public --tag latest --verbose

@@ -12,14 +12,14 @@ Modern ESM SDK for integrating **The Fitting Room** into Shopify storefronts.
 
 ```bash
 # Stable / production build
-npm install @thefittingroom/shop-sdk
+npm install @thefittingroom/sdk
 
 # Next / development build
-npm install @thefittingroom/shop-sdk@next
+npm install @thefittingroom/sdk@next
 ```
 
 ```ts
-import { initShop } from "@thefittingroom/shop-sdk"
+import { initShop } from "@thefittingroom/sdk"
 
 const brandId = 9001
 // env = "prod" | "dev"
@@ -30,13 +30,13 @@ const shop   = initShop(brandId, "prod")
 
 ```html
 <!-- Latest production build -->
-<script type="module" src="https://unpkg.com/@thefittingroom/shop-sdk@latest/dist/index.mjs"></script>
+<script type="module" src="https://unpkg.com/@thefittingroom/sdk@latest/dist/index.mjs"></script>
 
 <!-- Specific version (recommended) -->
-<script type="module" src="https://unpkg.com/@thefittingroom/shop-sdk@1.2.3/dist/index.mjs"></script>
+<script type="module" src="https://unpkg.com/@thefittingroom/sdk@1.2.3/dist/index.mjs"></script>
 
 <!-- Development build -->
-<script type="module" src="https://unpkg.com/@thefittingroom/shop-sdk@next/dist/index.mjs"></script>
+<script type="module" src="https://unpkg.com/@thefittingroom/sdk@next/dist/index.mjs"></script>
 ```
 
 ---
