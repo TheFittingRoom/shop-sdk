@@ -43,6 +43,6 @@ jobs:
 
       - name: Publish to npm (latest)
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npm publish --access public --tag latest
