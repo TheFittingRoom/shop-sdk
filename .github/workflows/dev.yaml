@@ -28,12 +28,12 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
-          path: ~/.yarn
-          key: yarn-${{ hashFiles('yarn.lock') }}
-          restore-keys: yarn-
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: npm ci
 
       - name: Derive version label from merge commit labels
         run: |
@@ -42,7 +42,7 @@ jobs:
       - name: Bump version after merge
         if: ${{ env.LABEL != '' }}
         run: |
-          yarn version --new-version "$LABEL"
+          npm version "$LABEL"
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git commit -am "ci: bump version ($LABEL)"
@@ -55,7 +55,7 @@ jobs:
           echo $GITHUB_SHA_7
           envsubst < .env.dev > .env.dev.tmp
           mv .env.dev.tmp .env.dev
-          NODE_ENV=dev yarn build:rollup
+          NODE_ENV=dev npm run build:rollup
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
