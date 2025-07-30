@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-
   workflow_dispatch:
 
 permissions:
@@ -12,9 +11,7 @@ permissions:
   contents: read
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,13 +21,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: npm-${{ hashFiles('package-lock.json') }}
-          restore-keys: npm-
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -51,11 +42,9 @@ jobs:
 
       - name: Build
         run: |
-          export GITHUB_SHA_7=${GITHUB_SHA::7}
-          echo $GITHUB_SHA_7
-          envsubst < .env.dev > .env.dev.tmp
-          mv .env.dev.tmp .env.dev
-          NODE_ENV=dev npm run build:rollup
+          mv .env .env.tmp
+          envsubst < .env.tmp > .env
+          NODE_ENV=dev npm run build:rollup  # Fixed missing 'run'
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -63,15 +52,11 @@ jobs:
           role-to-assume: arn:aws:iam::602373492013:role/github_actions
           aws-region: us-west-2
 
-      - name: Upload js to S3
+      - name: Upload assets to S3
         run: |
-          aws s3 cp ./dist/esm/main.js s3://tfr-assets-dev/shop-sdk/${GITHUB_SHA::7}/main.js
-
-      - name: Upload css to S3
-        run: aws s3 cp --recursive src/styles/ s3://tfr-assets-dev/shop-sdk/${GITHUB_SHA::7}/styles/
-
-      - name: Upload languages to S3
-        run: aws s3 cp --recursive src/languages/ s3://tfr-assets-dev/shop-sdk/${GITHUB_SHA::7}/languages/
+          aws s3 cp ./dist/esm/main.js s3://tfr-assets-dev/shop-sdk/${{ github.ref_name }}/main.js
+          aws s3 cp --recursive src/styles/ s3://tfr-assets-dev/shop-sdk/${{ github.ref_name }}/styles/
+          aws s3 cp --recursive src/languages/ s3://tfr-assets-dev/shop-sdk/${{ github.ref_name }}/languages/
 
       - name: Publish to npm (next)
         env:

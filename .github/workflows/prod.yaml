@@ -19,41 +19,29 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: npm-${{ hashFiles('package-lock.json') }}
-          restore-keys: npm-
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build
         run: |
-          envsubst < .env.prod > .env.prod.tmp
-          mv .env.prod.tmp .env.prod
+          mv .env .env.tmp
+          envsubst < .env.tmp > .env
           NODE_ENV=prod npm run build:rollup
-        env:
-          GITHUB_REF: ${{ github.ref_name }}
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::496310237386:role/github_actions
           aws-region: us-west-2
 
-      - name: Upload js to S3
+      - name: Upload assets to S3
         run: |
           aws s3 cp ./dist/esm/main.min.js s3://tfr-assets-prod/shop-sdk/${{ github.ref_name }}/main.min.js
           aws s3 cp ./dist/esm/main.js s3://tfr-assets-prod/shop-sdk/${{ github.ref_name }}/main.js
-
-      - name: Upload css to S3
-        run: aws s3 cp --recursive src/styles/ s3://tfr-assets-prod/shop-sdk/${{ github.ref_name }}/styles/
-
-      - name: Upload languages to S3
-        run: aws s3 cp --recursive src/languages/ s3://tfr-assets-prod/shop-sdk/${{ github.ref_name }}/languages/
+          aws s3 cp --recursive src/styles/ s3://tfr-assets-prod/shop-sdk/${{ github.ref_name }}/styles/
+          aws s3 cp --recursive src/languages/ s3://tfr-assets-prod/shop-sdk/${{ github.ref_name }}/languages/
 
       - name: Publish to npm (latest)
         env:
