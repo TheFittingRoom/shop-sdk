@@ -28,7 +28,7 @@ jobs:
         run: |
           mv .env .env.tmp
           envsubst < .env.tmp > .env
-          NODE_ENV=prod npm run build:rollup
+          NODE_ENV=prod npm run build
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
