@@ -1,17 +1,22 @@
 name: Deploy to dev
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+  pull_request_target:
+    types:
+      - closed
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
+  get_version_label:
+    if: github.event.pull_request.merged == true
+    uses: ./.github/workflows/get-version-label.yaml
+
   build:
+    needs: get_version_label
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,18 +32,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Derive version label from merge commit labels
-        run: |
-          echo "LABEL=$(node scripts/get-version-label.js)" >> $GITHUB_ENV
-
       - name: Bump version after merge
-        if: ${{ env.LABEL != '' }}
         run: |
-          npm version "$LABEL"
+          npm version "${{ needs.get_version_label.outputs.version_label }}"
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git commit -am "ci: bump version ($LABEL)"
-          git tag v$(node -p "require('./package.json').version")
+          git commit -am "ci: bump version (${{ needs.get_version_label.outputs.version_label }})"
+          VERSION=$(npm pkg get version | tr -d '"')
+          git tag v$VERSION
           git push --follow-tags
 
       - name: Build
