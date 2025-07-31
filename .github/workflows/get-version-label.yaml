@@ -3,7 +3,7 @@ on:
   pull_request:
     branches:
       - main
-    types: [labeled, unlabeled]
+    types: [opened, edited, labeled, unlabeled, synchronize]
   workflow_call:
     outputs:
       version_label:

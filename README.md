@@ -8,8 +8,6 @@ Modern ESM SDK for integrating **The Fitting Room** into Shopify storefronts.
 
 ---
 
-Trigger PR
-
 ## ✨ Quick Start
 
 ```bash
