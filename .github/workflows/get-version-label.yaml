@@ -1,4 +1,4 @@
-name: Get Version Label
+name: Semantic Versioning
 on:
   pull_request:
     branches:
@@ -55,4 +55,4 @@ jobs:
 
           VERSION_LABEL="${{ steps.get_version_label.outputs.version_label }}"
           npm version "$VERSION_LABEL" -m "ci: bump version to %s"
-          git push origin HEAD:"${GITHUB_REF}" --follow-tags
+          git push origin HEAD:${{ github.event.pull_request.head.ref }} --follow-tags
