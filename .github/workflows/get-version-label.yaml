@@ -4,23 +4,18 @@ on:
     branches:
       - main
     types: [opened, edited, labeled, unlabeled, synchronize]
-  workflow_call:
-    outputs:
-      version_label:
-        description: the major, minor or patch version label
-        value: ${{ jobs.get_label.outputs.version_label }}
 
 permissions:
   contents: read
 
 jobs:
-  get_label:
+  get_version_label:
     runs-on: ubuntu-latest
     outputs:
-      version_label: ${{ steps.get_label.outputs.version_label }}
+      version_label: ${{ steps.get_version_label.outputs.version_label }}
     steps:
       - name: Require patch/minor/major label
-        id: get_label
+        id: get_version_label
         uses: actions/github-script@v7
         with:
           script: |
@@ -34,3 +29,30 @@ jobs:
             }
             core.setOutput('version_label', versionLabels[0]);
             core.info(`version_label: ${versionLabels[0]}`);
+
+      - name: Check Version
+        id: check_feature_tags
+        run: |
+          VERSION_LABEL="${{ steps.get_version_label.outputs.version_label }}"
+
+          # Check if the version label tag exists on any commit reachable from HEAD
+          # but not from origin/main. This effectively checks if the tag was introduced
+          # within the feature branch's commits.
+          if git describe --tags --exact-match --contains "$VERSION_LABEL" $(git rev-list origin/main..HEAD) &>/dev/null; then
+            echo "version_bump_exists=true" >> $GITHUB_OUTPUT
+            echo "Version bump tag '$VERSION_LABEL' already exists on feature branch"
+          else
+            echo "version_bump_exists=false" >> $GITHUB_OUTPUT
+            echo "No '$VERSION_LABEL' tag found on feature branch"
+          fi
+
+      - name: Bump Version
+        if: ${{ steps.check_feature_tags.outputs.version_bump_exists == 'false' }}
+        run: |
+          # Configure Git user for the commit
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+
+          VERSION_LABEL="${{ steps.get_version_label.outputs.version_label }}"
+          npm version "$VERSION_LABEL" -m "ci: bump version to %s"
+          git push origin HEAD:"${GITHUB_REF}" --follow-tags
