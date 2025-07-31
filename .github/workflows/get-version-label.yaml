@@ -55,4 +55,4 @@ jobs:
 
           VERSION_LABEL="${{ steps.get_version_label.outputs.version_label }}"
           npm version "$VERSION_LABEL" -m "ci: bump version to %s"
-          git push origin ${{ github.event.pull_request.head.ref }} --follow-tags
+          git push origin HEAD --follow-tags
