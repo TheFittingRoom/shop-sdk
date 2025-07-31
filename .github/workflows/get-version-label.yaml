@@ -33,4 +33,4 @@ jobs:
               core.setFailed(`PR contains multiple version labels: ${versionLabels.join(', ')}. Only one of ${allowed.join(', ')} is allowed.`);
             }
             core.setOutput('version_label', versionLabels[0]);
-            core.info("version_label", versionLabels[0]);
+            core.info(`version_label: ${versionLabels[0]}`);
