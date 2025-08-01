@@ -9,7 +9,9 @@
     "clean": "rm -rf dist",
     "clean:all": "rm -rf dist && rm -rf build && rm -rf .rollup.cache",
     "build": "npm run clean && rollup --config",
-    "watch": "npm run clean && rollup --config -w"
+    "watch": "npm run clean && rollup --config -w",
+    "build:prod": "npm run clean && NODE_ENV=prod rollup --config",
+    "build:dev": "npm run clean && NODE_ENV=dev rollup --config"
   },
   "engines": {
     "node": ">=20"
