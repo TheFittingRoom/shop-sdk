@@ -42,8 +42,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.SDK_PUSH_PAT}}
         run: |
           npm version "${{ needs.get_version_label.outputs.version_label }}"
-          NEW_VERSION=$(npm pkg get version | tr -d '"')
-          git add package.json package-lock.json
 
       - name: Build
         run: |
@@ -69,5 +67,7 @@ jobs:
 
       - name: Commit and Push Version
         run: |
+          git add package.json package-lock.json
+          NEW_VERSION=$(npm pkg get version | tr -d '"')
           git commit -m "${{ needs.get_version_label.outputs.version_label }}(next): ${NEW_VERSION}"
           git push origin main --follow-tags
