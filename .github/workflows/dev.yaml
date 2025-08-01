@@ -49,6 +49,13 @@ jobs:
           envsubst < .env.tmp > .env
           npm run build:dev
 
+      - name: Commit and Push Version
+        run: |
+          git add package.json package-lock.json
+          NEW_VERSION=$(npm pkg get version | tr -d '"')
+          git commit -m "${{ needs.get_version_label.outputs.version_label }}(next): ${NEW_VERSION}"
+          git push origin main --follow-tags
+
       - name: Publish to NPM (next)
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -65,9 +72,3 @@ jobs:
         run: |
           aws s3 cp ./dist/esm/index.js s3://tfr-assets-dev/shop-sdk/${{ github.ref_name }}/index.js
 
-      - name: Commit and Push Version
-        run: |
-          git add package.json package-lock.json
-          NEW_VERSION=$(npm pkg get version | tr -d '"')
-          git commit -m "${{ needs.get_version_label.outputs.version_label }}(next): ${NEW_VERSION}"
-          git push origin main --follow-tags
