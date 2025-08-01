@@ -1,21 +1,27 @@
-name: Deploy to dev
+name: Deploy To Dev
 
 on:
-  push:
-    branches:
-      - main
+  pull_request_target:
+    types:
+      - closed
 
 permissions:
   id-token: write
-  contents: read
+  contents: write
 
 jobs:
+  get_version_label:
+    if: github.event.pull_request.merged == true
+    uses: ./.github/workflows/get-version-label.yaml
   build:
+    if: github.event.pull_request.merged == true && needs.get_version_label.outputs.version_label != 'chore'
     runs-on: ubuntu-latest
+    needs: get_version_label
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: main
 
       - uses: actions/setup-node@v4
         with:
@@ -26,11 +32,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Bump Version
+        env:
+          GITHUB_TOKEN: ${{ secrets.SDK_PUSH_PAT}}
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          npm version "${{ needs.get_version_label.outputs.version_label }}"
+          git push origin main --follow-tags
+
       - name: Build
         run: |
           mv .env .env.tmp
           envsubst < .env.tmp > .env
-          NODE_ENV=dev npm run build
+          npm run build:dev
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -42,7 +57,7 @@ jobs:
         run: |
           aws s3 cp ./dist/esm/index.js s3://tfr-assets-dev/shop-sdk/${{ github.ref_name }}/index.js
 
-      - name: Publish to npm (next)
+      - name: Publish to NPM (next)
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |

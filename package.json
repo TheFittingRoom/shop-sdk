@@ -1,6 +1,6 @@
 {
   "name": "@thefittingroom/sdk",
-  "version": "2.0.1",
+  "version": "2.0.3",
   "description": "the fitting room SDK",
   "type": "module",
   "main": "./dist/esm/index.js",
@@ -9,7 +9,9 @@
     "clean": "rm -rf dist",
     "clean:all": "rm -rf dist && rm -rf build && rm -rf .rollup.cache",
     "build": "npm run clean && rollup --config",
-    "watch": "npm run clean && rollup --config -w"
+    "watch": "npm run clean && rollup --config -w",
+    "build:prod": "npm run clean && NODE_ENV=prod rollup --config",
+    "build:dev": "npm run clean && NODE_ENV=dev rollup --config"
   },
   "engines": {
     "node": ">=20"
@@ -22,6 +24,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "~16.0.1",
+    "@rollup/plugin-replace": "~5.0.5",
     "@rollup/plugin-terser": "~0.4.4",
     "@rollup/plugin-typescript": "~12.1.4",
     "@trivago/prettier-plugin-sort-imports": "~5.2.1",
