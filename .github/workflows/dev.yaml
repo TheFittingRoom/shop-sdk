@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   get_version_label:
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
     uses: ./.github/workflows/get-version-label.yaml
   build:
     if: github.event.pull_request.merged == true && needs.get_version_label.outputs.version_label != 'chore'
@@ -22,6 +22,10 @@ jobs:
         with:
           fetch-depth: 0
           ref: main
+
+      - name: Fetch all branches/tags
+        run: |
+          git fetch --all
 
       - uses: actions/setup-node@v4
         with:
