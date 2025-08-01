@@ -59,6 +59,5 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          VERSION_LABEL="${{ steps.get_version_label.outputs.version_label }}"
-          npm version ${VERSION_LABEL}
+          npm version "${{ steps.get_version_label.outputs.version_label }}"
           git push origin HEAD:${{ github.event.pull_request.head.ref }} --follow-tags
