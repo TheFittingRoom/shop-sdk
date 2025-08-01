@@ -5,7 +5,4 @@ node_modules/
 
 .DS_Store
 .idea
-tygo.yaml
-go.mod
-go.sum
 firebase-service-account/*
