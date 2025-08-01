@@ -1,0 +1,25 @@
+packages:
+  - path: "github.com/thefittingroom/tfr-backend/pkg/types/errors"
+    output_path: "src/api/errors.ts"
+    type_mappings:
+      enums.MeasurementLocation: "string"
+
+  - path: "github.com/thefittingroom/tfr-backend/pkg/types/requests"
+    output_path: "src/api/requests.ts"
+    type_mappings:
+      enums.MeasurementLocation: "string"
+
+  - path: "github.com/thefittingroom/tfr-backend/pkg/types/responses"
+    output_path: "src/api/responses.ts"
+    type_mappings:
+      enums.MeasurementLocation: "string"
+
+  - path: "github.com/thefittingroom/tfr-backend/pkg/types/enums"
+    output_path: "src/api/enums.ts"
+    type_mappings:
+      enums.MeasurementLocation: "string"
+
+  - path: "github.com/thefittingroom/tfr-backend/pkg/types/common"
+    output_path: "src/api/common.ts"
+    type_mappings:
+      enums.MeasurementLocation: "string"
