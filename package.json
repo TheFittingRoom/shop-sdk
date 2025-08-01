@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "~16.0.1",
+    "@rollup/plugin-replace": "~5.0.5",
     "@rollup/plugin-terser": "~0.4.4",
     "@rollup/plugin-typescript": "~12.1.4",
     "@trivago/prettier-plugin-sort-imports": "~5.2.1",
