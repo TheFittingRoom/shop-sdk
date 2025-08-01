@@ -7,6 +7,8 @@ import * as dotenv from 'dotenv'
 
 import pkg from './package.json' with { type: 'json' }
 
+dotenv.config()
+
 const banner = `/*!
 * thefittingroom v${pkg.version} (${new Date().toISOString()})
 * Copyright 2022-present, TheFittingRoom, Inc. All rights reserved.
@@ -30,13 +32,6 @@ export default {
     },
   ],
   plugins: [
-    // Load environment variables using the already installed dotenv package
-    {
-      name: 'dotenv',
-      buildStart() {
-        dotenv.config()
-      },
-    },
     // Replace process.env variables with their actual values
     replace({
       preventAssignment: true,
