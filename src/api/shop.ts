@@ -13,7 +13,7 @@ import { testImage } from './utils';
 export class TfrShop {
   private measurementLocations: Map<string, { name: string; sort_order: number; }> = new Map();
 
-  constructor(private readonly brandId: number, private readonly firebase: Firebase) {}
+  constructor(private readonly brandId: number, private readonly firebase: Firebase) { }
 
   public get user() {
     return this.firebase.user;
@@ -234,7 +234,11 @@ export class TfrShop {
     try {
       try {
         this.requestColorwaySizeAssetFrames(colorwaySizeAsset.id);
-      } catch {}
+      } catch (e) {
+        if (e.error == "sdf not found") {
+          throw new Error("SIZE_REC_DISABLED")
+        }
+      }
 
       return this.awaitColorwaySizeAssetFrames(colorwaySizeAssetSku);
     } catch (error) {

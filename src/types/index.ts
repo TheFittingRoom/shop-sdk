@@ -1,5 +1,3 @@
-export * from './measurement'
-
 export type TryOnFrames = string[]
 
 export enum AvatarState {
@@ -45,6 +43,7 @@ export interface FirestoreStyle {
   name: string
   description: string
   garment_category: string
+  is_vto: string
   is_published: boolean
   sale_type: string
   colorways: FirestoreColorway[]
