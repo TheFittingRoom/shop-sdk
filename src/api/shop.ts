@@ -2,7 +2,6 @@ import { DocumentData, QueryFieldFilterConstraint, QuerySnapshot, where } from '
 
 import { Firebase } from '../firebase/firebase'
 import { getFirebaseError } from '../firebase/firebase-error'
-import { asyncTry } from '../helpers/async'
 import { Config } from '../helpers/config'
 import * as Errors from '../helpers/errors'
 import * as types from '../types'
@@ -32,11 +31,11 @@ export class TfrShop {
     return this.firebase.onInit(this.brandId)
   }
 
-  public async getRecommendedSizes(styleId: string) {
+  public async getRecommendedSizes(styleId: number) {
     if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
 
     try {
-      const res = await Fetcher.Get(this.user, `/styles/${styleId}/recommendation`)
+      const res = await Fetcher.Get(this.user, `/styles/${String(styleId)}/recommendation`)
       const data = (await res.json()) as SizeFitRecommendation
 
       if (!data?.fits?.length || !data?.recommended_size?.id) return null
@@ -95,47 +94,11 @@ export class TfrShop {
     }
   }
 
-  public async getColorwaySizeAssetFromBrandStyleId(brandStyleId: number): Promise<types.FirestoreColorwaySizeAsset> {
-    const assets = await this.getColorwaySizeAssetsFromStyleId(brandStyleId)
-    if (!assets?.length) throw new Errors.NoColorwaySizeAssetsFoundError()
-
-    return assets[0]
-  }
-
   public async getMeasurementLocationsFromSku(sku: string, filledLocations: string[] = []): Promise<string[]> {
-    console.log({ sku })
-    const asset = await this.getColorwaySizeAssetFromSku(sku)
-    if (!asset) throw new Error('No colorway size asset found for sku')
+    const colorwaySizeAsset = await this.getColorwaySizeAssetFromSku(sku)
+    if (!colorwaySizeAsset) throw new Error('No colorway size asset found for sku')
 
-    const styleCategory = await this.getStyle(asset.style_id)
-    if (!styleCategory) throw new Error('Style category not found for style id')
-
-    const taxonomy = await this.getGetTaxonomy(styleCategory.style_garment_category_id)
-    if (!taxonomy) throw new Error('Taxonomy not found for style garment category id')
-
-    const filteredLocations = !filledLocations.length
-      ? taxonomy.measurement_locations.female
-      : taxonomy.measurement_locations.female.filter((location) => filledLocations.includes(location))
-
-    const locationsWithSortOrder = filteredLocations.map((location) => {
-      return this.measurementLocations.has(location)
-        ? this.measurementLocations.get(location)
-        : { name: location, sort_order: Infinity }
-    })
-
-    return locationsWithSortOrder
-      .sort((a, b) => (a.sort_order < b.sort_order ? -1 : 0))
-      .map((location) => location.name)
-  }
-
-  public async getMeasurementLocationsFromBrandStyleId(
-    brandStyleId: number,
-    filledLocations: string[] = [],
-  ): Promise<string[]> {
-    const asset = await this.getColorwaySizeAssetFromBrandStyleId(brandStyleId)
-    if (!asset) throw new Error('No colorway size asset found for brand style id')
-
-    const styleCategory = await this.getStyle(asset.style_id)
+    const styleCategory = await this.getStyle(colorwaySizeAsset.style_id)
     if (!styleCategory) throw new Error('Style category not found for style id')
 
     const taxonomy = await this.getGetTaxonomy(styleCategory.style_garment_category_id)
@@ -186,32 +149,31 @@ export class TfrShop {
     return this.measurementLocations.has(location) ? this.measurementLocations.get(location).sort_order : Infinity
   }
 
-  public async tryOn(styleId: number, sizeId: number) {
+  public async tryOn(sku: string) {
     if (!this.isLoggedIn) throw new Errors.UserNotLoggedInError()
 
-    const colorwaySizeAssetSku = await this.getColorwaySizeAssetSkuFromStyleIdAndSizeId(styleId, sizeId)
+    const colorwaySizeAsset = await this.getColorwaySizeAssetFromSku(sku)
 
     try {
-      const frames = await this.getColorwaySizeAssetFrames(colorwaySizeAssetSku)
-
+      const frames = await this.getColorwaySizeAssetFrames(colorwaySizeAsset.sku)
       return frames
     } catch (error) {
       if (!(error instanceof Errors.NoFramesFoundError)) throw error
-
-      return this.requestThenGetColorwaySizeAssetFrames(colorwaySizeAssetSku)
     }
-  }
-
-  private async getColorwaySizeAssetSkuFromStyleIdAndSizeId(styleId: number, sizeId: number) {
     try {
-      const constraints: QueryFieldFilterConstraint[] = [where('brand_id', '==', this.brandId)]
-      constraints.push(where('style_id', '==', styleId))
-      constraints.push(where('size_id', '==', sizeId))
-      const querySnapshot = await this.firebase.getDocs('colorway_size_assets', constraints)
-
-      return querySnapshot.docs?.[0]?.data()?.sku as string
+      await this.requestColorwaySizeAssetFrames(colorwaySizeAsset.id)
     } catch (error) {
-      return getFirebaseError(error)
+      throw new Error(
+        `Failed to request frames for colorway size asset ${colorwaySizeAsset.id}: ${error.message || error}`,
+      )
+    }
+
+    try {
+      return this.awaitColorwaySizeAssetFrames(colorwaySizeAsset.sku)
+    } catch (error) {
+      if (error?.error === Errors.AvatarNotCreated) throw new Errors.AvatarNotCreatedError()
+
+      throw new Errors.NoStylesFoundError()
     }
   }
 
@@ -225,40 +187,26 @@ export class TfrShop {
     }
   }
 
-  private async getMeasurementLocations() {
-    const locations = await this.fetchMeasurementLocations()
+  private async getMeasurementLocations(): Promise<void> {
+    try {
+      const locations = await this.fetchMeasurementLocations()
 
-    locations.forEach((location) => {
-      this.measurementLocations.set(location.name, { name: location.garment_label, sort_order: location.sort_order })
-    })
+      locations.forEach((location) => {
+        this.measurementLocations.set(location.name, { name: location.garment_label, sort_order: location.sort_order })
+      })
+    } catch (error) {
+      console.error('Failed to load measurement locations:', error)
+      throw error
+    }
   }
 
-  private async fetchMeasurementLocations() {
+  private async fetchMeasurementLocations(): Promise<types.FirestoreGarmentMeasurementLocation[]> {
     try {
       const docs = await this.firebase.getDocs('measurement_locations', [])
 
       return docs.docs.map((doc) => doc.data()) as types.FirestoreGarmentMeasurementLocation[]
     } catch (error) {
-      return getFirebaseError(error)
-    }
-  }
-
-  private async requestThenGetColorwaySizeAssetFrames(colorwaySizeAssetSku: string) {
-    const [error, colorwaySizeAsset] = await asyncTry(this.getColorwaySizeAssetFromSku(colorwaySizeAssetSku))
-    if (error) throw error
-
-    try {
-      try {
-        this.requestColorwaySizeAssetFrames(colorwaySizeAsset.id)
-      } catch {
-        // Ignore errors when requesting frames
-      }
-
-      return this.awaitColorwaySizeAssetFrames(colorwaySizeAssetSku)
-    } catch (error) {
-      if (error?.error === Errors.AvatarNotCreated) throw new Errors.AvatarNotCreatedError()
-
-      throw new Errors.NoStylesFoundError()
+      throw getFirebaseError(error)
     }
   }
 
