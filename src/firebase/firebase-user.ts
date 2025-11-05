@@ -42,7 +42,6 @@ export class FirebaseUser {
       this.setUser(user)
       if (!user) return
 
-      this.logUserLogin(brandId, user)
       this.setBrandUserId(user.uid)
     })
 
