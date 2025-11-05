@@ -94,14 +94,14 @@ export class TfrShop {
     }
   }
 
-  public async getMeasurementLocationsFromSku(sku: string, filledLocations: string[] = []): Promise<string[]> {
+  public async getStyleMeasurementLocationsFromSku(sku: string, filledLocations: string[] = []): Promise<string[]> {
     const colorwaySizeAsset = await this.getColorwaySizeAssetFromSku(sku)
     if (!colorwaySizeAsset) throw new Error('No colorway size asset found for sku')
 
-    const styleCategory = await this.getStyle(colorwaySizeAsset.style_id)
-    if (!styleCategory) throw new Error('Style category not found for style id')
+    const style = await this.getStyle(colorwaySizeAsset.style_id)
+    if (!style) throw new Error('Style category not found for style id')
 
-    const taxonomy = await this.getGetTaxonomy(styleCategory.style_garment_category_id)
+    const taxonomy = await this.getGetTaxonomy(style.style_garment_category_id)
     if (!taxonomy) throw new Error('Taxonomy not found for style garment category id')
 
     const filteredLocations = !filledLocations.length
